@@ -2,9 +2,9 @@ import { prisma } from '@/app/lib/prisma';
 import { notFound } from 'next/navigation';
 
 interface UserPageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 async function getUserPage(username: string) {
@@ -37,7 +37,8 @@ async function getUserPage(username: string) {
 }
 
 export default async function UserPage({ params }: UserPageProps) {
-  const page = await getUserPage(params.username);
+  const { username } = await params;
+  const page = await getUserPage(username);
 
   if (!page) {
     notFound();
