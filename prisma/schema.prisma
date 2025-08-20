@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Model for the user who manages the page
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  page      Page?     // User's artist page
+}
+
+// Model for the user's public artist page
+model Page {
+  id          String     @id @default(cuid())
+  slug        String     @unique // Username in the URL /artist-name/
+  title       String
+  bio         String?
+  avatarUrl   String?
+  userId      String     @unique
+  user        User       @relation(fields: [userId], references: [id])
+  links       Link[]
+  appearance  Appearance?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+// Model for the links the user adds
+model Link {
+  id        String   @id @default(cuid())
+  title     String
+  url       String
+  isActive  Boolean  @default(true)
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

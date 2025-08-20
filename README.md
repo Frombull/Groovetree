@@ -27,7 +27,12 @@ npm run dev
 npm run dev
 ```
 
-4. Acessando no navegador
+4. Rodando SEED do DB
+```
+npx prisma db seed
+```
+
+5. Acessando no navegador
 
 ```
 http://localhost:3000
