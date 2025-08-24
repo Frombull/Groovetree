@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Model for the user who manages the page
 model User {
   id        String    @id @default(cuid())
   email     String    @unique
@@ -17,28 +16,78 @@ model User {
   page      Page?     // User's artist page
 }
 
-// Model for the user's public artist page
 model Page {
-  id          String     @id @default(cuid())
-  slug        String     @unique // Username in the URL /artist-name/
-  title       String
-  bio         String?
-  avatarUrl   String?
+  id                 String    @id @default(cuid())
+  slug               String    @unique // Username in the URL /artist-name/
+  title              String
+  bio                String?
+  avatarUrl          String?
+  backgroundColor    String?
+  textColor          String?
+  backgroundImageUrl String?
+
   userId      String     @unique
   user        User       @relation(fields: [userId], references: [id])
   links       Link[]
+  events      Event[]
+  embeds      Embed[]
+
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
 
-// Model for the links the user adds
+enum LinkType {
+  GENERIC
+  SPOTIFY
+  APPLE_MUSIC
+  DEEZER
+  YOUTUBE
+  SOUNDCLOUD
+  BEATPORT
+  INSTAGRAM
+  TIKTOK
+  TOUR
+}
+
 model Link {
   id        String   @id @default(cuid())
   title     String
   url       String
+  type      LinkType @default(GENERIC)
+  order     Int      @default(0)
   isActive  Boolean  @default(true)
+
   pageId    String
-  page      Page     @relation(fields: [pageId], references: [id])
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  venue       String
+  city        String
+  date        DateTime
+  ticketUrl   String?
+  isActive    Boolean   @default(true)
+
+  pageId      String
+  page        Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Embed {
+  id        String    @id @default(cuid())
+  title     String?
+  embedUrl  String
+  type      String    // "YOUTUBE_VIDEO", "SPOTIFY_ALBUM"
+  order     Int       @default(0)
+  isActive  Boolean   @default(true)
+
+  pageId    String
+  page      Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
