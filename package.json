@@ -12,7 +12,8 @@
     "@prisma/client": "^6.14.0",
     "next": "15.5.0",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-icons": "^5.5.0"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

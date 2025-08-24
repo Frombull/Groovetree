@@ -31,7 +31,7 @@ async function getUserPage(username: string) {
     
     return page;
   } catch (error) {
-    console.error('Erro ao buscar página do usuário:', error);
+    console.error('Error fetching user page:', error);
     return null;
   }
 }
