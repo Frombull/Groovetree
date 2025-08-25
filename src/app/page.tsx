@@ -12,7 +12,7 @@ export default function Home() {
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-32 h-32 bg-purple-500 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-pink-500 rounded-full blur-2xl animate-pulse delay-1000"></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-[#2D1B69] rounded-full blur-2xl animate-pulse delay-1000"></div>
           <div className="absolute bottom-40 left-1/4 w-40 h-40 bg-blue-500 rounded-full blur-3xl animate-pulse delay-2000"></div>
         </div>
 
@@ -24,7 +24,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-bold leading-tight mb-8">
               Here, you connect the audience to
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"> your sound </span>
+              <span className="bg-gradient-to-r from-purple-400 to-[#4C1D95] bg-clip-text text-transparent"> your sound </span>
             </h2>
 
             <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
@@ -41,7 +41,7 @@ export default function Home() {
                   placeholder=""
                   className="flex-1 bg-transparent text-white placeholder-gray-400 text-lg py-4 px-2 focus:outline-none"
                 />
-                <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-4 px-8 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all cursor-pointer shadow-lg">
+                <button className="bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] text-white font-semibold py-4 px-8 rounded-xl hover:from-[#1A0C4E] hover:to-[#2D1B69] transition-all cursor-pointer shadow-lg">
                   Criar Página
                 </button>
               </div>
@@ -54,7 +54,7 @@ export default function Home() {
                 <div className="text-gray-300">Active Users</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-pink-400">0+</div>
+                <div className="text-3xl font-bold text-[#4C1D95]">0+</div>
                 <div className="text-gray-300">Monthly Clicks</div>
               </div>
               <div className="text-center">
@@ -88,8 +88,8 @@ export default function Home() {
             </div>
 
             <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 flex flex-col items-center">
-              <div className="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mb-6">
-                <FaHeadphones className="text-pink-600 text-2xl" />
+              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
+                <FaHeadphones className="text-[#2D1B69] text-2xl" />
               </div>
               <h4 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">Embed Player</h4>
               <p className="text-gray-600">Your fans can listen to your music directly on your page</p>
@@ -129,7 +129,7 @@ export default function Home() {
             <FaApple className="text-5xl text-gray-800 hover:scale-110 transition-transform" />
             <FaSoundcloud className="text-5xl text-orange-500 hover:scale-110 transition-transform" />
             <FaYoutube className="text-5xl text-red-500 hover:scale-110 transition-transform" />
-            <FaInstagram className="text-5xl text-pink-500 hover:scale-110 transition-transform" />
+            <FaInstagram className="text-5xl text-[#4C1D95] hover:scale-110 transition-transform" />
             <FaTiktok className="text-5xl text-black hover:scale-110 transition-transform" />
             <FaXTwitter className="text-5xl text-black hover:scale-110 transition-transform" />
           </div>
@@ -137,7 +137,7 @@ export default function Home() {
       </section>
 
       {/* How it Works Section */}
-      <section id="how-it-works" className="py-20 bg-gradient-to-br from-purple-50 to-pink-50">
+      <section id="how-it-works" className="py-20 bg-gradient-to-br from-purple-50 to-purple-100">
         <div className="container mx-auto px-8 md:px-16">
           <div className="text-center mb-16">
             <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -150,7 +150,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                 1
               </div>
               <h4 className="text-2xl font-bold text-gray-900 mb-4">Create your account</h4>
@@ -160,7 +160,7 @@ export default function Home() {
             </div>
 
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                 2
               </div>
               <h4 className="text-2xl font-bold text-gray-900 mb-4">Add your links</h4>
@@ -170,7 +170,7 @@ export default function Home() {
             </div>
 
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+              <div className="w-20 h-20 bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                 3
               </div>
               <h4 className="text-2xl font-bold text-gray-900 mb-4">Share</h4>
@@ -183,7 +183,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+      <section className="py-20 bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] text-white">
         <div className="container mx-auto px-8 md:px-16 text-center">
           <h3 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to create your own page?
