@@ -26,7 +26,7 @@ export default function Header() {
               <input
                 type="text"
                 placeholder="Search artist..."
-                className="pl-10 pr-4 py-2 w-80 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all placeholder-gray-400"
+                className="pl-10 pr-4 py-2 w-80 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all placeholder-gray-400 text-gray-900 caret-gray-900"
               />
             </div>
             <Link href="/login">
