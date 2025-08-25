@@ -54,7 +54,7 @@ export default function Home() {
                 <div className="text-gray-300">Active Users</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-[#4C1D95]">0+</div>
+                <div className="text-3xl font-bold text-pink-400">0+</div>
                 <div className="text-gray-300">Monthly Clicks</div>
               </div>
               <div className="text-center">
