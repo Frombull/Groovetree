@@ -42,7 +42,7 @@ export default function Home() {
                   className="flex-1 bg-transparent text-white placeholder-gray-400 text-lg py-4 px-2 focus:outline-none"
                 />
                 <button className="bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] text-white font-semibold py-4 px-8 rounded-xl hover:from-[#1A0C4E] hover:to-[#2D1B69] transition-all cursor-pointer shadow-lg">
-                  Criar Página
+                  Create Page
                 </button>
               </div>
             </div>

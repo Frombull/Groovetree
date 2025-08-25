@@ -7,7 +7,7 @@ export default function Header() {
         <div className="bg-white rounded-4xl shadow-lg px-8 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-12">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Groovetree Feliz
+              Groovetree
             </h1>
             <nav className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-gray-600 hover:text-purple-600 transition-colors">Resources</a>
