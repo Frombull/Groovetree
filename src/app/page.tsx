@@ -1,74 +1,231 @@
 import Footer from '@/app/components/footer';
-import { FaSearch } from 'react-icons/fa';
+import { FaMusic, FaHeadphones, FaUsers, FaRocket, FaPlay, FaSpotify, FaSoundcloud, FaYoutube, FaInstagram, FaTiktok, FaApple } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import Link from 'next/link';
-import Artistcard from '@/app/components/artist-card';
 
 export default function Home() {
   return (
     <div className="font-sans">
-      <div className="min-h-screen bg-[#1A0C4E] text-white">
+      {/* Hero Section */}
+      <div className="min-h-screen bg-gradient-to-br from-[#1A0C4E] via-[#2D1B69] to-[#4C1D95] text-white relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-purple-500 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-pink-500 rounded-full blur-2xl animate-pulse delay-1000"></div>
+          <div className="absolute bottom-40 left-1/4 w-40 h-40 bg-blue-500 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        </div>
+
         {/* Header */}
-        <header className="py-6 px-8 md:px-16">
+        <header className="relative z-10 py-6 px-8 md:px-16">
           <div className="container mx-auto flex justify-between items-center">
             <div className="flex items-center space-x-12">
-              <h1 className="text-3xl font-bold">Groovetree</h1>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-purple-300 bg-clip-text text-transparent">
+                🎵 Groovetree Feliz
+              </h1>
               <nav className="hidden md:flex items-center space-x-8">
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">Sample Text</a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">Sample Text</a>
-                <a href="#" className="text-gray-300 hover:text-white transition-colors">Sample Text</a>
+                <a href="#features" className="text-gray-300 hover:text-white transition-colors">Resources</a>
+                <a href="#how-it-works" className="text-gray-300 hover:text-white transition-colors">How it works</a>
+                <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
               </nav>
             </div>
 
-            {/* Search bar */}
-            <div className="flex items-center space-x-6">
-              <div className="relative hidden lg:block">
-                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search artists..."
-                  className="bg-[#2A1B5D] border border-transparent focus:border-purple-500 focus:ring-0 rounded-full py-2 pl-10 pr-4 text-white placeholder-gray-400 transition-colors"
-                />
-              </div>
-              <div className="flex items-center space-x-2">
-                <Link href="/login">
-                  <button className="bg-transparent hover:bg-[#2A1B5D] text-white font-semibold py-2 px-6 rounded-full transition-colors cursor-pointer">
-                    Login
-                  </button>
-                </Link>
-                <Link href="/signup">
-                  <button className="bg-white text-[#1A0C4E] font-semibold py-2 px-6 rounded-full hover:bg-gray-200 transition-colors cursor-pointer">
-                    Sign up
-                  </button>
-                </Link>
-              </div>
+            <div className="flex items-center space-x-4">
+              <Link href="/login">
+                <button className="bg-transparent hover:bg-white/10 text-white font-semibold py-2 px-6 rounded-full border border-white/20 transition-all cursor-pointer">
+                  Login
+                </button>
+              </Link>
+              <Link href="/signup">
+                <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-2 px-6 rounded-full hover:from-purple-600 hover:to-pink-600 transition-all cursor-pointer shadow-lg">
+                  Sign Up
+                </button>
+              </Link>
             </div>
           </div>
         </header>
 
-        {/* Hero Section */}
-        <main className="container mx-auto px-8 md:px-16 text-center md:text-left mt-24 md:mt-32 pb-32">
-          <h2 className="text-6xl md:text-8xl font-bold leading-tight">
-            Aqui você conecta<br />
-            o público<br />
-            ao seu som
-          </h2>
+        {/* Hero Content */}
+        <main className="relative z-10 container mx-auto px-8 md:px-16 text-center mt-20 md:mt-32 pb-32">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-5xl md:text-7xl font-bold leading-tight mb-8">
+              Here, you connect the audience to 
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"> your sound </span>
+            </h2>
+            
+            <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
+              Create your personalized page and connect your fans to all your music platforms in one place.
+              The ultimate Musictree for DJs and artists.
+            </p>
 
-          <div className="mt-12 flex justify-center md:justify-start">
-            <div className="relative flex items-center w-full max-w-lg">
-              <span className="absolute left-4 text-gray-400">groovetree.com.br/</span>
-              <input
-                type="text"
-                className="w-full bg-white/20 backdrop-blur-sm rounded-full py-4 pl-48 pr-32 text-white placeholder-gray-300 border border-transparent focus:border-purple-400 focus:ring-0"
-              />
-              <button className="absolute right-2 bg-white text-[#1A0C4E] font-semibold py-2.5 px-6 rounded-full hover:bg-gray-200 transition-colors cursor-pointer">
-                Claim Now
-              </button>
+            {/* URL Input */}
+            <div className="mb-12 flex justify-center">
+              <div className="relative flex items-center w-full max-w-2xl bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
+                <span className="text-gray-300 pl-6 pr-2 text-lg">groovetree.com.br/</span>
+                <input
+                  type="text"
+                  placeholder=""
+                  className="flex-1 bg-transparent text-white placeholder-gray-400 text-lg py-4 px-2 focus:outline-none"
+                />
+                <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-4 px-8 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all cursor-pointer shadow-lg">
+                  Criar Página
+                </button>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-400">0+</div>
+                <div className="text-gray-300">Active Users</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-pink-400">0+</div>
+                <div className="text-gray-300">Monthly Clicks</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-400">0+</div>
+                <div className="text-gray-300">Status Info</div>
+              </div>
             </div>
           </div>
         </main>
       </div>
 
-      <Artistcard />
+      {/* Features Section */}
+      <section id="features" className="py-20 bg-gray-50">
+        <div className="container mx-auto px-8 md:px-16">
+          <div className="text-center mb-16">
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              AAAAAAAAAAAAAAA <span className="text-purple-600">AAAAAAAAAAA</span>
+            </h3>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 flex flex-col items-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
+                <FaMusic className="text-purple-600 text-2xl" />
+              </div>
+              <h4 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">Links</h4>
+              <p className="text-gray-600">Connect Spotify, Apple Music, SoundCloud and all your favorite platforms</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 flex flex-col items-center">
+              <div className="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mb-6">
+                <FaHeadphones className="text-pink-600 text-2xl" />
+              </div>
+              <h4 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">Embed Player</h4>
+              <p className="text-gray-600">Your fans can listen to your music directly on your page</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 flex flex-col items-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                <FaUsers className="text-blue-600 text-2xl" />
+              </div>
+              <h4 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">Analytics</h4>
+              <p className="text-gray-600">Track clicks, views, and engagement in real time</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 flex flex-col items-center">
+              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
+                <FaRocket className="text-green-600 text-2xl" />
+              </div>
+              <h4 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">Customization</h4>
+              <p className="text-gray-600">Custom themes that match your musical style</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Platform Icons Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-8 md:px-16 text-center">
+          <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Connect all your platforms
+          </h3>
+          <p className="text-xl text-gray-600 mb-12">
+            We support major music and social media platforms
+          </p>
+          
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+            <FaSpotify className="text-5xl text-green-500 hover:scale-110 transition-transform" />
+            <FaApple className="text-5xl text-gray-800 hover:scale-110 transition-transform" />
+            <FaSoundcloud className="text-5xl text-orange-500 hover:scale-110 transition-transform" />
+            <FaYoutube className="text-5xl text-red-500 hover:scale-110 transition-transform" />
+            <FaInstagram className="text-5xl text-pink-500 hover:scale-110 transition-transform" />
+            <FaTiktok className="text-5xl text-black hover:scale-110 transition-transform" />
+            <FaXTwitter className="text-5xl text-black hover:scale-110 transition-transform" />
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section id="how-it-works" className="py-20 bg-gradient-to-br from-purple-50 to-pink-50">
+        <div className="container mx-auto px-8 md:px-16">
+          <div className="text-center mb-16">
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              How it works
+            </h3>
+            <p className="text-xl text-gray-600">
+              In 3 simple steps, your page will be live!
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+                1
+              </div>
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">Create your account</h4>
+              <p className="text-gray-600 text-lg">
+                Sign up for free and choose your unique username
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+                2
+              </div>
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">Add your links</h4>
+              <p className="text-gray-600 text-lg">
+                Connect your social networks, music platforms, and other important links
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+                3
+              </div>
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">Share</h4>
+              <p className="text-gray-600 text-lg">
+                Use your custom page on shows, social media, and promotional materials
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+        <div className="container mx-auto px-8 md:px-16 text-center">
+          <h3 className="text-4xl md:text-5xl font-bold mb-6">
+            Ready to create your own page?
+          </h3>
+          <p className="text-xl mb-12 max-w-2xl mx-auto opacity-90">
+            AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link href="/signup">
+              <button className="bg-white text-purple-600 font-bold py-4 px-8 rounded-full hover:bg-gray-100 transition-colors cursor-pointer text-lg shadow-lg">
+              Get Started for Free
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <Footer />

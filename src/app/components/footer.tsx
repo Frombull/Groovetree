@@ -5,7 +5,7 @@ export default function Footer () {
   return (
     <footer className="bg-[#F0F0F0] text-black pt-16 pb-8 px-8 md:px-16">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {/* Newsletter */}
           <div className="border border-gray-300 rounded-lg p-6 flex flex-col justify-center">
             <h3 className="font-semibold mb-4 text-lg">Subscribe to our newsletter for the latest updates and releases!</h3>
@@ -23,9 +23,6 @@ export default function Footer () {
               By subscribing, you consent to our <a href="#" className="underline">Privacy Policy</a> and agree to receive updates.
             </p>
           </div>
-
-          {/* Empty */}
-          <div className="hidden lg:block border border-gray-300 rounded-lg p-6"></div>
 
           {/* About the Creators */}
           <div className="border border-gray-300 rounded-lg p-6">
