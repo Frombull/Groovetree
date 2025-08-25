@@ -1,4 +1,5 @@
 import Footer from '@/app/components/footer';
+import Header from '@/app/components/header';
 import { FaMusic, FaHeadphones, FaUsers, FaRocket, FaSpotify, FaSoundcloud, FaYoutube, FaInstagram, FaTiktok, FaApple } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import Link from 'next/link';
@@ -16,35 +17,7 @@ export default function Home() {
         </div>
 
         {/* Header */}
-        <header className="relative z-10 pt-8 px-8 md:px-16">
-          <div className="container mx-auto">
-            <div className="bg-white rounded-4xl shadow-lg px-8 py-4 flex justify-between items-center">
-              <div className="flex items-center space-x-12">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Groovetree Feliz
-                </h1>
-                <nav className="hidden md:flex items-center space-x-8">
-                  <a href="#features" className="text-gray-600 hover:text-purple-600 transition-colors">Resources</a>
-                  <a href="#how-it-works" className="text-gray-600 hover:text-purple-600 transition-colors">How it works</a>
-                  <a href="#pricing" className="text-gray-600 hover:text-purple-600 transition-colors">Pricing</a>
-                </nav>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <Link href="/login">
-                  <button className="bg-transparent hover:bg-gray-100 text-gray-700 font-semibold py-2 px-6 rounded-full border border-gray-300 transition-all cursor-pointer">
-                    Login
-                  </button>
-                </Link>
-                <Link href="/signup">
-                  <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-2 px-6 rounded-full hover:from-purple-600 hover:to-pink-600 transition-all cursor-pointer shadow-lg">
-                    Sign Up
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </header>
+        <Header />
 
         {/* Hero Content */}
         <main className="relative z-10 container mx-auto px-8 md:px-16 text-center mt-20 md:mt-32 pb-32">
