@@ -4,7 +4,7 @@ export default function Header() {
   return (
     <header className="relative z-10 pt-8 px-8 md:px-16">
       <div className="container mx-auto">
-        <div className="bg-white rounded-4xl shadow-lg px-8 py-4 flex justify-between items-center">
+        <div className="bg-white rounded-4xl shadow-lg px-8 py-6 flex justify-between items-center">
           <div className="flex items-center space-x-12">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Groovetree

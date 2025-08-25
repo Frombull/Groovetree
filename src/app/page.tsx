@@ -35,13 +35,13 @@ export default function Home() {
             {/* URL Input */}
             <div className="mb-12 flex justify-center">
               <div className="relative flex items-center w-full max-w-2xl bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
-                <span className="text-gray-300 pl-6 pr-2 text-lg">groovetree.com.br/</span>
+                <span className="text-gray-300 pl-6 text-lg">groovetree.com.br/</span>
                 <input
                   type="text"
                   placeholder=""
-                  className="flex-1 bg-transparent text-white placeholder-gray-400 text-lg py-4 px-2 focus:outline-none"
+                  className="flex-1 bg-transparent text-gray-300 placeholder-gray-400 text-lg py-4 focus:outline-none"
                 />
-                <button className="bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] text-white font-semibold py-4 px-8 rounded-xl hover:from-[#1A0C4E] hover:to-[#2D1B69] transition-all cursor-pointer shadow-lg">
+                <button className="bg-gradient-to-tl from-[#2D1B69] to-[#4C1D95] text-white font-semibold py-4 px-8 rounded-xl hover:from-[#1A0C4E] hover:to-[#2D1B69] transition-all cursor-pointer shadow-lg">
                   Create Page
                 </button>
               </div>
