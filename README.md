@@ -30,7 +30,7 @@ npm run dev
 4. Rodando SEED do DB
 
 ```bash
-tsx prisma/seed.ts
+npx tsx prisma/seed.ts
 ```
 
 5. Acessando no navegador
