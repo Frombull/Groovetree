@@ -1,6 +1,10 @@
+'use client';
+
 import Link from 'next/link';
+import { useAuth } from '@/app/hooks/useAuth';
 
 export default function Header() {
+  const { user, logout, loading } = useAuth();
   return (
     <header className="relative z-10 pt-8 px-8 md:px-16">
       <div className="container mx-auto">
@@ -29,16 +33,34 @@ export default function Header() {
                 className="pl-10 pr-4 py-2 w-80 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all placeholder-gray-400 text-gray-900 caret-gray-900"
               />
             </div>
-            <Link href="/login">
-              <button className="bg-transparent hover:bg-gray-100 text-gray-700 font-semibold py-2 px-6 rounded-full border border-gray-300 transition-all cursor-pointer">
-                Login
-              </button>
-            </Link>
-            <Link href="/signup">
-              <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-2 px-6 rounded-full hover:from-purple-600 hover:to-pink-600 transition-all cursor-pointer shadow-lg">
-                Sign Up
-              </button>
-            </Link>
+            {loading ? (
+              <div className="animate-pulse bg-gray-200 h-10 w-20 rounded-full"></div>
+            ) : user ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-700 font-medium">
+                  Hi, {user.name || user.email}
+                </span>
+                <button
+                  onClick={logout}
+                  className="bg-transparent hover:bg-gray-100 text-gray-700 font-semibold py-2 px-6 rounded-full border border-gray-300 transition-all cursor-pointer"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <>
+                <Link href="/login">
+                  <button className="bg-transparent hover:bg-gray-100 text-gray-700 font-semibold py-2 px-6 rounded-full border border-gray-300 transition-all cursor-pointer">
+                    Login
+                  </button>
+                </Link>
+                <Link href="/signup">
+                  <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-2 px-6 rounded-full hover:from-purple-600 hover:to-pink-600 transition-all cursor-pointer shadow-lg">
+                    Sign Up
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

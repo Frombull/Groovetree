@@ -1,9 +1,38 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaGoogle, FaGithub } from 'react-icons/fa';
-
+import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useState } from 'react';
+import { useAuth } from '@/app/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    
+    const { login } = useAuth();
+    const router = useRouter();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        const result = await login(email, password);
+        
+        if (result.success) {
+            router.push('/');
+        } else {
+            setError(result.error || 'Login error');
+        }
+        
+        setLoading(false);
+    };
+
     return (
         <div className="min-h-screen flex text-gray-800 bg-white font-sans">
 
@@ -14,22 +43,54 @@ export default function Login() {
                     <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center">Welcome back</h1>
                     <p className="text-gray-600 mb-8 text-center">Log in to your Groovetree account</p>
 
-                    <form>
+                    {error && (
+                        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit}>
                         <div className="mb-4">
-                            <label htmlFor="email" className="sr-only">Email or username</label>
+                            <label htmlFor="email" className="sr-only">Email</label>
                             <input
                                 id="email"
-                                type="text"
-                                placeholder="Email or username"
+                                type="email"
+                                placeholder="Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+                                required
                             />
+                        </div>
+
+                        <div className="mb-6">
+                            <label htmlFor="password" className="sr-only">Password</label>
+                            <div className="relative">
+                                <input
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                >
+                                    {showPassword ? <FaEye/> : <FaEyeSlash/>}
+                                </button>
+                            </div>
                         </div>
 
                         <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-[#6f42c1] to-[#8a2be2] text-white font-semibold py-3 rounded-md hover:opacity-90 transition cursor-pointer"
+                            disabled={loading}
+                            className="w-full bg-gradient-to-r from-[#6f42c1] to-[#8a2be2] text-white font-semibold py-3 rounded-md hover:opacity-90 transition cursor-pointer disabled:opacity-50"
                         >
-                            Continue
+                            {loading ? 'Logging in...' : 'Continue'}
                         </button>
                     </form>
 
