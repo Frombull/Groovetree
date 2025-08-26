@@ -12,10 +12,10 @@ async function main() {
   await prisma.page.deleteMany()
   await prisma.user.deleteMany()
 
-  // Hash da senha padrão para todos os usuários de teste
+  // Default passw0rd for test users
   const defaultPassword = await bcrypt.hash('1q2w3E*', 12)
 
-  // Usuários de teste
+  // Test users
   const users = await Promise.all([
     prisma.user.create({
       data: {
