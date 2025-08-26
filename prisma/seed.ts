@@ -19,7 +19,7 @@ async function main() {
   const users = await Promise.all([
     prisma.user.create({
       data: {
-        email: 'joãotestedasilva@gmail.com',
+        email: 'joaotestedasilva@gmail.com',
         name: 'João Teste da Silva',
         password: defaultPassword,
         page: {
