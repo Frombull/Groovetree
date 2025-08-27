@@ -6,6 +6,10 @@ interface User {
   id: string;
   email: string;
   name: string | null;
+  page?: {
+    slug: string;
+    avatarUrl?: string | null;
+  } | null;
 }
 
 interface AuthState {
@@ -77,8 +81,17 @@ export function useAuth() {
   };
 
   const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    setAuthState({ user: null, loading: false });
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      setAuthState({ user: null, loading: false });
+      
+      // Redirect after logout
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error during logout:', error);
+      setAuthState({ user: null, loading: false });
+      window.location.href = '/';
+    }
   };
 
   return {

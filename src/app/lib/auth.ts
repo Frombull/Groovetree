@@ -6,6 +6,10 @@ export interface AuthUser {
   id: string;
   email: string;
   name: string | null;
+  page?: {
+    slug: string;
+    avatarUrl?: string | null;
+  } | null;
 }
 
 export async function getAuthUser(): Promise<AuthUser | null> {
@@ -28,6 +32,12 @@ export async function getAuthUser(): Promise<AuthUser | null> {
         id: true,
         email: true,
         name: true,
+        page: {
+          select: {
+            slug: true,
+            avatarUrl: true,
+          }
+        }
       }
     });
 

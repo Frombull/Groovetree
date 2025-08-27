@@ -11,8 +11,10 @@ interface User {
   id: string;
   name: string | null;
   email: string;
-  profilePicture?: string | null;
-  page?: { slug: string } | null;
+  page?: {
+    slug: string;
+    avatarUrl?: string | null;
+  } | null;
 }
 
 interface UserMenuProps {
@@ -21,6 +23,7 @@ interface UserMenuProps {
 
 export default function UserMenu({ user }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { logout } = useAuth();
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -38,9 +41,10 @@ export default function UserMenu({ user }: UserMenuProps) {
     };
   }, []);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
     setIsOpen(false);
+    await logout();
   };
 
   return (
@@ -52,7 +56,7 @@ export default function UserMenu({ user }: UserMenuProps) {
       >
         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 hover:border-purple-300 transition-colors">
           <Image
-            src={user.profilePicture || '/default-profile-picture.png'}
+            src={user.page?.avatarUrl || '/default-profile-picture.png'}
             alt={user.name || 'User'}
             width={40}
             height={40}
@@ -68,7 +72,7 @@ export default function UserMenu({ user }: UserMenuProps) {
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 rounded-full overflow-hidden">
                 <Image
-                  src={user.profilePicture || '/default-profile-picture.png'}
+                  src={user.page?.avatarUrl || '/default-profile-picture.png'}
                   alt={user.name || 'User'}
                   width={48}
                   height={48}
@@ -107,9 +111,14 @@ export default function UserMenu({ user }: UserMenuProps) {
 
             <button
               onClick={handleLogout}
-              className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer">
-              <FaSignOutAlt className="mr-2" />
-              Logout
+              disabled={isLoggingOut}
+              className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+              {isLoggingOut ? (
+                <div className="w-4 h-4 mr-2 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <FaSignOutAlt className="mr-2" />
+              )}
+              {isLoggingOut ? 'Logging out...' : 'Logout'}
             </button>
           </div>
         </div>

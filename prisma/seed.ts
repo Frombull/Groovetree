@@ -27,7 +27,7 @@ async function main() {
             slug: 'joao-teste-da-silva',
             title: 'João Teste da Silva - Músico',
             bio: 'Guitarrista e compositor apaixonado por rock e blues. Mais de 10 anos de experiência em shows ao vivo.',
-            avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
+            avatarUrl: '',
             links: {
               create: [
                 {
