@@ -5,7 +5,7 @@ import { useAuth } from '@/app/hooks/useAuth';
 import UserMenu from './UserMenu';
 
 export default function Header() {
-  const { user, logout, loading } = useAuth();
+  const { user, loading } = useAuth();
   return (
     <header className="relative z-10 pt-8 px-8 md:px-16">
       <div className="container mx-auto">

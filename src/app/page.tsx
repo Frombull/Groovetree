@@ -19,8 +19,7 @@ export default function Home() {
         {/* Header */}
         <Header />
 
-        {/* Hero Content */}
-        <main className="relative z-10 container mx-auto px-8 md:px-16 text-center mt-20 md:mt-32 pb-32">
+        <main className="relative container mx-auto px-8 md:px-16 text-center mt-20 md:mt-32 pb-32">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-bold leading-tight mb-8">
               Here, you connect the audience to
