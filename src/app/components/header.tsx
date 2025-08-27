@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/app/hooks/useAuth';
+import UserMenu from './UserMenu';
 
 export default function Header() {
   const { user, logout, loading } = useAuth();
@@ -36,17 +37,7 @@ export default function Header() {
             {loading ? (
               <div className="animate-pulse bg-gray-200 h-10 w-20 rounded-full"></div>
             ) : user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-700 font-medium">
-                  Hi, {user.name || user.email}
-                </span>
-                <button
-                  onClick={logout}
-                  className="bg-transparent hover:bg-gray-100 text-gray-700 font-semibold py-2 px-6 rounded-full border border-gray-300 transition-all cursor-pointer"
-                >
-                  Logout
-                </button>
-              </div>
+              <UserMenu user={user} />
             ) : (
               <>
                 <Link href="/login">

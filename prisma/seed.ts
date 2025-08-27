@@ -13,7 +13,7 @@ async function main() {
   await prisma.user.deleteMany()
 
   // Default passw0rd for test users
-  const defaultPassword = await bcrypt.hash('1q2w3E*', 12)
+  const defaultPassword = await bcrypt.hash('admin', 12)
 
   // Test users
   const users = await Promise.all([
@@ -49,6 +49,37 @@ async function main() {
                   title: 'Site Oficial',
                   url: 'https://joaotestedasilva.com.br',
                   isActive: false
+                }
+              ]
+            }
+          }
+        }
+      },
+      include: {
+        page: {
+          include: {
+            links: true
+          }
+        }
+      }
+    }),
+    prisma.user.create({
+      data: {
+        email: 'admin@gmail.com',
+        name: 'Admin',
+        password: defaultPassword,
+        page: {
+          create: {
+            slug: 'admin',
+            title: 'Admin - Fiscal de fodase',
+            bio: 'Bio do admin.',
+            avatarUrl: '',
+            links: {
+              create: [
+                {
+                  title: 'Spotify',
+                  url: 'https://open.spotify.com/artist/admin',
+                  isActive: true
                 }
               ]
             }
