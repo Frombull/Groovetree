@@ -11,9 +11,11 @@ export default function Header() {
       <div className="container mx-auto">
         <div className="bg-white dark:bg-gray-800 rounded-4xl shadow-lg px-8 py-6 flex justify-between items-center">
           <div className="flex items-center space-x-12">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Groovetree
-            </h1>
+            <Link href="/">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity">
+                Groovetree
+              </h1>
+            </Link>
             <nav className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Resources</a>
               <a href="#how-it-works" className="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">How it works</a>
