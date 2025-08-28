@@ -192,45 +192,51 @@ export default function SettingsPage() {
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Profile Information</h2>
 
-                  {/* Profile picture upload */}
-                  <div className="flex justify-center py-6">
-                    <AvatarUpload
-                      currentAvatar={user?.page?.avatarUrl}
-                      onAvatarChange={(file) => {
-                        // TODO
-                        toast.success('TODO')
-                        console.log('Avatar file:', file);
-                      }}
-                      size="lg"
-                    />
+                  {/* Profile picture and basic info */}
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-center my-8">
+                    <div className="md:col-span-2 flex justify-center">
+                      <AvatarUpload
+                        currentAvatar={user?.page?.avatarUrl}
+                        onAvatarChange={(file) => {
+                          // TODO
+                          toast.success('TODO')
+                          console.log('Avatar file:', file);
+                        }}
+                        size="lg"
+                      />
+                    </div>
+
+                    {/* Name and Email fields */}
+                    <div className="md:col-span-3 space-y-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Name
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.name}
+                          onChange={(e) => setSettings(prev => ({ ...prev, name: e.target.value }))}
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          placeholder="Your Name"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          value={settings.email}
+                          onChange={(e) => setSettings(prev => ({ ...prev, email: e.target.value }))}
+                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          placeholder="your@email.com"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        value={settings.name}
-                        onChange={(e) => setSettings(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="Seu nome completo"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        value={settings.email}
-                        onChange={(e) => setSettings(prev => ({ ...prev, email: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="your@email.com"
-                      />
-                    </div>
 
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -294,13 +300,6 @@ export default function SettingsPage() {
               {activeTab === 'security' && (
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">Account Security</h2>
-
-                  <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 flex items-center">
-                    <FaShield className="text-yellow-600 dark:text-yellow-400 mr-2" />
-                    <span className="text-yellow-800 dark:text-yellow-300 font-medium">
-                      Keep your account secure with a strong password
-                    </span>
-                  </div>
 
                   <div className="space-y-4">
                     <div>
@@ -539,7 +538,7 @@ export default function SettingsPage() {
                         {/* Light Theme */}
                         <button
                           onClick={() => handleThemeChange('light')}
-                          className={`p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'light'
+                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'light'
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                             }`}
@@ -561,7 +560,7 @@ export default function SettingsPage() {
                         {/* Dark Theme */}
                         <button
                           onClick={() => handleThemeChange('dark')}
-                          className={`p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'dark'
+                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'dark'
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                             }`}
@@ -583,7 +582,7 @@ export default function SettingsPage() {
                         {/* Auto Theme */}
                         <button
                           onClick={() => handleThemeChange('auto')}
-                          className={`p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'auto'
+                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'auto'
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                             }`}

@@ -49,7 +49,7 @@ export default function AccountStats({
     },
     {
       icon: FaEye,
-      label: 'Profile views',
+      label: 'Artist page views',
       value: formatNumber(profileViews),
       color: 'text-green-600',
       bgColor: 'bg-green-50'
@@ -63,7 +63,7 @@ export default function AccountStats({
     },
     {
       icon: FaMusic,
-      label: 'Shared songs',
+      label: 'Songs click',
       value: formatNumber(songsShared),
       color: 'text-purple-600',
       bgColor: 'bg-purple-50'
