@@ -97,13 +97,18 @@ export default function SettingsPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // TODO
-      toast.success('TODO')
+      toast.success('handleSave')
     } catch (error) {
-      toast.error("This didn't work.")
+      toast.error("Failed to save settings.");
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleThemeChange = (newTheme: 'light' | 'dark' | 'auto') => {
+    setTheme(newTheme);
+    setSettings(prev => ({ ...prev, theme: newTheme }));
+    toast.success(`Theme changed to ${newTheme === 'auto' ? 'system preference' : newTheme} mode!`);
   };
 
   const handlePasswordChange = async () => {
@@ -533,7 +538,7 @@ export default function SettingsPage() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Light Theme */}
                         <button
-                          onClick={() => setTheme('light')}
+                          onClick={() => handleThemeChange('light')}
                           className={`p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'light'
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
@@ -555,7 +560,7 @@ export default function SettingsPage() {
 
                         {/* Dark Theme */}
                         <button
-                          onClick={() => setTheme('dark')}
+                          onClick={() => handleThemeChange('dark')}
                           className={`p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'dark'
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
@@ -577,7 +582,7 @@ export default function SettingsPage() {
 
                         {/* Auto Theme */}
                         <button
-                          onClick={() => setTheme('auto')}
+                          onClick={() => handleThemeChange('auto')}
                           className={`p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'auto'
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
@@ -605,19 +610,6 @@ export default function SettingsPage() {
                       </div>
                     </div>
                   </div>
-
-                  <button
-                    onClick={handleSave}
-                    disabled={isSaving}
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center cursor-pointer"
-                  >
-                    {isSaving ? (
-                      <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    ) : (
-                      <FaSave className="mr-2" />
-                    )}
-                    {isSaving ? 'Saving...' : 'Save Changes'}
-                  </button>
                 </div>
               )}
 
@@ -673,19 +665,19 @@ export default function SettingsPage() {
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">Delete your Groovetree account</h2>
                   {/* TODO: Delete account option */}
 
-                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
-                      <div className="flex items-center mb-4">
-                        <FaTrash className="text-red-700 dark:red-900 mr-2" />
-                        <h3 className="text-lg font-semibold text-red-900 dark:text-red-400">Danger Zone Copy</h3>
-                      </div>
-                      <p className="text-red-700 dark:text-red-300 mb-4">
-                        These actions are irreversible. Be sure before proceeding.
-                      </p>
-                      <button className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center cursor-pointer">
-                        <FaTrash className="mr-2" />
-                        Delete account
-                      </button>
+                  <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
+                    <div className="flex items-center mb-4">
+                      <FaTrash className="text-red-700 dark:red-900 mr-2" />
+                      <h3 className="text-lg font-semibold text-red-900 dark:text-red-400">Danger Zone Copy</h3>
                     </div>
+                    <p className="text-red-700 dark:text-red-300 mb-4">
+                      These actions are irreversible. Be sure before proceeding.
+                    </p>
+                    <button className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center cursor-pointer">
+                      <FaTrash className="mr-2" />
+                      Delete account
+                    </button>
+                  </div>
 
                 </div>
               )}

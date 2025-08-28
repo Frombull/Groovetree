@@ -15,20 +15,28 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('auto');
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Load theme from localStorage on mount
     const savedTheme = localStorage.getItem('theme') as Theme;
     if (savedTheme && ['light', 'dark', 'auto'].includes(savedTheme)) {
       setTheme(savedTheme);
+    } else {
+      // If no saved theme, detect system preference
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme('auto');
+      setResolvedTheme(systemPrefersDark ? 'dark' : 'light');
     }
   }, []);
 
   useEffect(() => {
-    // Save theme to localStorage whenever it changes
+    if (!mounted) return;
+    
+    // Save theme to localStorage when it changes
     localStorage.setItem('theme', theme);
     
-    // Determine the resolved theme
     let resolved: 'light' | 'dark' = 'light';
     
     if (theme === 'auto') {
@@ -41,12 +49,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     
     // Apply theme to document
     const root = document.documentElement;
+    
     if (resolved === 'dark') {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-  }, [theme]);
+  }, [theme, mounted]);
 
   useEffect(() => {
     // Listen for system theme changes when in auto mode
@@ -58,6 +67,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         setResolvedTheme(resolved);
         
         const root = document.documentElement;
+        
         if (resolved === 'dark') {
           root.classList.add('dark');
         } else {
@@ -69,6 +79,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [theme]);
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <ThemeContext.Provider value={{ theme: 'light', setTheme, resolvedTheme: 'light' }}>
+        {children}
+      </ThemeContext.Provider>
+    );
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>

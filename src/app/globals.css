@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
+@theme {
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  --default-font-family: var(--font-geist-sans);
+  --default-mono-font-family: var(--font-geist-mono);
+}
+
+@variant dark (.dark &);
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 .dark {
