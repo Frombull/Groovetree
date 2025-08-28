@@ -52,7 +52,7 @@ export default function UserMenu({ user }: UserMenuProps) {
       {/* PFP */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
       >
         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 hover:border-purple-300 transition-colors">
           <Image
@@ -67,8 +67,8 @@ export default function UserMenu({ user }: UserMenuProps) {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-          <div className="px-4 py-3 border-b border-gray-100">
+        <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-2 z-50">
+          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 rounded-full overflow-hidden">
                 <Image
@@ -80,7 +80,7 @@ export default function UserMenu({ user }: UserMenuProps) {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-300 truncate">
                   {user.name || 'User'}
                 </p>
                 <p className="text-sm text-gray-500 truncate">
@@ -93,7 +93,7 @@ export default function UserMenu({ user }: UserMenuProps) {
           <div className="py-1">
             <Link
               href={user.page?.slug ? `/${user.page.slug}` : '/create-page'}
-              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 transition-colors"
               onClick={() => setIsOpen(false)}>
               <FaUser className="mr-2" />
               My Artist Page
@@ -101,7 +101,7 @@ export default function UserMenu({ user }: UserMenuProps) {
 
             <Link
               href="/settings"
-              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 transition-colors"
               onClick={() => setIsOpen(false)}>
               <FaCog className="mr-2" />
               Settings
