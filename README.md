@@ -1,10 +1,6 @@
 # GrooveTree
 
-Instale as dependências do projeto
-
-```bash
-npm install
-```
+Descrição feliz
 
 
 
@@ -12,57 +8,50 @@ npm install
 
 - [Node.js](https://nodejs.org/)
 - [Docker](https://www.docker.com/)
-
-
-
-# Rodando DB local
-1.  Crie um ``.env`` em ``/docker`` com as informações necessárias, seguindo o template de ```/docker/.env.template```
-
-2. Rode o docker compose
-
-    ```bash
-    cd /docker
-    docker compose up -d
-    ```
-
-3. Gere o cliente Prisma (necessário sempre que o schema mudar)
-
-    ```bash
-    npx prisma generate
-    ```
-    
-4. Execute as migrações para criar o banco de dados
-
-    ```bash
-    npx prisma migrate dev
-
-    # Se for a primeira vez, você pode usar:
-    npx prisma db push
-    ```
-
-5. Rodando SEED do DB (opcional)
-
-    ```bash
-    npx tsx prisma/seed.ts
-    ```
+- [Supabase CLI](https://supabase.com/docs/guides/local-development)
 
 
 
 # Rodando o projeto
 
-1. Crie um ``.env`` na pasta raiz, seguindo o template de ``.env.template``
+1.  Instale as dependências do projeto
 
-2. Rodando em DEV
+    ```bash
+    npm install
+    ```
+
+2. Inicie os serviços do Supabase
+
+    ```bash
+    supabase start
+    ```
+    Ao final, o terminal vai mostrar as credenciais de acesso local, guarde elas para o próximo passo.
+
+3. Crie um ``.env`` na pasta raiz, seguindo o template de ``.env.template``. Em seguida, preencha com as informações fornecidas pelo comando ``supabase start``
+
+4. Sincronize o Banco de Dados com o Schema
+    ```bash
+    npx prisma db push
+    ```
+
+5. Gere o cliente Prisma
+    ```bash
+    npx prisma generate
+    ```
+
+6. Rode o SEED do DB (opcional)
+
+    ```bash
+    npx tsx prisma/seed.ts
+    ```
+
+7. Rodando em DEV
 
     ```bash
     npm run dev
     ```
-
-3. Acessando no navegador
-
-    ```bash
-    http://localhost:3000
-    ```
+    
+    Ficará disponível em http://localhost:3000
 
 
 
@@ -78,7 +67,7 @@ npm install
     npx cypress open
     ```
 
-- Testes com **postman** estão em:
+- Testes com **postman**:
 
     ```bash
     // TODO
@@ -88,5 +77,5 @@ npm install
 
 # Autores
 - [Marco Di Toro](https://github.com/Frombull) | 150 | GES
-- [Vitor Torres](https://github.com/Torress01)  | 517 | GES
 - [Gabriel Costa](https://github.com/JoaoGabrielCostaa) | 193 | GES
+- [Vitor Torres](https://github.com/Torress01)  | 517 | GES
