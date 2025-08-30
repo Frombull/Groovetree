@@ -7,6 +7,7 @@ import Header from '@/app/components/header';
 import AvatarUpload from '@/app/components/AvatarUpload';
 import AccountStats from '@/app/components/AccountStats';
 import DataExport from '@/app/components/DataExport';
+import { profilePictureService } from '@/lib/profilePicture';
 import toast from 'react-hot-toast';
 import {
   FaUser,
@@ -76,6 +77,8 @@ export default function SettingsPage() {
     confirmPassword: '',
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [currentAvatarUrl, setCurrentAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -84,6 +87,7 @@ export default function SettingsPage() {
         name: user.name || '',
         email: user.email || '',
       }));
+      setCurrentAvatarUrl(user.page?.avatarUrl || null);
     }
   }, [user]);
 
@@ -109,6 +113,52 @@ export default function SettingsPage() {
     setTheme(newTheme);
     setSettings(prev => ({ ...prev, theme: newTheme }));
     toast.success(`Theme changed to ${newTheme === 'auto' ? 'system preference' : newTheme} mode!`);
+  };
+
+  const handleAvatarChange = async (file: File | null) => {
+    if (!user?.id) {
+      toast.error('User not found');
+      return;
+    }
+
+    if (!file) {
+      // Handle avatar removal
+      if (currentAvatarUrl) {
+        setIsUploadingAvatar(true);
+        try {
+          const success = await profilePictureService.deleteAvatar(currentAvatarUrl);
+          if (success) {
+            setCurrentAvatarUrl(null);
+            toast.success('Profile picture removed successfully');
+            // TODO: Update user profile in database
+          } else {
+            toast.error('Failed to remove profile picture');
+          }
+        } catch (error) {
+          toast.error('Error removing profile picture');
+        } finally {
+          setIsUploadingAvatar(false);
+        }
+      }
+      return;
+    }
+
+    setIsUploadingAvatar(true);
+    try {
+      const result = await profilePictureService.uploadAvatar(file, user.id, currentAvatarUrl);
+      
+      if (result.success && result.url) {
+        setCurrentAvatarUrl(result.url);
+        toast.success('Profile picture updated successfully!');
+        // TODO: Update user profile in database with new avatar URL
+      } else {
+        toast.error(result.error || 'Failed to upload profile picture');
+      }
+    } catch (error) {
+      toast.error('Error uploading profile picture');
+    } finally {
+      setIsUploadingAvatar(false);
+    }
   };
 
   const handlePasswordChange = async () => {
@@ -196,13 +246,10 @@ export default function SettingsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-center my-8">
                     <div className="md:col-span-2 flex justify-center">
                       <AvatarUpload
-                        currentAvatar={user?.page?.avatarUrl}
-                        onAvatarChange={(file) => {
-                          // TODO
-                          toast.success('TODO')
-                          console.log('Avatar file:', file);
-                        }}
+                        currentAvatar={currentAvatarUrl}
+                        onAvatarChange={handleAvatarChange}
                         size="lg"
+                        isUploading={isUploadingAvatar}
                       />
                     </div>
 
