@@ -13,9 +13,9 @@ interface AvatarUploadProps {
   isUploading?: boolean;
 }
 
-export default function AvatarUpload({ 
-  currentAvatar, 
-  onAvatarChange, 
+export default function AvatarUpload({
+  currentAvatar,
+  onAvatarChange,
   size = 'md',
   isUploading = false
 }: AvatarUploadProps) {
@@ -46,7 +46,7 @@ export default function AvatarUpload({
 
   const handleFileSelect = (file: File) => {
     setError(null);
-    
+
     if (!file) return;
 
     const validationError = validateFile(file);
@@ -105,13 +105,12 @@ export default function AvatarUpload({
     <div className="flex flex-col items-center space-y-4">
       <div className="relative group">
         <div
-          className={`${sizeClasses[size]} rounded-full overflow-hidden border-4 transition-colors relative ${
-            error 
-              ? 'border-red-400 dark:border-red-500' 
-              : isDragging 
-                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900' 
+          className={`${sizeClasses[size]} rounded-full overflow-hidden border-4 transition-colors relative ${error
+              ? 'border-red-400 dark:border-red-500'
+              : isDragging
+                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900'
                 : 'border-gray-200 dark:border-gray-600 group-hover:border-purple-300 dark:group-hover:border-purple-400'
-          } ${isUploading ? 'opacity-50' : ''}`}
+            } ${isUploading ? 'opacity-50' : ''}`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -123,13 +122,16 @@ export default function AvatarUpload({
             height={size === 'lg' ? 128 : size === 'md' ? 96 : 64}
             className="w-full h-full object-cover"
           />
-          
+
           {/* Overlay */}
-          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex items-center justify-center cursor-pointer">
+          <div
+            className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-200 flex items-center justify-center cursor-pointer"
+            onClick={() => fileInputRef.current?.click()}
+          >
             {isUploading ? (
               <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
-              <FaCamera className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+              <FaCamera className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
             )}
           </div>
         </div>
@@ -161,7 +163,7 @@ export default function AvatarUpload({
           )}
           {isUploading ? 'Uploading...' : 'Change profile picture'}
         </button>
-        
+
         {(preview || currentAvatar) && !isUploading && (
           <button
             onClick={handleRemove}
