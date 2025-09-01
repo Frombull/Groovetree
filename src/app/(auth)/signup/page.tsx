@@ -28,7 +28,7 @@ export default function SignupPage() {
     }
 
     if (password.length < 3) {
-      setError('Password sould be at least 3 characters');
+      setError('Password too short');
       return;
     }
 
@@ -106,7 +106,7 @@ export default function SignupPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
                   required
-                  minLength={6}
+                  minLength={3}
                 />
                 <button
                   type="button"

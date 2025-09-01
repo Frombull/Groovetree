@@ -6,31 +6,16 @@ const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXB
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 async function setupStorage() {
-  try {
-    console.log('Setting up profile-pictures bucket...');
-    
-    // Create the bucket
-    const { data, error } = await supabase.storage.createBucket('profile-pictures', {
-      public: true,
-      fileSizeLimit: 2097152, // 2MB
-      allowedMimeTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-    });
+  console.log('Setting up profile-pictures bucket...');
+  
+  // Create the bucket
+  const { data, error } = await supabase.storage.createBucket('profile-pictures', {
+    public: true,
+    fileSizeLimit: '2MB',
+    allowedMimeTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+  });
 
-    if (error) {
-      if (error.message.includes('already exists')) {
-        console.log('✅ Bucket already exists');
-      } else {
-        console.error('❌ Error creating bucket:', error);
-        return;
-      }
-    } else {
-      console.log('✅ Bucket created successfully');
-    }
-
-    console.log('✅ Storage setup complete!');
-  } catch (error) {
-    console.error('❌ Setup failed:', error);
-  }
+  console.log('Bucket created');
 }
 
 setupStorage();

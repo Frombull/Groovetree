@@ -23,7 +23,7 @@ Descrição feliz
 2. Inicie os serviços do Supabase
 
     ```bash
-    supabase start
+    npx supabase start
     ```
     Ao final, o terminal vai mostrar as credenciais de acesso local, guarde elas para o próximo passo.
 

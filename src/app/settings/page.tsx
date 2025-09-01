@@ -145,8 +145,8 @@ export default function SettingsPage() {
 
     setIsUploadingAvatar(true);
     try {
-      const result = await profilePictureService.uploadAvatar(file, user.id, currentAvatarUrl);
-      
+      const result = await profilePictureService.uploadAvatar(file, user.id, currentAvatarUrl || undefined);
+
       if (result.success && result.url) {
         setCurrentAvatarUrl(result.url);
         toast.success('Profile picture updated successfully!');

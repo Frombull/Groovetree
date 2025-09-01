@@ -92,11 +92,11 @@ export default function UserMenu({ user }: UserMenuProps) {
 
           <div className="py-1">
             <Link
-              href={user.page?.slug ? `/${user.page.slug}` : '/create-page'}
+              href={user.page?.slug ? `/${user.page.slug}` : '/dashboard'}
               className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
               onClick={() => setIsOpen(false)}>
               <FaUser className="mr-2" />
-              My Artist Page
+              {user.page?.slug ? 'My Artist Page' : 'Create Artist Page'}
             </Link>
 
             <Link
