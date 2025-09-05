@@ -43,12 +43,16 @@ export default function Header() {
             ) : (
               <>
                 <Link href="/login">
-                  <button className="bg-transparent hover:bg-gray-100 dark:text-gray-300 text-gray-700 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 transition-all cursor-pointer text-sm md:text-base">
+                  <button 
+                  className="bg-transparent hover:bg-gray-100 dark:text-gray-300 text-gray-700 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 transition-all cursor-pointer text-sm md:text-base"
+                  data-cy="login-button-header">
                     Login
                   </button>
                 </Link>
                 <Link href="/signup">
-                  <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-2 px-3 md:px-6 rounded-full hover:from-purple-600 hover:to-pink-600 transition-all cursor-pointer shadow-lg text-sm md:text-base">
+                  <button 
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-2 px-3 md:px-6 rounded-full hover:from-purple-600 hover:to-pink-600 transition-all cursor-pointer shadow-lg text-sm md:text-base"
+                  data-cy="signup-button-header">
                     Sign Up
                   </button>
                 </Link>

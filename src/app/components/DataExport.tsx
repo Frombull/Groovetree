@@ -66,12 +66,12 @@ export default function DataExport() {
         <button
           onClick={handleExport}
           disabled={isExporting}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center cursor-pointer"
         >
           {isExporting ? (
             <>
               <FaSpinner className="mr-2 animate-spin" />
-              Preparing download......
+              Preparing download...
             </>
           ) : (
             <>

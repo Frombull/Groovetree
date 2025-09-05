@@ -135,7 +135,7 @@ export default function SignupPage() {
               type="submit"
               disabled={loading}
               className="w-full bg-[#483D8B] text-white font-semibold py-3 rounded-md hover:bg-[#3A316E] transition disabled:opacity-50 cursor-pointer"
-            >
+              data-cy="signup-button">
               {loading ? 'Creating account...' : 'Continue'}
             </button>
           </form>

@@ -89,7 +89,7 @@ export default function Login() {
                             type="submit"
                             disabled={loading}
                             className="w-full bg-gradient-to-r from-[#6f42c1] to-[#8a2be2] text-white font-semibold py-3 rounded-md hover:opacity-90 transition cursor-pointer disabled:opacity-50"
-                        >
+                            data-cy="login-button">
                             {loading ? 'Logging in...' : 'Continue'}
                         </button>
                     </form>

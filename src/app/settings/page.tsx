@@ -66,11 +66,10 @@ export default function SettingsPage() {
       showEmail: false,
     },
     theme: theme,
-    language: 'pt-BR',
+    language: 'en-US',
   });
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -263,7 +262,7 @@ export default function SettingsPage() {
                           type="text"
                           value={settings.name}
                           onChange={(e) => setSettings(prev => ({ ...prev, name: e.target.value }))}
-                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           placeholder="Your Name"
                         />
                       </div>
@@ -276,7 +275,7 @@ export default function SettingsPage() {
                           type="email"
                           value={settings.email}
                           onChange={(e) => setSettings(prev => ({ ...prev, email: e.target.value }))}
-                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           placeholder="your@email.com"
                         />
                       </div>
@@ -293,7 +292,7 @@ export default function SettingsPage() {
                         value={settings.bio}
                         onChange={(e) => setSettings(prev => ({ ...prev, bio: e.target.value }))}
                         rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:italic"
                         placeholder="Tell us a little about yourself..."
                       />
                     </div>
@@ -306,7 +305,7 @@ export default function SettingsPage() {
                         type="text"
                         value={settings.location}
                         onChange={(e) => setSettings(prev => ({ ...prev, location: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:italic"
                         placeholder="City"
                       />
                     </div>
@@ -319,8 +318,8 @@ export default function SettingsPage() {
                         type="url"
                         value={settings.website}
                         onChange={(e) => setSettings(prev => ({ ...prev, website: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="https://seusite.com"
+                        className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:italic"
+                        placeholder="https://yoursite.com"
                       />
                     </div>
                   </div>
@@ -358,7 +357,7 @@ export default function SettingsPage() {
                           type={showCurrentPassword ? 'text' : 'password'}
                           value={passwordData.currentPassword}
                           onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                          className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-3 pr-12 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           placeholder="Current password"
                         />
                         <button
@@ -380,13 +379,13 @@ export default function SettingsPage() {
                           type={showNewPassword ? 'text' : 'password'}
                           value={passwordData.newPassword}
                           onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
-                          className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-3 pr-12 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           placeholder="New Password"
                         />
                         <button
                           type="button"
                           onClick={() => setShowNewPassword(!showNewPassword)}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2  text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
                         >
                           {showNewPassword ? <FaEyeSlash /> : <FaEye />}
                         </button>
@@ -399,19 +398,12 @@ export default function SettingsPage() {
                       </label>
                       <div className="relative">
                         <input
-                          type={showConfirmPassword ? 'text' : 'password'}
+                          type={showNewPassword ? 'text' : 'password'}
                           value={passwordData.confirmPassword}
                           onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                          className="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           placeholder="Confirm New Password"
                         />
-                        <button
-                          type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
-                        >
-                          {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -419,8 +411,7 @@ export default function SettingsPage() {
                   <button
                     onClick={handlePasswordChange}
                     disabled={isSaving || !passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword}
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center cursor-pointer disabled:cursor-not-allowed"
-                  >
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center cursor-pointer disabled:cursor-not-allowed">
                     {isSaving ? (
                       <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     ) : (
@@ -497,8 +488,7 @@ export default function SettingsPage() {
                   <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center"
-                  >
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center">
                     {isSaving ? (
                       <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     ) : (
@@ -517,27 +507,8 @@ export default function SettingsPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                       <div>
-                        <h3 className="font-medium text-gray-900 dark:text-gray-100">Public Profile</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Allow other users to view your artist profile</p>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={settings.privacy.profilePublic}
-                          onChange={(e) => setSettings(prev => ({
-                            ...prev,
-                            privacy: { ...prev.privacy, profilePublic: e.target.checked }
-                          }))}
-                          className="sr-only peer"
-                        />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                      </label>
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                      <div>
-                        <h3 className="font-medium text-gray-900 dark:text-gray-100">Show Email</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Show your email on your public profile</p>
+                        <h3 className="font-medium text-gray-900 dark:text-gray-100">Cool Option</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Description</p>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
@@ -557,8 +528,7 @@ export default function SettingsPage() {
                   <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center"
-                  >
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center">
                     {isSaving ? (
                       <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     ) : (
@@ -588,8 +558,7 @@ export default function SettingsPage() {
                           className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'light'
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
-                            }`}
-                        >
+                            }`}>
                           <div className="flex items-center space-x-3 mb-3">
                             <FaSun className="w-5 h-5 text-yellow-500" />
                             <span className="font-medium text-gray-900 dark:text-gray-100">Light</span>
@@ -610,8 +579,7 @@ export default function SettingsPage() {
                           className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'dark'
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
-                            }`}
-                        >
+                            }`}>
                           <div className="flex items-center space-x-3 mb-3">
                             <FaMoon className="w-5 h-5 text-blue-400" />
                             <span className="font-medium text-gray-900 dark:text-gray-100">Dark</span>
@@ -632,8 +600,7 @@ export default function SettingsPage() {
                           className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === 'auto'
                             ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                             : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
-                            }`}
-                        >
+                            }`}>
                           <div className="flex items-center space-x-3 mb-3">
                             <FaDesktop className="w-5 h-5 text-gray-500" />
                             <span className="font-medium text-gray-900 dark:text-gray-100">Auto</span>
@@ -669,13 +636,13 @@ export default function SettingsPage() {
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Interface Language
                       </label>
-                      <select
+                      <select disabled
                         value={settings.language}
                         onChange={(e) => setSettings(prev => ({ ...prev, language: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:text-gray-300 disabled:italic"
                       >
-                        <option value="pt-BR">Português (Brasil)</option>
-                        <option value="en-US">English (US)</option>
+                        <option value="en-US">English</option>
+                        <option value="pt-BR">Português</option>
                         <option value="es-ES">Español</option>
                         <option value="fr-FR">Français</option>
                       </select>
@@ -685,8 +652,7 @@ export default function SettingsPage() {
                   <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center cursor-pointer"
-                  >
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center cursor-pointer">
                     {isSaving ? (
                       <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                     ) : (
@@ -709,7 +675,6 @@ export default function SettingsPage() {
               {activeTab === 'delete_account' && (
                 <div className="space-y-6">
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">Delete your Groovetree account</h2>
-                  {/* TODO: Delete account option */}
 
                   <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
                     <div className="flex items-center mb-4">
