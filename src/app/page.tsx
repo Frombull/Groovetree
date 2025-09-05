@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="font-sans">
+    <div className="font-sans overflow-x-hidden">
       {/* Hero Section */}
       <div className="min-h-screen bg-gradient-to-br from-[#1A0C4E] via-[#2D1B69] to-[#4C1D95] text-white relative overflow-hidden">
         {/* Background Elements */}
@@ -69,11 +69,11 @@ export default function Home() {
       <section id="features" className="py-20 bg-gray-50">
         <div className="container mx-auto px-8 md:px-16">
           <div className="text-center mb-16">
-            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              AAAAAAAAAAAAAAA <span className="text-purple-600">AAAAAAAAAAA</span>
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 break-words">
+              Everything you need <span className="text-purple-600">in one place</span>
             </h3>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto break-words">
+              Connect all your music platforms and social media in a single, beautiful page
             </p>
           </div>
 
@@ -187,8 +187,8 @@ export default function Home() {
           <h3 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to create your own page?
           </h3>
-          <p className="text-xl mb-12 max-w-2xl mx-auto opacity-90">
-            AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+          <p className="text-xl mb-12 max-w-2xl mx-auto opacity-90 break-words">
+            Join thousands of artists already using Groovetree to grow their audience
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
