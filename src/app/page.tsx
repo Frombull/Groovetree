@@ -1,10 +1,6 @@
 import Footer from "@/app/components/footer";
 import Header from "@/app/components/header";
 import {
-  FaMusic,
-  FaHeadphones,
-  FaUsers,
-  FaRocket,
   FaSpotify,
   FaSoundcloud,
   FaYoutube,
@@ -14,7 +10,7 @@ import {
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
-import Image from "next/image";
+import Features from "./components/Features";
 
 export default function Home() {
   return (
@@ -84,49 +80,8 @@ export default function Home() {
       </div>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-8 md:px-16">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 break-words">
-              Everything you need{" "}
-              <span className="text-purple-600">in one place</span>
-            </h3>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto break-words">
-              Connect all your music platforms and social media in a single,
-              beautiful page
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="flex justify-center items-center">
-              <Image
-                src="/embedvideos.png" // coloque o arquivo dentro de /public
-                alt="Descrição da imagem"
-                width={620}
-                height={600}
-              />
-            </div>
-
-            <div className="flex justify-center items-center">
-              <Image
-                src="/promoteshows.png" // coloque o arquivo dentro de /public
-                alt="Descrição da imagem"
-                width={620}
-                height={600}
-              />
-            </div>
-
-            <div className="flex justify-center items-center">
-              <Image
-                src="/streammusic.png" // coloque o arquivo dentro de /public
-                alt="Descrição da imagem"
-                width={620}
-                height={600}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      <Features />
+      
 
       {/* Platform Icons Section */}
       <section className="py-20 bg-white">
