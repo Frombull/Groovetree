@@ -1,8 +1,20 @@
-import Footer from '@/app/components/footer';
-import Header from '@/app/components/header';
-import { FaMusic, FaHeadphones, FaUsers, FaRocket, FaSpotify, FaSoundcloud, FaYoutube, FaInstagram, FaTiktok, FaApple } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
-import Link from 'next/link';
+import Footer from "@/app/components/footer";
+import Header from "@/app/components/header";
+import {
+  FaMusic,
+  FaHeadphones,
+  FaUsers,
+  FaRocket,
+  FaSpotify,
+  FaSoundcloud,
+  FaYoutube,
+  FaInstagram,
+  FaTiktok,
+  FaApple,
+} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -23,18 +35,24 @@ export default function Home() {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-bold leading-tight mb-8">
               Here, you connect the audience to
-              <span className="bg-gradient-to-r from-purple-400 to-[#4C1D95] bg-clip-text text-transparent"> your sound </span>
+              <span className="bg-gradient-to-r from-purple-400 to-[#4C1D95] bg-clip-text text-transparent">
+                {" "}
+                your sound{" "}
+              </span>
             </h2>
 
             <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
-              Create your personalized page and connect your fans to all your music platforms in one place.
-              The ultimate Musictree for DJs and artists.
+              Create your personalized page and connect your fans to all your
+              music platforms in one place. The ultimate Musictree for DJs and
+              artists.
             </p>
 
             {/* URL Input */}
             <div className="mb-12 flex justify-center">
               <div className="relative flex items-center w-full max-w-2xl bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
-                <span className="text-gray-300 pl-6 text-lg">groovetree.com.br/</span>
+                <span className="text-gray-300 pl-6 text-lg">
+                  groovetree.com.br/
+                </span>
                 <input
                   type="text"
                   placeholder=""
@@ -47,7 +65,7 @@ export default function Home() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+            {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl font-bold text-purple-400">0+</div>
                 <div className="text-gray-300">Active Users</div>
@@ -60,7 +78,7 @@ export default function Home() {
                 <div className="text-3xl font-bold text-blue-400">0+</div>
                 <div className="text-gray-300">Status Info</div>
               </div>
-            </div>
+            </div> */}
           </div>
         </main>
       </div>
@@ -70,44 +88,41 @@ export default function Home() {
         <div className="container mx-auto px-8 md:px-16">
           <div className="text-center mb-16">
             <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 break-words">
-              Everything you need <span className="text-purple-600">in one place</span>
+              Everything you need{" "}
+              <span className="text-purple-600">in one place</span>
             </h3>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto break-words">
-              Connect all your music platforms and social media in a single, beautiful page
+              Connect all your music platforms and social media in a single,
+              beautiful page
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 flex flex-col items-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
-                <FaMusic className="text-purple-600 text-2xl" />
-              </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">Links</h4>
-              <p className="text-gray-600">Connect Spotify, Apple Music, SoundCloud and all your favorite platforms</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="flex justify-center items-center">
+              <Image
+                src="/embedvideos.png" // coloque o arquivo dentro de /public
+                alt="Descrição da imagem"
+                width={620}
+                height={600}
+              />
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 flex flex-col items-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
-                <FaHeadphones className="text-[#2D1B69] text-2xl" />
-              </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">Embed Player</h4>
-              <p className="text-gray-600">Your fans can listen to your music directly on your page</p>
+            <div className="flex justify-center items-center">
+              <Image
+                src="/promoteshows.png" // coloque o arquivo dentro de /public
+                alt="Descrição da imagem"
+                width={620}
+                height={600}
+              />
             </div>
 
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 flex flex-col items-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
-                <FaUsers className="text-blue-600 text-2xl" />
-              </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">Analytics</h4>
-              <p className="text-gray-600">Track clicks, views, and engagement in real time</p>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100 flex flex-col items-center">
-              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
-                <FaRocket className="text-green-600 text-2xl" />
-              </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-4 flex justify-center">Customization</h4>
-              <p className="text-gray-600">Custom themes that match your musical style</p>
+            <div className="flex justify-center items-center">
+              <Image
+                src="/streammusic.png" // coloque o arquivo dentro de /public
+                alt="Descrição da imagem"
+                width={620}
+                height={600}
+              />
             </div>
           </div>
         </div>
@@ -136,7 +151,10 @@ export default function Home() {
       </section>
 
       {/* How it Works Section */}
-      <section id="how-it-works" className="py-20 bg-gradient-to-br from-purple-50 to-purple-100">
+      <section
+        id="how-it-works"
+        className="py-20 bg-gradient-to-br from-purple-50 to-purple-100"
+      >
         <div className="container mx-auto px-8 md:px-16">
           <div className="text-center mb-16">
             <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
@@ -152,7 +170,9 @@ export default function Home() {
               <div className="w-20 h-20 bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                 1
               </div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-4">Create your account</h4>
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">
+                Create your account
+              </h4>
               <p className="text-gray-600 text-lg">
                 Sign up for free and choose your unique username
               </p>
@@ -162,9 +182,12 @@ export default function Home() {
               <div className="w-20 h-20 bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                 2
               </div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-4">Add your links</h4>
+              <h4 className="text-2xl font-bold text-gray-900 mb-4">
+                Add your links
+              </h4>
               <p className="text-gray-600 text-lg">
-                Connect your social networks, music platforms, and other important links
+                Connect your social networks, music platforms, and other
+                important links
               </p>
             </div>
 
@@ -174,7 +197,8 @@ export default function Home() {
               </div>
               <h4 className="text-2xl font-bold text-gray-900 mb-4">Share</h4>
               <p className="text-gray-600 text-lg">
-                Use your custom page on shows, social media, and promotional materials
+                Use your custom page on shows, social media, and promotional
+                materials
               </p>
             </div>
           </div>
@@ -188,7 +212,8 @@ export default function Home() {
             Ready to create your own page?
           </h3>
           <p className="text-xl mb-12 max-w-2xl mx-auto opacity-90 break-words">
-            Join thousands of artists already using Groovetree to grow their audience
+            Join thousands of artists already using Groovetree to grow their
+            audience
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
