@@ -3,9 +3,15 @@
 import Link from "next/link";
 import { useAuth } from "@/app/hooks/useAuth";
 import UserMenu from "./UserMenu";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const { user, loading } = useAuth();
+  const pathname = usePathname();
+
+  // se for /settings, não mostra os links
+  const hideNav = pathname === "/settings";
+
   return (
     <header className="relative z-10 pt-8 px-8 md:px-16">
       <div className="container mx-auto">
@@ -16,26 +22,23 @@ export default function Header() {
                 Groovetree
               </h1>
             </Link>
-            <nav className="hidden md:flex items-center space-x-8">
-              <a
-                href="#features"
-                className="text-text-gray-300 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-              >
-                Resources
-              </a>
-              <a
-                href="#how-it-works"
-                className="text-text-gray-300 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-              >
-                How it works
-              </a>
-              <a
-                href="#pricing"
-                className="text-text-gray-300 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-              >
-                Pricing
-              </a>
-            </nav>
+
+            {!hideNav && (
+              <nav className="hidden md:flex items-center space-x-8">
+                <a
+                  href="#features"
+                  className="text-text-gray-300 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                >
+                  Resources
+                </a>
+                <a
+                  href="#how-it-works"
+                  className="text-text-gray-300 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                >
+                  How it works
+                </a>
+              </nav>
+            )}
           </div>
 
           <div className="flex items-center space-x-2 md:space-x-4">
@@ -69,7 +72,7 @@ export default function Header() {
               <>
                 <Link href="/login">
                   <button
-                    className="bg-transparent hover:bg-gray-100 dark:text-gray-300 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 transition-all cursor-pointer text-sm md:text-base"
+                    className="bg-transparent hover:opacity-90 dark:text-gray-300 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 transition-all cursor-pointer text-sm md:text-base"
                     data-cy="login-button-header"
                   >
                     Login

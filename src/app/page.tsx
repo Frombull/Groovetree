@@ -81,7 +81,6 @@ export default function Home() {
 
       {/* Features Section */}
       <Features />
-      
 
       {/* Platform Icons Section */}
       <section className="py-20 bg-white">
