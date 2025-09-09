@@ -166,8 +166,7 @@ export default function Home() {
             Ready to create your own page?
           </h3>
           <p className="text-xl mb-12 max-w-2xl mx-auto opacity-90 break-words">
-            Join thousands of artists already using Groovetree to grow their
-            audience
+            Join Groovetree to grow your audience
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
