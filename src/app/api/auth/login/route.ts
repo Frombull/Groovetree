@@ -1,7 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
+import { NextRequest, NextResponse } from 'next/server';
+
 import { prisma } from '@/app/lib/prisma';
+import { env } from '@/app/lib/env';
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,7 +43,7 @@ export async function POST(request: NextRequest) {
     // JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email },
-      process.env.JWT_SECRET || 'fallback-secret',
+      env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 

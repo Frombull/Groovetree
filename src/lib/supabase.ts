@@ -1,7 +1,9 @@
+import { env } from '@/app/lib/env';
+
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
+const supabaseUrl = env.SUPABASE_URL;
+const supabaseAnonKey = env.SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -81,7 +83,7 @@ export async function deleteProfilePicture(url: string): Promise<boolean> {
     const urlParts = url.split('/');
     const bucketIndex = urlParts.findIndex(part => part === PROFILE_PICTURES_BUCKET);
     if (bucketIndex === -1 || bucketIndex === urlParts.length - 1) return false;
-    
+
     // Get the path after the bucket name
     const filePath = urlParts.slice(bucketIndex + 1).join('/');
     if (!filePath) return false;

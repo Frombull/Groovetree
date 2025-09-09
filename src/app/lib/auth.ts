@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken';
+
 import { cookies } from 'next/headers';
+
 import { prisma } from './prisma';
+import { env } from './env';
 
 export interface AuthUser {
   id: string;
@@ -23,7 +26,7 @@ export async function getAuthUser(): Promise<AuthUser | null> {
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || 'fallback-secret'
+      env.JWT_SECRET || 'fallback-secret'
     ) as { userId: string; email: string };
 
     const user = await prisma.user.findUnique({
@@ -50,10 +53,10 @@ export async function getAuthUser(): Promise<AuthUser | null> {
 
 export async function requireAuth(): Promise<AuthUser> {
   const user = await getAuthUser();
-  
+
   if (!user) {
     throw new Error('Unauthenticated user');
   }
-  
+
   return user;
 }
