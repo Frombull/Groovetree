@@ -15,10 +15,10 @@ export default function Header() {
   return (
     <header className="relative z-10 pt-8 px-8 md:px-16">
       <div className="container mx-auto">
-        <div className="bg-transparent dark:bg-transparent rounded-4xl shadow-2xl px-4 md:px-8 py-4 md:py-6 flex justify-between items-center">
+        <div className="bg-transparent rounded-4xl shadow-2xl px-4 md:px-8 py-4 md:py-6 flex justify-between items-center">
           <div className="flex items-center space-x-12">
             <Link href="/">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity">
+              <h1 className="text-3xl font-light text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity">
                 Groovetree
               </h1>
             </Link>
@@ -61,7 +61,7 @@ export default function Header() {
               <input
                 type="text"
                 placeholder="Search artist..."
-                className="pl-10 pr-4 py-2 w-64 xl:w-80 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all placeholder-gray-400 text-gray-900 caret-gray-900"
+                className="pl-10 pr-4 py-2 w-64 xl:w-80 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all placeholder-gray-400 text-white caret-gray-900"
               />
             </div>
             {loading ? (

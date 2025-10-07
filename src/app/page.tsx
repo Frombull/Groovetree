@@ -11,72 +11,79 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import Features from "./components/Features";
+import Aurora from "./components/Aurora";
+import TextType from "./components/TextType";
+import CircularText from "./components/CircularText";
 
 export default function Home() {
   return (
-    <div className="font-sans overflow-x-hidden">
+    <div className="font-sans overflow-x-hidden relative">
       {/* Hero Section */}
-      <div className="min-h-screen bg-gradient-to-br from-[#1A0C4E] via-[#2D1B69] to-[#4C1D95] text-white relative overflow-hidden">
+      <div className="relative min-h-screen bg-gradient-to-br bg-[#060010] text-white overflow-hidden">
         {/* Background Elements */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-purple-500 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-[#2D1B69] rounded-full blur-2xl animate-pulse delay-1000"></div>
-          <div className="absolute bottom-40 left-1/4 w-40 h-40 bg-blue-500 rounded-full blur-3xl animate-pulse delay-2000"></div>
-        </div>
+        <Aurora
+          colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
+          blend={0.5}
+          amplitude={1.0}
+          speed={0.5}
+        />
 
         {/* Header */}
-        <Header />
-
-        <main className="relative container mx-auto px-8 md:px-16 text-center mt-20 md:mt-32 pb-32">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-5xl md:text-7xl font-bold leading-tight mb-8">
-              Here, you connect the audience to
-              <span className="bg-gradient-to-r from-purple-400 to-[#4C1D95] bg-clip-text text-transparent">
-                {" "}
-                your sound{" "}
-              </span>
-            </h2>
-
-            <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto">
-              Create your personalized page and connect your fans to all your
-              music platforms in one place. The ultimate Musictree for DJs and
-              artists.
-            </p>
-
-            {/* URL Input */}
-            <div className="mb-12 flex justify-center">
-              <div className="relative flex items-center w-full max-w-2xl bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
-                <span className="text-gray-300 pl-6 text-lg">
-                  groovetree.com.br/
+        <div className="z-[9999]">
+          <Header />
+          <main className="relative container mx-auto px-8 md:px-16 text-center mt-20 md:mt-32 pb-32">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-5xl md:text-7xl font-bold leading-tight mb-8">
+                Here, you connect the audience to
+                <span className="bg-gradient-to-r from-purple-400 to-[#4C1D95] bg-clip-text text-transparent">
+                  {" "}
+                  your sound{" "}
                 </span>
-                <input
-                  type="text"
-                  placeholder=""
-                  className="flex-1 bg-transparent text-gray-300 placeholder-gray-400 text-lg py-4 focus:outline-none"
-                />
-                <button className="bg-gradient-to-tl from-[#2D1B69] to-[#4C1D95] text-white font-semibold py-4 px-8 rounded-xl hover:from-[#1A0C4E] hover:to-[#2D1B69] transition-all cursor-pointer shadow-lg">
-                  Create Page
-                </button>
+              </h2>
+              <TextType
+                text={[
+                  "Create your personalized page and connect your fans to all your music platforms in one place. The ultimate Musictree for DJs and artists.",
+                  "Unite your music, socials, and fans with a single, beautiful link.",
+                  "Grow your audience by sharing all your music and profiles in one spot.",
+                  "Make it easy for fans to find your latest tracks and follow you everywhere.",
+                  "Your music. Your links. Your brand. All together.",
+                  "Share your groove. Amplify your reach. Connect with your fans.",
+                ]}
+                typingSpeed={75}
+                pauseDuration={1500}
+                textColors={["#d1d5dc "]}
+                showCursor={true}
+                cursorCharacter="|"
+                className="text-xl md:text-2xl min-h-28 max-w-3xl mx-auto"
+              />
+
+              {/* URL Input */}
+              <div className="mb-12 flex justify-center">
+                <div className="relative flex items-center w-full max-w-2xl bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
+                  <span className="text-gray-300 pl-6 text-lg">
+                    groovetree.com.br/
+                  </span>
+                  <input
+                    type="text"
+                    placeholder=""
+                    className="flex-1 bg-transparent text-gray-300 placeholder-gray-400 text-lg py-4 focus:outline-none"
+                  />
+                  <button className="bg-gradient-to-tl from-[#2D1B69] to-[#4C1D95] text-white font-semibold py-4 px-8 rounded-xl hover:from-[#1A0C4E] hover:to-[#2D1B69] transition-all cursor-pointer shadow-lg">
+                    Create Page
+                  </button>
+                </div>
               </div>
             </div>
+          </main>
+        </div>
+      </div>
 
-            {/* Stats */}
-            {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-400">0+</div>
-                <div className="text-gray-300">Active Users</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-pink-400">0+</div>
-                <div className="text-gray-300">Monthly Clicks</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-400">0+</div>
-                <div className="text-gray-300">Status Info</div>
-              </div>
-            </div> */}
-          </div>
-        </main>
+      <div className="absolute z-40 -right-14 top-[800px]">
+        <CircularText
+          text="GROOVE*TREE*GROOVE*TREE*"
+          onHover="speedUp"
+          spinDuration={20}
+        />
       </div>
 
       {/* Features Section */}
