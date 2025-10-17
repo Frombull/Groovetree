@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/app/lib/prisma';
-import { verifyAuth } from '@/app/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/app/lib/prisma";
+import { verifyAuth } from "@/app/lib/auth";
 
 export async function PUT(
   req: NextRequest,
@@ -8,9 +8,9 @@ export async function PUT(
 ) {
   try {
     const user = await verifyAuth(req);
-    
+
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { title, url, type, isActive, order } = await req.json();
@@ -21,13 +21,13 @@ export async function PUT(
       where: {
         id,
         page: {
-          userId: user.id
-        }
-      }
+          userId: user.id,
+        },
+      },
     });
 
     if (!link) {
-      return NextResponse.json({ error: 'Link not found' }, { status: 404 });
+      return NextResponse.json({ error: "Link not found" }, { status: 404 });
     }
 
     const updatedLink = await prisma.link.update({
@@ -38,14 +38,14 @@ export async function PUT(
         ...(type !== undefined && { type }),
         ...(isActive !== undefined && { isActive }),
         ...(order !== undefined && { order }),
-      }
+      },
     });
 
     return NextResponse.json(updatedLink);
   } catch (error) {
-    console.error('Error updating link:', error);
+    console.error("Error updating link:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
@@ -57,9 +57,9 @@ export async function DELETE(
 ) {
   try {
     const user = await verifyAuth(req);
-    
+
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = params;
@@ -69,24 +69,24 @@ export async function DELETE(
       where: {
         id,
         page: {
-          userId: user.id
-        }
-      }
+          userId: user.id,
+        },
+      },
     });
 
     if (!link) {
-      return NextResponse.json({ error: 'Link not found' }, { status: 404 });
+      return NextResponse.json({ error: "Link not found" }, { status: 404 });
     }
 
     await prisma.link.delete({
-      where: { id }
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting link:', error);
+    console.error("Error deleting link:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

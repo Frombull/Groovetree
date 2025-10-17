@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { useState } from 'react';
-import { useAuth } from '@/app/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import Link from "next/link";
+import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useState } from "react";
+import { useAuth } from "@/app/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { signup } = useAuth();
@@ -20,15 +20,15 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     if (password.length < 3) {
-      setError('Password too short');
+      setError("Password too short");
       return;
     }
 
@@ -37,9 +37,9 @@ export default function SignupPage() {
     const result = await signup(email, password, name || undefined);
 
     if (result.success) {
-      router.push('/dashboard');
+      router.push("/dashboard");
     } else {
-      setError(result.error || 'Error creating account');
+      setError(result.error || "Error creating account");
     }
 
     setLoading(false);
@@ -47,18 +47,15 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex font-sans">
-
       {/* Left */}
       <div
         className="hidden md:block w-1/2 bg-cover bg-center"
         style={{ backgroundImage: "url('/signup-page-bg.jpg')" }}
-      >
-      </div>
+      ></div>
 
       {/* Right */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 sm:p-12 bg-white text-gray-800">
         <div className="w-full max-w-sm">
-
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold">Join Groovetree!</h1>
           </div>
@@ -71,7 +68,9 @@ export default function SignupPage() {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="name" className="sr-only">Name*</label>
+              <label htmlFor="name" className="sr-only">
+                Name*
+              </label>
               <input
                 id="name"
                 type="text"
@@ -83,7 +82,9 @@ export default function SignupPage() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="email" className="sr-only">Email*</label>
+              <label htmlFor="email" className="sr-only">
+                Email*
+              </label>
               <input
                 id="email"
                 type="email"
@@ -96,7 +97,9 @@ export default function SignupPage() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="password" className="sr-only">Password*</label>
+              <label htmlFor="password" className="sr-only">
+                Password*
+              </label>
               <div className="relative">
                 <input
                   id="password"
@@ -113,13 +116,15 @@ export default function SignupPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
                 >
-                  {showPassword ? <FaEye/> : <FaEyeSlash/>}
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
               </div>
             </div>
 
             <div className="mb-6">
-              <label htmlFor="confirmPassword" className="sr-only">Confirm password</label>
+              <label htmlFor="confirmPassword" className="sr-only">
+                Confirm password
+              </label>
               <input
                 id="confirmPassword"
                 type={showPassword ? "text" : "password"}
@@ -135,8 +140,9 @@ export default function SignupPage() {
               type="submit"
               disabled={loading}
               className="w-full bg-[#483D8B] text-white font-semibold py-3 rounded-md hover:bg-[#3A316E] transition disabled:opacity-50 cursor-pointer"
-              data-cy="signup-button">
-              {loading ? 'Creating account...' : 'Continue'}
+              data-cy="signup-button"
+            >
+              {loading ? "Creating account..." : "Continue"}
             </button>
           </form>
 
@@ -147,20 +153,23 @@ export default function SignupPage() {
           </div>
 
           <div className="space-y-3">
-          <button className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer">
-                <FaGoogle />
-                Sign up with Google
+            <button className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer">
+              <FaGoogle />
+              Sign up with Google
             </button>
             <button className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer">
-                <FaGithub />
-                Sign up with Github
+              <FaGithub />
+              Sign up with Github
             </button>
           </div>
 
           <div className="text-center mt-8">
             <p className="text-gray-600">
-              Already have an account?{' '}
-              <Link href="/login" className="text-purple-600 hover:underline font-semibold">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="text-purple-600 hover:underline font-semibold"
+              >
                 Log in
               </Link>
             </p>

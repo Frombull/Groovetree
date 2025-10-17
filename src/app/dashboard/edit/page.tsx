@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@/app/hooks/useAuth';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "@/app/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   FaPlus,
   FaTimes,
@@ -16,13 +16,13 @@ import {
   FaExternalLinkAlt,
   FaSoundcloud,
   FaApple,
-} from 'react-icons/fa';
-import { IoMdLink, IoMdSettings } from 'react-icons/io';
-import { MdEvent, MdLogout, MdSave, MdEdit } from 'react-icons/md';
-import { BsEyeFill } from 'react-icons/bs';
-import { RiShareFill } from 'react-icons/ri';
-import Image from 'next/image';
-import toast from 'react-hot-toast';
+} from "react-icons/fa";
+import { IoMdLink, IoMdSettings } from "react-icons/io";
+import { MdEvent, MdLogout, MdSave, MdEdit } from "react-icons/md";
+import { BsEyeFill } from "react-icons/bs";
+import { RiShareFill } from "react-icons/ri";
+import Image from "next/image";
+import toast from "react-hot-toast";
 
 interface PageData {
   id: string;
@@ -58,76 +58,76 @@ interface LinkTypeItem {
 
 const linkCategories: LinkCategory[] = [
   {
-    id: 'music',
-    name: 'Music',
+    id: "music",
+    name: "Music",
     icon: <FaSpotify className="w-4 h-4" />,
     items: [
       {
-        type: 'SPOTIFY',
-        name: 'Spotify',
-        description: 'Share your latest or favorite music',
+        type: "SPOTIFY",
+        name: "Spotify",
+        description: "Share your latest or favorite music",
         icon: <FaSpotify className="w-6 h-6 text-green-500" />,
       },
       {
-        type: 'APPLE_MUSIC',
-        name: 'Apple Music',
-        description: 'Share your Apple Music content',
+        type: "APPLE_MUSIC",
+        name: "Apple Music",
+        description: "Share your Apple Music content",
         icon: <FaApple className="w-6 h-6 text-gray-700" />,
       },
       {
-        type: 'SOUNDCLOUD',
-        name: 'SoundCloud',
-        description: 'Share your SoundCloud tracks',
+        type: "SOUNDCLOUD",
+        name: "SoundCloud",
+        description: "Share your SoundCloud tracks",
         icon: <FaSoundcloud className="w-6 h-6 text-orange-500" />,
       },
       {
-        type: 'YOUTUBE',
-        name: 'YouTube',
-        description: 'Share YouTube videos',
+        type: "YOUTUBE",
+        name: "YouTube",
+        description: "Share YouTube videos",
         icon: <FaYoutube className="w-6 h-6 text-red-500" />,
       },
       {
-        type: 'GENERIC',
-        name: 'Custom Music Link',
-        description: 'Add any music platform link',
+        type: "GENERIC",
+        name: "Custom Music Link",
+        description: "Add any music platform link",
         icon: <IoMdLink className="w-6 h-6 text-blue-500" />,
       },
     ],
   },
   {
-    id: 'social',
-    name: 'Social',
+    id: "social",
+    name: "Social",
     icon: <FaInstagram className="w-4 h-4" />,
     items: [
       {
-        type: 'INSTAGRAM',
-        name: 'Instagram',
-        description: 'Link to your Instagram profile',
+        type: "INSTAGRAM",
+        name: "Instagram",
+        description: "Link to your Instagram profile",
         icon: <FaInstagram className="w-6 h-6 text-pink-500" />,
       },
       {
-        type: 'TIKTOK',
-        name: 'TikTok',
-        description: 'Link to your TikTok profile',
+        type: "TIKTOK",
+        name: "TikTok",
+        description: "Link to your TikTok profile",
         icon: <FaTiktok className="w-6 h-6" />,
       },
     ],
   },
   {
-    id: 'other',
-    name: 'Other',
+    id: "other",
+    name: "Other",
     icon: <IoMdLink className="w-4 h-4" />,
     items: [
       {
-        type: 'GENERIC',
-        name: 'Custom Link',
-        description: 'Add any custom link',
+        type: "GENERIC",
+        name: "Custom Link",
+        description: "Add any custom link",
         icon: <IoMdLink className="w-6 h-6 text-blue-500" />,
       },
       {
-        type: 'TOUR',
-        name: 'Tour Dates',
-        description: 'Link to your tour schedule',
+        type: "TOUR",
+        name: "Tour Dates",
+        description: "Link to your tour schedule",
         icon: <MdEvent className="w-6 h-6 text-purple-500" />,
       },
     ],
@@ -142,19 +142,23 @@ export default function EditPage() {
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('music');
+  const [selectedCategory, setSelectedCategory] = useState<string>("music");
   const [editingLink, setEditingLink] = useState<Link | null>(null);
-  const [linkForm, setLinkForm] = useState({ title: '', url: '', type: 'GENERIC' });
+  const [linkForm, setLinkForm] = useState({
+    title: "",
+    url: "",
+    type: "GENERIC",
+  });
 
   const createPage = useCallback(async () => {
     try {
-      const response = await fetch('/api/page/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/page/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          slug: user?.email?.split('@')[0] || 'user',
-          title: user?.name || 'My Page',
-          bio: 'Bio do artista.',
+          slug: user?.email?.split("@")[0] || "user",
+          title: user?.name || "My Page",
+          bio: "Bio do artista.",
         }),
       });
 
@@ -163,13 +167,13 @@ export default function EditPage() {
         setPageData(data);
       }
     } catch (error) {
-      console.error('Error creating page:', error);
+      console.error("Error creating page:", error);
     }
   }, [user]);
 
   const fetchPageData = useCallback(async () => {
     try {
-      const response = await fetch('/api/page/me');
+      const response = await fetch("/api/page/me");
       if (response.ok) {
         const data = await response.json();
         setPageData(data);
@@ -177,8 +181,8 @@ export default function EditPage() {
         await createPage();
       }
     } catch (error) {
-      console.error('Error fetching page:', error);
-      toast.error('Erro ao carregar página');
+      console.error("Error fetching page:", error);
+      toast.error("Erro ao carregar página");
     } finally {
       setIsLoadingPage(false);
     }
@@ -186,7 +190,7 @@ export default function EditPage() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/login');
+      router.push("/login");
     }
   }, [user, loading, router]);
 
@@ -202,8 +206,8 @@ export default function EditPage() {
       .find((item) => item.type === linkType);
 
     setLinkForm({
-      title: category?.name || '',
-      url: '',
+      title: category?.name || "",
+      url: "",
       type: linkType,
     });
     setShowAddModal(false);
@@ -222,7 +226,7 @@ export default function EditPage() {
 
   const handleSaveLink = async () => {
     if (!linkForm.title || !linkForm.url) {
-      toast.error('Preencha todos os campos');
+      toast.error("Preencha todos os campos");
       return;
     }
 
@@ -230,24 +234,24 @@ export default function EditPage() {
       if (editingLink) {
         // Atualizar link existente
         const response = await fetch(`/api/links/${editingLink.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(linkForm),
         });
 
         if (response.ok) {
-          toast.success('Link atualizado!');
+          toast.success("Link atualizado!");
           fetchPageData();
           setShowEditModal(false);
           setEditingLink(null);
         } else {
-          toast.error('Erro ao atualizar link');
+          toast.error("Erro ao atualizar link");
         }
       } else {
         // Criar novo link
-        const response = await fetch('/api/links/create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/links/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...linkForm,
             pageId: pageData?.id,
@@ -255,44 +259,44 @@ export default function EditPage() {
         });
 
         if (response.ok) {
-          toast.success('Link adicionado!');
+          toast.success("Link adicionado!");
           fetchPageData();
           setShowEditModal(false);
         } else {
-          toast.error('Erro ao adicionar link');
+          toast.error("Erro ao adicionar link");
         }
       }
     } catch (error) {
-      console.error('Error saving link:', error);
-      toast.error('Erro ao salvar link');
+      console.error("Error saving link:", error);
+      toast.error("Erro ao salvar link");
     }
   };
 
   const handleDeleteLink = async (linkId: string) => {
-    if (!confirm('Tem certeza que deseja deletar este link?')) return;
+    if (!confirm("Tem certeza que deseja deletar este link?")) return;
 
     try {
       const response = await fetch(`/api/links/${linkId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
-        toast.success('Link deletado!');
+        toast.success("Link deletado!");
         fetchPageData();
       } else {
-        toast.error('Erro ao deletar link');
+        toast.error("Erro ao deletar link");
       }
     } catch (error) {
-      console.error('Error deleting link:', error);
-      toast.error('Erro ao deletar link');
+      console.error("Error deleting link:", error);
+      toast.error("Erro ao deletar link");
     }
   };
 
   const handleUpdatePage = async () => {
     try {
-      const response = await fetch('/api/page/update', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/page/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: pageData?.title,
           bio: pageData?.bio,
@@ -300,13 +304,13 @@ export default function EditPage() {
       });
 
       if (response.ok) {
-        toast.success('Página atualizada!');
+        toast.success("Página atualizada!");
       } else {
-        toast.error('Erro ao atualizar página');
+        toast.error("Erro ao atualizar página");
       }
     } catch (error) {
-      console.error('Error updating page:', error);
-      toast.error('Erro ao atualizar página');
+      console.error("Error updating page:", error);
+      toast.error("Erro ao atualizar página");
     }
   };
 
@@ -397,11 +401,15 @@ export default function EditPage() {
 
           {/* Profile Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Profile Title</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Profile Title
+            </label>
             <input
               type="text"
               value={pageData.title}
-              onChange={(e) => setPageData({ ...pageData, title: e.target.value })}
+              onChange={(e) =>
+                setPageData({ ...pageData, title: e.target.value })
+              }
               onBlur={handleUpdatePage}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="Your artist name"
@@ -410,10 +418,14 @@ export default function EditPage() {
 
           {/* Bio */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Bio
+            </label>
             <textarea
-              value={pageData.bio || ''}
-              onChange={(e) => setPageData({ ...pageData, bio: e.target.value })}
+              value={pageData.bio || ""}
+              onChange={(e) =>
+                setPageData({ ...pageData, bio: e.target.value })
+              }
               onBlur={handleUpdatePage}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
               rows={3}
@@ -423,7 +435,9 @@ export default function EditPage() {
 
           {/* Groovetree URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Groovetree URL</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Groovetree URL
+            </label>
             <div className="flex items-center gap-2">
               <span className="text-gray-500 text-sm">groovetree.com/</span>
               <input
@@ -459,7 +473,9 @@ export default function EditPage() {
                 >
                   <FaGripVertical className="text-gray-400 cursor-grab" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{link.title}</p>
+                    <p className="font-medium text-gray-900 truncate">
+                      {link.title}
+                    </p>
                     <p className="text-sm text-gray-500 truncate flex items-center gap-1">
                       <FaExternalLinkAlt className="w-3 h-3" />
                       {link.url}
@@ -486,8 +502,12 @@ export default function EditPage() {
             ) : (
               <div className="text-center py-16 text-gray-400">
                 <p className="text-6xl mb-4">🎵</p>
-                <p className="text-lg font-medium text-gray-700">No links yet</p>
-                <p className="text-sm">Click the button above to add your first link</p>
+                <p className="text-lg font-medium text-gray-700">
+                  No links yet
+                </p>
+                <p className="text-sm">
+                  Click the button above to add your first link
+                </p>
               </div>
             )}
           </div>
@@ -517,8 +537,8 @@ export default function EditPage() {
                   onClick={() => setSelectedCategory(category.id)}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${
                     selectedCategory === category.id
-                      ? 'bg-purple-600 text-white shadow-lg shadow-purple-200'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? "bg-purple-600 text-white shadow-lg shadow-purple-200"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   {category.icon}
@@ -543,7 +563,9 @@ export default function EditPage() {
                         <h3 className="font-semibold text-gray-900 group-hover:text-purple-700 truncate">
                           {item.name}
                         </h3>
-                        <p className="text-sm text-gray-500 truncate">{item.description}</p>
+                        <p className="text-sm text-gray-500 truncate">
+                          {item.description}
+                        </p>
                       </div>
                       <FaPlus className="text-gray-400 group-hover:text-purple-600 w-5 h-5 flex-shrink-0" />
                     </button>
@@ -559,7 +581,9 @@ export default function EditPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-md w-full">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold">{editingLink ? 'Edit Link' : 'New Link'}</h2>
+              <h2 className="text-2xl font-bold">
+                {editingLink ? "Edit Link" : "New Link"}
+              </h2>
               <button
                 onClick={() => {
                   setShowEditModal(false);
@@ -573,22 +597,30 @@ export default function EditPage() {
 
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Title
+                </label>
                 <input
                   type="text"
                   value={linkForm.title}
-                  onChange={(e) => setLinkForm({ ...linkForm, title: e.target.value })}
+                  onChange={(e) =>
+                    setLinkForm({ ...linkForm, title: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="e.g., My Spotify"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  URL
+                </label>
                 <input
                   type="url"
                   value={linkForm.url}
-                  onChange={(e) => setLinkForm({ ...linkForm, url: e.target.value })}
+                  onChange={(e) =>
+                    setLinkForm({ ...linkForm, url: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="https://..."
                 />

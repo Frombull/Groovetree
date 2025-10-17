@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/app/lib/prisma';
-import { verifyAuth } from '@/app/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/app/lib/prisma";
+import { verifyAuth } from "@/app/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
     const user = await verifyAuth(req);
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { title, url, type, pageId } = await req.json();
@@ -16,21 +16,20 @@ export async function POST(req: NextRequest) {
     const page = await prisma.page.findFirst({
       where: {
         id: pageId,
-        userId: user.id
+        userId: user.id,
       },
       include: {
-        links: true
-      }
+        links: true,
+      },
     });
 
     if (!page) {
-      return NextResponse.json({ error: 'Page not found' }, { status: 404 });
+      return NextResponse.json({ error: "Page not found" }, { status: 404 });
     }
 
     // Determina a ordem do novo link
-    const maxOrder = page.links.length > 0
-      ? Math.max(...page.links.map(l => l.order))
-      : -1;
+    const maxOrder =
+      page.links.length > 0 ? Math.max(...page.links.map((l) => l.order)) : -1;
 
     const link = await prisma.link.create({
       data: {
@@ -38,15 +37,15 @@ export async function POST(req: NextRequest) {
         url,
         type,
         order: maxOrder + 1,
-        pageId
-      }
+        pageId,
+      },
     });
 
     return NextResponse.json(link);
   } catch (error) {
-    console.error('Error creating link:', error);
+    console.error("Error creating link:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

@@ -61,16 +61,16 @@ export async function requireAuth(): Promise<AuthUser> {
 export async function verifyAuth(req: Request): Promise<AuthUser | null> {
   try {
     // Extrai o token dos cookies da requisição
-    const cookieHeader = req.headers.get('cookie');
+    const cookieHeader = req.headers.get("cookie");
     if (!cookieHeader) return null;
 
-    const cookies = cookieHeader.split(';').reduce((acc, cookie) => {
-      const [key, value] = cookie.trim().split('=');
+    const cookies = cookieHeader.split(";").reduce((acc, cookie) => {
+      const [key, value] = cookie.trim().split("=");
       acc[key] = value;
       return acc;
     }, {} as Record<string, string>);
 
-    const token = cookies['auth-token'];
+    const token = cookies["auth-token"];
     if (!token) return null;
 
     const decoded = jwt.verify(
@@ -99,7 +99,7 @@ export async function verifyAuth(req: Request): Promise<AuthUser | null> {
       id: user.id,
       email: user.email,
       name: user.name,
-      page: user.pages?.[0] || null
+      page: user.pages?.[0] || null,
     };
   } catch (error) {
     console.error("Error verifying auth:", error);

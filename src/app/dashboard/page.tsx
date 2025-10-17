@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useAuth } from '@/app/hooks/useAuth';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useAuth } from "@/app/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -11,10 +11,10 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        router.push('/login');
+        router.push("/login");
       } else {
         // Redireciona para a página de edição
-        router.push('/dashboard/edit');
+        router.push("/dashboard/edit");
       }
     }
   }, [user, loading, router]);
