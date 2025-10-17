@@ -57,3 +57,52 @@ export async function requireAuth(): Promise<AuthUser> {
 
   return user;
 }
+
+export async function verifyAuth(req: Request): Promise<AuthUser | null> {
+  try {
+    // Extrai o token dos cookies da requisição
+    const cookieHeader = req.headers.get('cookie');
+    if (!cookieHeader) return null;
+
+    const cookies = cookieHeader.split(';').reduce((acc, cookie) => {
+      const [key, value] = cookie.trim().split('=');
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>);
+
+    const token = cookies['auth-token'];
+    if (!token) return null;
+
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || "fallback-secret"
+    ) as { userId: string; email: string };
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        pages: {
+          select: {
+            slug: true,
+            avatarUrl: true,
+          },
+        },
+      },
+    });
+
+    if (!user) return null;
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      page: user.pages?.[0] || null
+    };
+  } catch (error) {
+    console.error("Error verifying auth:", error);
+    return null;
+  }
+}

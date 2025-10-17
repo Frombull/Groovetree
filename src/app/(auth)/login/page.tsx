@@ -13,7 +13,7 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    
+
     const { login } = useAuth();
     const router = useRouter();
 
@@ -23,13 +23,13 @@ export default function Login() {
         setLoading(true);
 
         const result = await login(email, password);
-        
+
         if (result.success) {
-            router.push('/');
+            router.push('/dashboard');
         } else {
             setError(result.error || 'Login error');
         }
-        
+
         setLoading(false);
     };
 

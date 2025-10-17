@@ -14,7 +14,7 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const { signup } = useAuth();
   const router = useRouter();
 
@@ -35,13 +35,13 @@ export default function SignupPage() {
     setLoading(true);
 
     const result = await signup(email, password, name || undefined);
-    
+
     if (result.success) {
-      router.push('/');
+      router.push('/dashboard');
     } else {
       setError(result.error || 'Error creating account');
     }
-    
+
     setLoading(false);
   };
 
@@ -58,7 +58,7 @@ export default function SignupPage() {
       {/* Right */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 sm:p-12 bg-white text-gray-800">
         <div className="w-full max-w-sm">
-          
+
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold">Join Groovetree!</h1>
           </div>
@@ -130,7 +130,7 @@ export default function SignupPage() {
                 required
               />
             </div>
-            
+
             <button
               type="submit"
               disabled={loading}
@@ -156,7 +156,7 @@ export default function SignupPage() {
                 Sign up with Github
             </button>
           </div>
-          
+
           <div className="text-center mt-8">
             <p className="text-gray-600">
               Already have an account?{' '}
