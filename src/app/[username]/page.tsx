@@ -1,5 +1,12 @@
-import { prisma } from '@/app/lib/prisma';
-import { notFound } from 'next/navigation';
+import { redirect } from "next/navigation";
+import { prisma } from "@/app/lib/prisma";
+
+import { ArtistProfile } from "./_components/artist-profile";
+import MusicPlatforms from "./_components/music-platforms";
+import { PhotoGallery } from "./_components/photo-gallery";
+import { ShowCalendar } from "./_components/show-calendar";
+import Link from "next/link";
+import { SocialLinks } from "./_components/social-links";
 
 interface UserPageProps {
   params: Promise<{
@@ -28,10 +35,10 @@ async function getUserPage(username: string) {
         },
       },
     });
-    
+
     return page;
   } catch (error) {
-    console.error('Error fetching user page:', error);
+    console.error("Error fetching user page:", error);
     return null;
   }
 }
@@ -40,39 +47,50 @@ export default async function UserPage({ params }: UserPageProps) {
   const { username } = await params;
   const page = await getUserPage(username);
 
-  if (!page) {
-    notFound();
-  }
+  if (!page) redirect("/");
+
+  console.log(page);
+
+  const { avatarUrl, backgroundImageUrl, user, title, bio } = page;
+
+  const { name } = user;
+  console.log(backgroundImageUrl);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
-            {page.title}
-          </h1>
-          {page.bio && (
-            <p className="text-gray-600 mb-4">{page.bio}</p>
-          )}
-          <p className="text-sm text-gray-500 mb-6">@{page.slug}</p>
-          
-          {page.links.length > 0 && (
-            <div className="space-y-3">
-              {page.links.map((link) => (
-                <a
-                  key={link.id}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  {link.title}
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
+    <main className="relative min-h-screen bg-black">
+      {/* Background image with overlay */}
+      {backgroundImageUrl && (
+        <>
+          <div
+            className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${backgroundImageUrl})` }}
+          />
+          <div className="fixed inset-0 z-0 bg-black/90 backdrop-blur-md" />
+        </>
+      )}
+
+      {/* Content */}
+      <div className="relative z-[9999] mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
+        <ArtistProfile
+          name={name}
+          title={title}
+          bio={bio}
+          avatarUrl={avatarUrl || undefined}
+        />
+        <SocialLinks />
+        <MusicPlatforms />
+        <PhotoGallery />
+        <ShowCalendar />
+
+        <p className="mt-8 text-center text-sm text-muted-foreground">
+          © 2025{" "}
+          <Link href="/" className="underline">
+            Groovetree
+          </Link>
+          {". "}
+          Todos os direitos reservados.
+        </p>
       </div>
-    </div>
+    </main>
   );
 }

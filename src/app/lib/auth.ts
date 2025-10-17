@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken';
-import { cookies } from 'next/headers';
-import { prisma } from './prisma';
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
+import { prisma } from "./prisma";
 
 export interface AuthUser {
   id: string;
@@ -15,7 +15,7 @@ export interface AuthUser {
 export async function getAuthUser(): Promise<AuthUser | null> {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get('auth-token')?.value;
+    const token = cookieStore.get("auth-token")?.value;
 
     if (!token) {
       return null;
@@ -23,7 +23,7 @@ export async function getAuthUser(): Promise<AuthUser | null> {
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || 'fallback-secret'
+      process.env.JWT_SECRET || "fallback-secret"
     ) as { userId: string; email: string };
 
     const user = await prisma.user.findUnique({
@@ -32,28 +32,28 @@ export async function getAuthUser(): Promise<AuthUser | null> {
         id: true,
         email: true,
         name: true,
-        page: {
+        pages: {
           select: {
             slug: true,
             avatarUrl: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     return user;
   } catch (error) {
-    console.error('Error verifying authentication:', error);
+    console.error("Error verifying authentication:", error);
     return null;
   }
 }
 
 export async function requireAuth(): Promise<AuthUser> {
   const user = await getAuthUser();
-  
+
   if (!user) {
-    throw new Error('Unauthenticated user');
+    throw new Error("Unauthenticated user");
   }
-  
+
   return user;
 }

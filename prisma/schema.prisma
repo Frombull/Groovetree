@@ -8,18 +8,18 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
+  id        String   @id @default(cuid())
+  email     String   @unique
   name      String?
   password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  page      Page?     // User's artist page
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  pages     Page[] // User can have multiple pages
 }
 
 model Page {
-  id                 String    @id @default(cuid())
-  slug               String    @unique // Username in the URL /artist-name/
+  id                 String  @id @default(cuid())
+  slug               String  @unique // Username in the URL /artist-name/
   title              String
   bio                String?
   avatarUrl          String?
@@ -27,14 +27,14 @@ model Page {
   textColor          String?
   backgroundImageUrl String?
 
-  userId      String     @unique
-  user        User       @relation(fields: [userId], references: [id])
-  links       Link[]
-  events      Event[]
-  embeds      Embed[]
+  userId String
+  user   User    @relation(fields: [userId], references: [id])
+  links  Link[]
+  events Event[]
+  embeds Embed[]
 
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum LinkType {
@@ -51,12 +51,12 @@ enum LinkType {
 }
 
 model Link {
-  id        String   @id @default(cuid())
-  title     String
-  url       String
-  type      LinkType @default(GENERIC)
-  order     Int      @default(0)
-  isActive  Boolean  @default(true)
+  id       String   @id @default(cuid())
+  title    String
+  url      String
+  type     LinkType @default(GENERIC)
+  order    Int      @default(0)
+  isActive Boolean  @default(true)
 
   pageId    String
   page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
@@ -65,30 +65,30 @@ model Link {
 }
 
 model Event {
-  id          String    @id @default(cuid())
-  title       String
-  venue       String
-  city        String
-  date        DateTime
-  ticketUrl   String?
-  isActive    Boolean   @default(true)
+  id        String   @id @default(cuid())
+  title     String
+  venue     String
+  city      String
+  date      DateTime
+  ticketUrl String?
+  isActive  Boolean  @default(true)
 
-  pageId      String
-  page        Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Embed {
-  id        String    @id @default(cuid())
-  title     String?
-  embedUrl  String
-  type      String    // "YOUTUBE_VIDEO", "SPOTIFY_ALBUM"
-  order     Int       @default(0)
-  isActive  Boolean   @default(true)
+  id       String  @id @default(cuid())
+  title    String?
+  embedUrl String
+  type     String // "YOUTUBE_VIDEO", "SPOTIFY_ALBUM"
+  order    Int     @default(0)
+  isActive Boolean @default(true)
 
   pageId    String
-  page      Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
