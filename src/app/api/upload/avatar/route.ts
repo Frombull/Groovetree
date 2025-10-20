@@ -38,10 +38,7 @@ export async function POST(req: NextRequest) {
     const uploadResult = await uploadProfilePicture(file, user.id);
 
     if (!uploadResult.success) {
-      return NextResponse.json(
-        { error: uploadResult.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: uploadResult.error }, { status: 400 });
     }
 
     // Atualizar avatar URL no banco

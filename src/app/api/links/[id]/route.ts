@@ -4,7 +4,7 @@ import { verifyAuth } from "@/app/lib/auth";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
@@ -14,7 +14,7 @@ export async function PUT(
     }
 
     const { title, url, type, isActive, order } = await req.json();
-    const { id } = params;
+    const { id } = await params;
 
     // Verifica se o link pertence ao usuário
     const link = await prisma.link.findFirst({
@@ -53,7 +53,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await verifyAuth(req);
@@ -62,7 +62,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Verifica se o link pertence ao usuário
     const link = await prisma.link.findFirst({

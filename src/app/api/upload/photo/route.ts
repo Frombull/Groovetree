@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     const fileName = `${user.id}/photo-${Date.now()}.${fileExt}`;
 
     // Upload para Supabase Storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(PHOTOS_BUCKET)
       .upload(fileName, file, {
         cacheControl: "3600",
