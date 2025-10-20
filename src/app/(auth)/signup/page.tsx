@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function SignupPage() {
+function SignupContent() {
   const searchParams = useSearchParams();
   const usernameFromUrl = searchParams.get("username") || "";
 
@@ -187,5 +187,17 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 via-pink-600 to-red-600">
+        <div className="text-white text-xl">Carregando...</div>
+      </div>
+    }>
+      <SignupContent />
+    </Suspense>
   );
 }

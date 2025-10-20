@@ -7,7 +7,6 @@ import {
 } from "@/app/components/ui/avatar";
 
 export function ArtistProfile({
-  name,
   avatarUrl,
   title,
   bio,

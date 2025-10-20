@@ -1033,6 +1033,7 @@ export default function EditPage() {
                   key={photo.id}
                   className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all"
                 >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={photo.imageUrl}
                     alt={photo.caption || "Photo"}
@@ -1549,6 +1550,7 @@ export default function EditPage() {
               {/* Image Preview */}
               {(photoPreview || photoForm.imageUrl) && (
                 <div className="rounded-lg overflow-hidden border border-gray-200">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={photoPreview || photoForm.imageUrl}
                     alt="Preview"

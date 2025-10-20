@@ -44,18 +44,17 @@ export function SocialLinks({ links, isLight = false }: SocialLinksProps) {
               aria-label={link.title}
               title={link.title}
               className={`
-                p-4 rounded-xl backdrop-blur-xl border shadow-xl
-                transition-all duration-300 hover:scale-110
-                ${
-                  isLight
-                    ? "bg-black/5 border-black/10 hover:bg-black/10"
-                    : "bg-white/10 border-white/20 hover:bg-white/15"
-                }
+              p-4 rounded-xl backdrop-blur-xl border shadow-xl
+              transition-all duration-300 hover:scale-110
+              ${
+                isLight
+                  ? "bg-black/5 border-black/10 hover:bg-black/10"
+                  : "bg-white/10 border-white/20 hover:bg-white/15"
+              }
               `}
             >
               <Icon
-                className="h-5 w-5"
-                style={{ color: isLight ? "#000000" : "#ffffff" }}
+                className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`}
               />
             </a>
           );
