@@ -61,7 +61,7 @@ export default function Home() {
               <div className="mb-12 flex justify-center">
                 <div className="relative flex items-center w-full max-w-2xl bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
                   <span className="text-gray-300 pl-6 text-lg">
-                    groovetree.com.br/
+                    groovetree.vercel.app.br/
                   </span>
                   <input
                     type="text"

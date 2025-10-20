@@ -44,6 +44,14 @@ async function getUserPage(username: string) {
             date: "asc",
           },
         },
+        photos: {
+          where: {
+            isActive: true,
+          },
+          orderBy: {
+            order: "asc",
+          },
+        },
       },
     });
 
@@ -62,8 +70,16 @@ export default async function UserPage({ params }: UserPageProps) {
 
   console.log(page);
 
-  const { avatarUrl, backgroundImageUrl, user, title, bio, links, events } =
-    page;
+  const {
+    avatarUrl,
+    backgroundImageUrl,
+    user,
+    title,
+    bio,
+    links,
+    events,
+    photos,
+  } = page;
 
   const { name } = user;
   console.log(backgroundImageUrl);
@@ -109,8 +125,9 @@ export default async function UserPage({ params }: UserPageProps) {
         />
         <SocialLinks links={socialLinks} />
         <MusicPlatforms links={musicLinks} />
-        <PhotoGallery />
+
         <ShowCalendar events={events} />
+        <PhotoGallery photos={photos} />
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
           © 2025{" "}

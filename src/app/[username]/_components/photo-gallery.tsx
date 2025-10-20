@@ -1,54 +1,60 @@
 "use client";
 
-import TiltedCard from "@/app/components/TiltedCard";
+import Image from "next/image";
 
-const photos = [
-  {
-    id: 1,
-    url: "/dj-performing-at-festival.jpg",
-    alt: "Live performance at festival",
-  },
-  {
-    id: 2,
-    url: "/dj-in-studio-with-equipment.jpg",
-    alt: "Studio session",
-  },
-  {
-    id: 3,
-    url: "/dj-at-nightclub-with-crowd.jpg",
-    alt: "Club night",
-  },
-  {
-    id: 4,
-    url: "/dj-portrait-with-neon-lights.jpg",
-    alt: "Artist portrait",
-  },
-];
+interface Photo {
+  id: string;
+  imageUrl: string;
+  caption: string | null;
+  order: number;
+}
 
-export function PhotoGallery() {
+interface PhotoGalleryProps {
+  photos: Photo[];
+}
+
+export function PhotoGallery({ photos }: PhotoGalleryProps) {
+  // Se não houver fotos, não renderiza nada
+  if (!photos || photos.length === 0) {
+    return null;
+  }
+
+  // Limitar a 4 fotos
+  const displayPhotos = photos.slice(0, 4);
+
   return (
-    <section className="text-center">
+    <section className="text-center mb-12">
       <h1 className="my-6 mt-8 font-sans text-3xl font-bold tracking-tight text-white text-balance">
         Nos palcos
       </h1>
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-        {photos.map((photo) => (
-          <TiltedCard
-            key={photo.id}
-            imageSrc="https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58"
-            altText="Kendrick Lamar - GNX Album Cover"
-            captionText="Kendrick Lamar - GNX"
-            containerHeight="300px"
-            containerWidth="300px"
-            imageHeight="300px"
-            imageWidth="300px"
-            rotateAmplitude={12}
-            scaleOnHover={1.2}
-            showMobileWarning={false}
-            showTooltip={true}
-            displayOverlayContent={true}
-            overlayContent={<p className="tilted-card-demo-text">Laroc</p>}
-          />
+      {/* Layout despojado: uma foto por linha, qualidade original */}
+      <div className="flex flex-col items-center gap-8 max-w-4xl mx-auto px-4">
+        {displayPhotos.map((photo, index) => (
+          <div key={photo.id} className="w-full group">
+            {/* Imagem com qualidade original */}
+            <div
+              className="relative overflow-hidden rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-[1.02] w-full"
+              style={{ minHeight: "400px" }}
+            >
+              <Image
+                src={photo.imageUrl}
+                alt={photo.caption || "Photo"}
+                width={1200}
+                height={800}
+                quality={100}
+                className="w-full h-auto object-contain"
+                unoptimized={true}
+                priority={index === 0}
+              />
+            </div>
+
+            {/* Legenda embaixo da foto */}
+            {photo.caption && (
+              <p className="mt-4 text-white text-lg font-semibold tracking-wide">
+                {photo.caption}
+              </p>
+            )}
+          </div>
         ))}
       </div>
     </section>

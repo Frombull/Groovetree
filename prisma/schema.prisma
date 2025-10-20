@@ -32,6 +32,7 @@ model Page {
   links  Link[]
   events Event[]
   embeds Embed[]
+  photos Photo[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -47,6 +48,8 @@ enum LinkType {
   BEATPORT
   INSTAGRAM
   TIKTOK
+  FACEBOOK
+  TWITTER
   TOUR
 }
 
@@ -88,6 +91,19 @@ model Embed {
   type     String // "YOUTUBE_VIDEO", "SPOTIFY_ALBUM"
   order    Int     @default(0)
   isActive Boolean @default(true)
+
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Photo {
+  id              String  @id @default(cuid())
+  imageUrl        String  // URL da imagem
+  caption         String? // Texto do overlay (opcional)
+  order           Int     @default(0)
+  isActive        Boolean @default(true)
 
   pageId    String
   page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)

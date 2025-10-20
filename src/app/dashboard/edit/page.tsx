@@ -18,10 +18,18 @@ import {
   FaApple,
   FaCopy,
   FaCheck,
+  FaFacebook,
+  FaHeart,
 } from "react-icons/fa";
-import { IoMdLink, IoMdSettings } from "react-icons/io";
-import { MdEvent, MdLogout, MdSave, MdEdit } from "react-icons/md";
-import { BsEyeFill } from "react-icons/bs";
+import { IoMdSettings, IoMdMusicalNote } from "react-icons/io";
+import {
+  MdEvent,
+  MdLogout,
+  MdSave,
+  MdEdit,
+  MdPhotoLibrary,
+} from "react-icons/md";
+import { BsEyeFill, BsTwitterX } from "react-icons/bs";
 import { RiShareFill } from "react-icons/ri";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -34,6 +42,7 @@ interface PageData {
   avatarUrl: string | null;
   links: Link[];
   events: Event[];
+  photos: Photo[];
 }
 
 interface Link {
@@ -56,6 +65,14 @@ interface Event {
   isActive: boolean;
 }
 
+interface Photo {
+  id: string;
+  imageUrl: string;
+  caption: string | null;
+  order: number;
+  isActive: boolean;
+}
+
 interface LinkCategory {
   id: string;
   name: string;
@@ -74,7 +91,7 @@ const linkCategories: LinkCategory[] = [
   {
     id: "music",
     name: "Music",
-    icon: <FaSpotify className="w-4 h-4" />,
+    icon: <IoMdMusicalNote className="w-4 h-4" />,
     items: [
       {
         type: "SPOTIFY",
@@ -100,18 +117,12 @@ const linkCategories: LinkCategory[] = [
         description: "Share YouTube videos",
         icon: <FaYoutube className="w-6 h-6 text-red-500" />,
       },
-      {
-        type: "GENERIC",
-        name: "Custom Music Link",
-        description: "Add any music platform link",
-        icon: <IoMdLink className="w-6 h-6 text-blue-500" />,
-      },
     ],
   },
   {
     id: "social",
     name: "Social",
-    icon: <FaInstagram className="w-4 h-4" />,
+    icon: <FaHeart className="w-4 h-4" />,
     items: [
       {
         type: "INSTAGRAM",
@@ -125,24 +136,17 @@ const linkCategories: LinkCategory[] = [
         description: "Link to your TikTok profile",
         icon: <FaTiktok className="w-6 h-6" />,
       },
-    ],
-  },
-  {
-    id: "other",
-    name: "Other",
-    icon: <IoMdLink className="w-4 h-4" />,
-    items: [
       {
-        type: "GENERIC",
-        name: "Custom Link",
-        description: "Add any custom link",
-        icon: <IoMdLink className="w-6 h-6 text-blue-500" />,
+        type: "FACEBOOK",
+        name: "Facebook",
+        description: "Link to your Facebook page",
+        icon: <FaFacebook className="w-6 h-6 text-blue-600" />,
       },
       {
-        type: "TOUR",
-        name: "Tour Dates",
-        description: "Link to your tour schedule",
-        icon: <MdEvent className="w-6 h-6 text-purple-500" />,
+        type: "TWITTER",
+        name: "X (Twitter)",
+        description: "Link to your X profile",
+        icon: <BsTwitterX className="w-6 h-6" />,
       },
     ],
   },
@@ -159,10 +163,13 @@ export default function EditPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("music");
   const [editingLink, setEditingLink] = useState<Link | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [editingPhoto, setEditingPhoto] = useState<Photo | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [linkForm, setLinkForm] = useState({
     title: "",
     url: "",
@@ -176,6 +183,13 @@ export default function EditPage() {
     date: "",
     ticketUrl: "",
   });
+  const [photoForm, setPhotoForm] = useState({
+    imageUrl: "",
+    caption: "",
+  });
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const photoInputRef = useRef<HTMLInputElement>(null);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -207,6 +221,7 @@ export default function EditPage() {
         const data = await response.json();
         setPageData(data);
         setEvents(data.events || []); // Popula os eventos
+        setPhotos(data.photos || []); // Popula as fotos
       } else {
         await createPage();
       }
@@ -401,6 +416,141 @@ export default function EditPage() {
     }
   };
 
+  // Photo Management Functions
+  const handlePhotoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validar tipo
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+    ];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Tipo de arquivo inválido. Use JPEG, PNG, WebP ou GIF");
+      return;
+    }
+
+    // Validar tamanho (10MB para melhor qualidade)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Arquivo muito grande. Tamanho máximo: 10MB");
+      return;
+    }
+
+    setUploadingPhoto(true);
+
+    // Preview local
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPhotoPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload/photo", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPhotoForm({ ...photoForm, imageUrl: data.url });
+        toast.success("Imagem carregada!");
+      } else {
+        const error = await response.json();
+        toast.error(error.error || "Erro ao fazer upload");
+        setPhotoPreview(null);
+      }
+    } catch (error) {
+      console.error("Error uploading photo:", error);
+      toast.error("Erro ao fazer upload da imagem");
+      setPhotoPreview(null);
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
+  const handleSavePhoto = async () => {
+    if (!photoForm.imageUrl || !pageData) {
+      toast.error("Por favor, faça upload de uma imagem primeiro");
+      return;
+    }
+
+    // Limite de 4 fotos
+    if (!editingPhoto && photos.length >= 4) {
+      toast.error("Máximo de 4 fotos permitidas");
+      return;
+    }
+
+    try {
+      const url = editingPhoto
+        ? `/api/photos/${editingPhoto.id}`
+        : "/api/photos/create";
+      const method = editingPhoto ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageUrl: photoForm.imageUrl,
+          caption: photoForm.caption || null,
+          pageId: pageData.id,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success(editingPhoto ? "Foto atualizada!" : "Foto adicionada!");
+        setShowPhotoModal(false);
+        setEditingPhoto(null);
+        setPhotoForm({ imageUrl: "", caption: "" });
+        fetchPageData();
+      } else {
+        toast.error("Erro ao salvar foto");
+      }
+    } catch (error) {
+      console.error("Error saving photo:", error);
+      toast.error("Erro ao salvar foto");
+    }
+  };
+
+  const handleEditPhoto = (photo: Photo) => {
+    setEditingPhoto(photo);
+    setPhotoForm({
+      imageUrl: photo.imageUrl,
+      caption: photo.caption || "",
+    });
+    setPhotoPreview(null); // Usa a URL existente
+    setShowPhotoModal(true);
+  };
+
+  const handleDeletePhoto = async (photoId: string) => {
+    if (!confirm("Tem certeza que deseja deletar esta foto?")) return;
+
+    try {
+      const response = await fetch(`/api/photos/${photoId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        toast.success("Foto deletada!");
+        fetchPageData();
+      } else {
+        toast.error("Erro ao deletar foto");
+      }
+    } catch (error) {
+      console.error("Error deleting photo:", error);
+      toast.error("Erro ao deletar foto");
+    }
+  };
+
   const handleUpdatePage = async () => {
     try {
       const response = await fetch("/api/page/update", {
@@ -512,7 +662,7 @@ export default function EditPage() {
             </button>
 
             <Link
-              href="/settings"
+              href=""
               className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <IoMdSettings className="w-5 h-5" />
@@ -521,7 +671,7 @@ export default function EditPage() {
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors hover:cursor-pointer"
             >
               <MdLogout className="w-5 h-5" />
               Logout
@@ -570,7 +720,7 @@ export default function EditPage() {
             <button
               onClick={handleAvatarClick}
               disabled={uploadingAvatar}
-              className="px-4 py-2 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors disabled:opacity-50 hover:cursor-pointer"
             >
               {uploadingAvatar ? "Uploading..." : "Choose Image"}
             </button>
@@ -616,7 +766,9 @@ export default function EditPage() {
               Groovetree URL
             </label>
             <div className="flex items-center gap-2">
-              <span className="text-gray-500 text-sm">groovetree.com/</span>
+              <span className="text-gray-500 text-sm">
+                groovetree.vercel.app/
+              </span>
               <input
                 type="text"
                 value={pageData.slug}
@@ -715,6 +867,80 @@ export default function EditPage() {
           </div>
         </div>
 
+        {/* Photo Gallery Section */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <MdPhotoLibrary className="w-6 h-6 text-purple-600" />
+            Photo Gallery
+          </h2>
+
+          {/* Add Photo Button */}
+          <button
+            onClick={() => {
+              setEditingPhoto(null);
+              setPhotoForm({ imageUrl: "", caption: "" });
+              setPhotoPreview(null);
+              setShowPhotoModal(true);
+            }}
+            disabled={photos.length >= 4}
+            className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 ${
+              photos.length >= 4
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-purple-600 text-white hover:bg-purple-700"
+            }`}
+          >
+            <FaPlus className="w-5 h-5" />
+            Add Photo {photos.length >= 4 && "(Máximo atingido)"}
+          </button>
+
+          {/* Photos Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {photos && photos.length > 0 ? (
+              photos.map((photo) => (
+                <div
+                  key={photo.id}
+                  className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all"
+                >
+                  <img
+                    src={photo.imageUrl}
+                    alt={photo.caption || "Photo"}
+                    className="w-full h-full object-cover"
+                  />
+                  {photo.caption && (
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs p-2 truncate">
+                      {photo.caption}
+                    </div>
+                  )}
+                  <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => handleEditPhoto(photo)}
+                      className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
+                      title="Edit photo"
+                    >
+                      <MdEdit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDeletePhoto(photo.id)}
+                      className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-lg"
+                      title="Delete photo"
+                    >
+                      <FaTrash className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-2 sm:col-span-4 text-center py-16 text-gray-400">
+                <p className="text-6xl mb-4">📸</p>
+                <p className="text-lg font-medium text-gray-700">
+                  Nenhuma foto ainda
+                </p>
+                <p className="text-sm">Adicione até 4 fotos para a galeria</p>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Links Section */}
         <div className="bg-white rounded-2xl shadow-sm p-6">
           <h2 className="text-xl font-semibold mb-4">Links</h2>
@@ -781,7 +1007,7 @@ export default function EditPage() {
 
       {/* Add Link Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden flex flex-col">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -1005,7 +1231,7 @@ export default function EditPage() {
 
       {/* Event Modal (Add/Edit) */}
       {showEventModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
               <h2 className="text-xl font-semibold flex items-center gap-2">
@@ -1138,6 +1364,107 @@ export default function EditPage() {
               >
                 <MdSave className="w-5 h-5" />
                 {editingEvent ? "Update Show" : "Add Show"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Photo Modal */}
+      {showPhotoModal && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+              <h2 className="text-xl font-semibold flex items-center gap-2">
+                <MdPhotoLibrary className="w-6 h-6 text-purple-600" />
+                {editingPhoto ? "Edit Photo" : "Add New Photo"}
+              </h2>
+              <button
+                onClick={() => {
+                  setShowPhotoModal(false);
+                  setEditingPhoto(null);
+                  setPhotoForm({ imageUrl: "", caption: "" });
+                  setPhotoPreview(null);
+                  if (photoInputRef.current) {
+                    photoInputRef.current.value = "";
+                  }
+                }}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <FaTimes className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {/* Image Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Upload Image <span className="text-red-500">*</span>
+                </label>
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                  onChange={handlePhotoUpload}
+                  disabled={uploadingPhoto}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  JPEG, PNG, WebP ou GIF (máx. 10MB para melhor qualidade)
+                </p>
+              </div>
+
+              {/* Image Preview */}
+              {(photoPreview || photoForm.imageUrl) && (
+                <div className="rounded-lg overflow-hidden border border-gray-200">
+                  <img
+                    src={photoPreview || photoForm.imageUrl}
+                    alt="Preview"
+                    className="w-full h-48 object-cover"
+                  />
+                </div>
+              )}
+
+              {/* Caption */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Caption
+                </label>
+                <input
+                  type="text"
+                  value={photoForm.caption}
+                  onChange={(e) =>
+                    setPhotoForm({ ...photoForm, caption: e.target.value })
+                  }
+                  placeholder="Ex: Show em São Paulo 2024"
+                  maxLength={100}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Texto que aparece sobre a foto (opcional, máx. 100 caracteres)
+                </p>
+              </div>
+
+              {/* Info */}
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                <p className="text-sm text-purple-800">
+                  💡 <strong>Dica:</strong> Use imagens com proporção quadrada
+                  (1:1) para melhor visualização. Máximo de 4 fotos.
+                </p>
+              </div>
+
+              {/* Save Button */}
+              <button
+                onClick={handleSavePhoto}
+                disabled={uploadingPhoto || !photoForm.imageUrl}
+                className="w-full py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <MdSave className="w-5 h-5" />
+                {uploadingPhoto
+                  ? "Uploading..."
+                  : editingPhoto
+                  ? "Update Photo"
+                  : "Add Photo"}
               </button>
             </div>
           </div>

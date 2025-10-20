@@ -19,6 +19,9 @@ export async function GET(req: NextRequest) {
         events: {
           orderBy: { date: "asc" },
         },
+        photos: {
+          orderBy: { order: "asc" },
+        },
       },
     });
 
