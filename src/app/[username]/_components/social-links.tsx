@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/app/components/ui/button";
 import { Instagram, Twitter, Youtube, Facebook } from "lucide-react";
 import { FaTiktok } from "react-icons/fa";
 
@@ -13,6 +12,7 @@ interface Link {
 
 interface SocialLinksProps {
   links: Link[];
+  isLight?: boolean;
 }
 
 // Mapeamento de ícones por tipo
@@ -24,7 +24,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   TIKTOK: FaTiktok,
 };
 
-export function SocialLinks({ links }: SocialLinksProps) {
+export function SocialLinks({ links, isLight = false }: SocialLinksProps) {
   // Se não houver links, não renderiza nada
   if (!links || links.length === 0) {
     return null;
@@ -36,17 +36,28 @@ export function SocialLinks({ links }: SocialLinksProps) {
         {links.map((link) => {
           const Icon = iconMap[link.type] || Instagram;
           return (
-            <Button key={link.id} asChild variant="default" size="lg">
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.title}
-                title={link.title}
-              >
-                <Icon className="h-5 w-5" />
-              </a>
-            </Button>
+            <a
+              key={link.id}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={link.title}
+              title={link.title}
+              className={`
+                p-4 rounded-xl backdrop-blur-xl border shadow-xl
+                transition-all duration-300 hover:scale-110
+                ${
+                  isLight
+                    ? "bg-black/5 border-black/10 hover:bg-black/10"
+                    : "bg-white/10 border-white/20 hover:bg-white/15"
+                }
+              `}
+            >
+              <Icon
+                className="h-5 w-5"
+                style={{ color: isLight ? "#000000" : "#ffffff" }}
+              />
+            </a>
           );
         })}
       </div>

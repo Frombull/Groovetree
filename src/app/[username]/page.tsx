@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/app/lib/prisma";
+import { isLightColor } from "@/lib/utils";
 
 import { ArtistProfile } from "./_components/artist-profile";
 import MusicPlatforms from "./_components/music-platforms";
@@ -73,6 +74,8 @@ export default async function UserPage({ params }: UserPageProps) {
   const {
     avatarUrl,
     backgroundImageUrl,
+    backgroundColor,
+    textColor,
     user,
     title,
     bio,
@@ -83,6 +86,9 @@ export default async function UserPage({ params }: UserPageProps) {
 
   const { name } = user;
   console.log(backgroundImageUrl);
+
+  // Detecta se o fundo é claro ou escuro
+  const isLight = isLightColor(backgroundColor);
 
   // Separar links por tipo
   const socialLinks = links.filter((link) =>
@@ -103,7 +109,12 @@ export default async function UserPage({ params }: UserPageProps) {
   );
 
   return (
-    <main className="relative min-h-screen bg-black">
+    <main
+      className="relative min-h-screen"
+      style={{
+        backgroundColor: backgroundColor || "#000000",
+      }}
+    >
       {/* Background image with overlay */}
       {backgroundImageUrl && (
         <>
@@ -111,23 +122,34 @@ export default async function UserPage({ params }: UserPageProps) {
             className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${backgroundImageUrl})` }}
           />
-          <div className="fixed inset-0 z-0 bg-black/90 backdrop-blur-md" />
+          <div
+            className="fixed inset-0 z-0 backdrop-blur-md"
+            style={{
+              backgroundColor: isLight
+                ? "rgba(255, 255, 255, 0.7)"
+                : "rgba(0, 0, 0, 0.7)",
+            }}
+          />
         </>
       )}
 
       {/* Content */}
-      <div className="relative z-[9999] mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
+      <div
+        className="relative z-[9999] mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8"
+        style={{ color: textColor || (isLight ? "#000000" : "#ffffff") }}
+      >
         <ArtistProfile
           name={name}
           title={title}
           bio={bio}
           avatarUrl={avatarUrl || undefined}
+          textColor={textColor || (isLight ? "#000000" : "#ffffff")}
         />
-        <SocialLinks links={socialLinks} />
-        <MusicPlatforms links={musicLinks} />
+        <SocialLinks links={socialLinks} isLight={isLight} />
+        <MusicPlatforms links={musicLinks} isLight={isLight} />
 
-        <ShowCalendar events={events} />
-        <PhotoGallery photos={photos} />
+        <ShowCalendar events={events} isLight={isLight} />
+        <PhotoGallery photos={photos} isLight={isLight} />
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
           © 2025{" "}

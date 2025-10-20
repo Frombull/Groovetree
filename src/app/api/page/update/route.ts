@@ -10,8 +10,14 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { title, bio, avatarUrl, backgroundColor, textColor } =
-      await req.json();
+    const {
+      title,
+      bio,
+      avatarUrl,
+      backgroundColor,
+      textColor,
+      backgroundImageUrl,
+    } = await req.json();
 
     const page = await prisma.page.findFirst({
       where: { userId: user.id },
@@ -29,6 +35,7 @@ export async function PUT(req: NextRequest) {
         ...(avatarUrl !== undefined && { avatarUrl }),
         ...(backgroundColor !== undefined && { backgroundColor }),
         ...(textColor !== undefined && { textColor }),
+        ...(backgroundImageUrl !== undefined && { backgroundImageUrl }),
       },
       include: {
         links: {

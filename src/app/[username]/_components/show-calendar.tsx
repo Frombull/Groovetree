@@ -1,6 +1,5 @@
 "use client";
 
-import { Card } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Calendar, MapPin, Ticket } from "lucide-react";
 
@@ -16,9 +15,10 @@ interface Event {
 
 interface ShowCalendarProps {
   events: Event[];
+  isLight?: boolean;
 }
 
-export function ShowCalendar({ events }: ShowCalendarProps) {
+export function ShowCalendar({ events, isLight = false }: ShowCalendarProps) {
   // Se não houver eventos, não renderiza nada
   if (!events || events.length === 0) {
     return null;
@@ -38,27 +38,46 @@ export function ShowCalendar({ events }: ShowCalendarProps) {
 
   return (
     <section className="my-12 text-center">
-      <h1 className="my-6 font-sans text-3xl font-bold tracking-tight text-white text-balance">
+      <h1
+        className="my-6 font-sans text-3xl font-bold tracking-tight text-balance"
+        style={{ color: isLight ? "#000000" : "#ffffff" }}
+      >
         Próximos shows
       </h1>
       <div className="space-y-3">
         {events.map((event) => (
-          <Card
+          <div
             key={event.id}
-            className="border-2 bg-card p-5 transition-colors hover:border-primary"
+            className={`
+              rounded-xl p-5 transition-all hover:scale-[1.02] backdrop-blur-xl border shadow-xl
+              ${
+                isLight
+                  ? "bg-black/5 border-black/10 hover:bg-black/10"
+                  : "bg-white/10 border-white/20 hover:bg-white/15"
+              }
+            `}
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="space-y-2 text-left">
-                <div className="flex items-center gap-2 text-primary">
+                <div
+                  className="flex items-center gap-2 font-semibold"
+                  style={{ color: isLight ? "#7c3aed" : "#a78bfa" }}
+                >
                   <Calendar className="h-4 w-4" />
-                  <span className="font-mono text-sm font-semibold">
+                  <span className="font-mono text-sm">
                     {formatDate(event.date)}
                   </span>
                 </div>
-                <h3 className="font-sans text-lg font-bold text-card-foreground">
+                <h3
+                  className="font-sans text-lg font-bold"
+                  style={{ color: isLight ? "#000000" : "#ffffff" }}
+                >
                   {event.title}
                 </h3>
-                <div className="flex items-center gap-2 text-muted-foreground">
+                <div
+                  className="flex items-center gap-2"
+                  style={{ color: isLight ? "#4b5563" : "#9ca3af" }}
+                >
                   <MapPin className="h-4 w-4" />
                   <span className="text-sm">
                     {event.venue} - {event.city}
@@ -69,7 +88,13 @@ export function ShowCalendar({ events }: ShowCalendarProps) {
               {event.ticketUrl && (
                 <Button
                   asChild
-                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  className={`
+                    ${
+                      isLight
+                        ? "bg-purple-600 text-white hover:bg-purple-700"
+                        : "bg-purple-500 text-white hover:bg-purple-600"
+                    }
+                  `}
                 >
                   <a
                     href={event.ticketUrl}
@@ -82,7 +107,7 @@ export function ShowCalendar({ events }: ShowCalendarProps) {
                 </Button>
               )}
             </div>
-          </Card>
+          </div>
         ))}
       </div>
     </section>

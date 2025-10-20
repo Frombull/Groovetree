@@ -40,6 +40,9 @@ interface PageData {
   title: string;
   bio: string | null;
   avatarUrl: string | null;
+  backgroundColor: string | null;
+  textColor: string | null;
+  backgroundImageUrl: string | null;
   links: Link[];
   events: Event[];
   photos: Photo[];
@@ -559,6 +562,9 @@ export default function EditPage() {
         body: JSON.stringify({
           title: pageData?.title,
           bio: pageData?.bio,
+          backgroundColor: pageData?.backgroundColor,
+          textColor: pageData?.textColor,
+          backgroundImageUrl: pageData?.backgroundImageUrl,
         }),
       });
 
@@ -776,6 +782,132 @@ export default function EditPage() {
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Customization Section */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <IoMdSettings className="w-6 h-6 text-purple-600" />
+            Personalização da Página
+          </h2>
+
+          <div className="space-y-4">
+            {/* Background Color */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Cor de Fundo
+              </label>
+              <div className="flex items-center gap-3">
+                <input
+                  type="color"
+                  value={pageData?.backgroundColor || "#000000"}
+                  onChange={(e) =>
+                    setPageData({
+                      ...pageData!,
+                      backgroundColor: e.target.value,
+                    })
+                  }
+                  className="h-10 w-20 rounded-lg border border-gray-300 cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={pageData?.backgroundColor || "#000000"}
+                  onChange={(e) =>
+                    setPageData({
+                      ...pageData!,
+                      backgroundColor: e.target.value,
+                    })
+                  }
+                  placeholder="#000000"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Text Color */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Cor do Texto
+              </label>
+              <div className="flex items-center gap-3">
+                <input
+                  type="color"
+                  value={pageData?.textColor || "#ffffff"}
+                  onChange={(e) =>
+                    setPageData({
+                      ...pageData!,
+                      textColor: e.target.value,
+                    })
+                  }
+                  className="h-10 w-20 rounded-lg border border-gray-300 cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={pageData?.textColor || "#ffffff"}
+                  onChange={(e) =>
+                    setPageData({
+                      ...pageData!,
+                      textColor: e.target.value,
+                    })
+                  }
+                  placeholder="#ffffff"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Background Image URL */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                URL da Imagem de Fundo
+              </label>
+              <input
+                type="url"
+                value={pageData?.backgroundImageUrl || ""}
+                onChange={(e) =>
+                  setPageData({
+                    ...pageData!,
+                    backgroundImageUrl: e.target.value,
+                  })
+                }
+                placeholder="https://example.com/background.jpg"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Deixe vazio para usar apenas a cor de fundo
+              </p>
+            </div>
+
+            {/* Preview */}
+            <div className="mt-4 p-4 rounded-lg border border-gray-200">
+              <p className="text-sm font-medium text-gray-700 mb-2">Preview:</p>
+              <div
+                className="h-24 rounded-lg flex items-center justify-center"
+                style={{
+                  backgroundColor: pageData?.backgroundColor || "#000000",
+                  backgroundImage: pageData?.backgroundImageUrl
+                    ? `url(${pageData.backgroundImageUrl})`
+                    : undefined,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  color: pageData?.textColor || "#ffffff",
+                }}
+              >
+                <p className="font-semibold text-lg drop-shadow-lg">
+                  Texto de exemplo
+                </p>
+              </div>
+            </div>
+
+            {/* Save Button */}
+            <button
+              onClick={handleUpdatePage}
+              className="w-full py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <MdSave className="w-5 h-5" />
+              Salvar Personalização
+            </button>
           </div>
         </div>
 
@@ -1008,9 +1140,9 @@ export default function EditPage() {
       {/* Add Link Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden flex flex-col">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
               <h2 className="text-2xl font-bold">Add Link</h2>
               <button
                 onClick={() => setShowAddModal(false)}
@@ -1021,7 +1153,7 @@ export default function EditPage() {
             </div>
 
             {/* Categories Tabs */}
-            <div className="flex gap-2 p-4 border-b border-gray-200 overflow-x-auto">
+            <div className="flex gap-2 p-4 border-b border-gray-200/50 overflow-x-auto">
               {linkCategories.map((category) => (
                 <button
                   key={category.id}
@@ -1069,9 +1201,9 @@ export default function EditPage() {
 
       {/* Edit/Create Link Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-md w-full shadow-2xl">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
               <h2 className="text-2xl font-bold">
                 {editingLink ? "Edit Link" : "New Link"}
               </h2>
@@ -1142,8 +1274,8 @@ export default function EditPage() {
 
       {/* Share Modal */}
       {showShareModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full overflow-hidden">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
             <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold">
@@ -1232,8 +1364,8 @@ export default function EditPage() {
       {/* Event Modal (Add/Edit) */}
       {showEventModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-200/50 px-6 py-4 flex justify-between items-center">
               <h2 className="text-xl font-semibold flex items-center gap-2">
                 <MdEvent className="w-6 h-6 text-purple-600" />
                 {editingEvent ? "Edit Show" : "Add New Show"}
@@ -1373,8 +1505,8 @@ export default function EditPage() {
       {/* Photo Modal */}
       {showPhotoModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-200/50 px-6 py-4 flex justify-between items-center">
               <h2 className="text-xl font-semibold flex items-center gap-2">
                 <MdPhotoLibrary className="w-6 h-6 text-purple-600" />
                 {editingPhoto ? "Edit Photo" : "Add New Photo"}

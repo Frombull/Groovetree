@@ -11,11 +11,13 @@ export function ArtistProfile({
   avatarUrl,
   title,
   bio,
+  textColor,
 }: {
   name?: string | null;
   avatarUrl?: string;
   title: string;
   bio?: string | null;
+  textColor?: string;
 }) {
   return (
     <div className="mb-12 text-center">
@@ -25,11 +27,17 @@ export function ArtistProfile({
           DJ
         </AvatarFallback>
       </Avatar>
-      <h1 className="mt-6 font-sans text-4xl font-bold tracking-tight text-white sm:text-5xl text-balance">
+      <h1
+        className="mt-6 font-sans text-4xl font-bold tracking-tight sm:text-5xl text-balance"
+        style={{ color: textColor }}
+      >
         {title}
       </h1>
       {bio && (
-        <p className="mx-auto mt-6 max-w-md text-sm text-white/70 text-pretty">
+        <p
+          className="mx-auto mt-6 max-w-md text-sm text-pretty"
+          style={{ color: textColor, opacity: 0.7 }}
+        >
           {bio}
         </p>
       )}

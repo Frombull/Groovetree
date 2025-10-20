@@ -19,6 +19,7 @@ interface Link {
 
 interface MusicPlatformsProps {
   links: Link[];
+  isLight?: boolean;
 }
 
 // Mapeamento de ícones e cores por tipo
@@ -62,7 +63,10 @@ const platformConfig: Record<
   },
 };
 
-export default function MusicPlatforms({ links }: MusicPlatformsProps) {
+export default function MusicPlatforms({
+  links,
+  isLight = false,
+}: MusicPlatformsProps) {
   // Se não houver links, não renderiza nada
   if (!links || links.length === 0) {
     return null;
@@ -74,7 +78,10 @@ export default function MusicPlatforms({ links }: MusicPlatformsProps) {
 
   return (
     <div className="text-center mb-12">
-      <h1 className="my-6 font-sans text-3xl font-bold tracking-tight text-white text-balance">
+      <h1
+        className="my-6 font-sans text-3xl font-bold tracking-tight text-balance"
+        style={{ color: isLight ? "#000000" : "#ffffff" }}
+      >
         Ouça agora
       </h1>
 
@@ -121,10 +128,22 @@ export default function MusicPlatforms({ links }: MusicPlatformsProps) {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${config.bgColor} border border-white/10 rounded-xl p-6 transition-all duration-300 flex flex-col items-center justify-center gap-3 hover:scale-105 hover:border-white/20`}
+                className={`
+                  backdrop-blur-xl rounded-xl p-6 border shadow-xl
+                  transition-all duration-300 flex flex-col items-center justify-center gap-3
+                  hover:scale-105
+                  ${
+                    isLight
+                      ? "bg-black/5 border-black/10 hover:bg-black/10"
+                      : "bg-white/10 border-white/20 hover:bg-white/15"
+                  }
+                `}
               >
                 <Icon className={`w-12 h-12 ${config.color}`} />
-                <span className="text-white font-medium text-sm">
+                <span
+                  className="font-medium text-sm"
+                  style={{ color: isLight ? "#000000" : "#ffffff" }}
+                >
                   {link.title}
                 </span>
               </a>

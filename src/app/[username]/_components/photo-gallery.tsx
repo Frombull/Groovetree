@@ -11,9 +11,10 @@ interface Photo {
 
 interface PhotoGalleryProps {
   photos: Photo[];
+  isLight?: boolean;
 }
 
-export function PhotoGallery({ photos }: PhotoGalleryProps) {
+export function PhotoGallery({ photos, isLight = false }: PhotoGalleryProps) {
   // Se não houver fotos, não renderiza nada
   if (!photos || photos.length === 0) {
     return null;
@@ -23,34 +24,42 @@ export function PhotoGallery({ photos }: PhotoGalleryProps) {
   const displayPhotos = photos.slice(0, 4);
 
   return (
-    <section className="text-center mb-12">
-      <h1 className="my-6 mt-8 font-sans text-3xl font-bold tracking-tight text-white text-balance">
+    <section className="mb-12">
+      <h1
+        className="text-center mb-8 font-sans text-2xl sm:text-3xl font-bold tracking-tight"
+        style={{ color: isLight ? "#000000" : "#ffffff" }}
+      >
         Nos palcos
       </h1>
-      {/* Layout despojado: uma foto por linha, qualidade original */}
-      <div className="flex flex-col items-center gap-8 max-w-4xl mx-auto px-4">
+
+      {/* Layout responsivo: uma foto por linha */}
+      <div className="flex flex-col items-center gap-6 sm:gap-8 max-w-3xl mx-auto">
         {displayPhotos.map((photo, index) => (
-          <div key={photo.id} className="w-full group">
-            {/* Imagem com qualidade original */}
-            <div
-              className="relative overflow-hidden rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-[1.02] w-full"
-              style={{ minHeight: "400px" }}
-            >
+          <div key={photo.id} className="w-full">
+            {/* Container da imagem sem altura mínima fixa */}
+            <div className="relative overflow-hidden rounded-lg sm:rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.01]">
               <Image
                 src={photo.imageUrl}
                 alt={photo.caption || "Photo"}
                 width={1200}
                 height={800}
                 quality={100}
-                className="w-full h-auto object-contain"
+                className="w-full h-auto object-cover"
                 unoptimized={true}
                 priority={index === 0}
+                style={{ maxHeight: "600px" }}
               />
             </div>
 
-            {/* Legenda embaixo da foto */}
+            {/* Legenda abaixo da foto */}
             {photo.caption && (
-              <p className="mt-4 text-white text-lg font-semibold tracking-wide">
+              <p
+                className="mt-3 sm:mt-4 text-center text-sm sm:text-base font-medium tracking-wide px-2"
+                style={{
+                  color: isLight ? "#000000" : "#ffffff",
+                  opacity: 0.9,
+                }}
+              >
                 {photo.caption}
               </p>
             )}
