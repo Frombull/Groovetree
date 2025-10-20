@@ -2,21 +2,31 @@
 
 import Link from "next/link";
 import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SignupPage() {
+  const searchParams = useSearchParams();
+  const usernameFromUrl = searchParams.get("username") || "";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [name, setName] = useState("");
+  const [name, setName] = useState(usernameFromUrl);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { signup } = useAuth();
   const router = useRouter();
+
+  // Atualizar o campo name quando o username da URL mudar
+  useEffect(() => {
+    if (usernameFromUrl) {
+      setName(usernameFromUrl);
+    }
+  }, [usernameFromUrl]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +84,7 @@ export default function SignupPage() {
               <input
                 id="name"
                 type="text"
-                placeholder="Name"
+                placeholder="Username"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 transition"
