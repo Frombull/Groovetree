@@ -192,11 +192,13 @@ function SignupContent() {
 
 export default function SignupPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 via-pink-600 to-red-600">
-        <div className="text-white text-xl">Carregando...</div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 via-pink-600 to-red-600">
+          <div className="text-white text-xl">Carregando...</div>
+        </div>
+      }
+    >
       <SignupContent />
     </Suspense>
   );
