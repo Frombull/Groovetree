@@ -32,6 +32,17 @@ async function getUserPage(username: string) {
           where: {
             isActive: true,
           },
+          orderBy: {
+            order: "asc",
+          },
+        },
+        events: {
+          where: {
+            isActive: true,
+          },
+          orderBy: {
+            date: "asc",
+          },
         },
       },
     });
@@ -51,10 +62,29 @@ export default async function UserPage({ params }: UserPageProps) {
 
   console.log(page);
 
-  const { avatarUrl, backgroundImageUrl, user, title, bio } = page;
+  const { avatarUrl, backgroundImageUrl, user, title, bio, links, events } =
+    page;
 
   const { name } = user;
   console.log(backgroundImageUrl);
+
+  // Separar links por tipo
+  const socialLinks = links.filter((link) =>
+    ["INSTAGRAM", "TIKTOK", "YOUTUBE", "FACEBOOK", "TWITTER"].includes(
+      link.type
+    )
+  );
+
+  const musicLinks = links.filter((link) =>
+    [
+      "SPOTIFY",
+      "APPLE_MUSIC",
+      "DEEZER",
+      "SOUNDCLOUD",
+      "YOUTUBE_MUSIC",
+      "BEATPORT",
+    ].includes(link.type)
+  );
 
   return (
     <main className="relative min-h-screen bg-black">
@@ -77,10 +107,10 @@ export default async function UserPage({ params }: UserPageProps) {
           bio={bio}
           avatarUrl={avatarUrl || undefined}
         />
-        <SocialLinks />
-        <MusicPlatforms />
+        <SocialLinks links={socialLinks} />
+        <MusicPlatforms links={musicLinks} />
         <PhotoGallery />
-        <ShowCalendar />
+        <ShowCalendar events={events} />
 
         <p className="mt-8 text-center text-sm text-muted-foreground">
           © 2025{" "}

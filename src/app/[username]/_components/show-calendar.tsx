@@ -4,74 +4,83 @@ import { Card } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Calendar, MapPin, Ticket } from "lucide-react";
 
-const shows = [
-  {
-    id: 1,
-    date: "FRI, MAR 15",
-    venue: "Electric Dreams Festival",
-    location: "Miami, FL",
-    ticketUrl: "#",
-  },
-  {
-    id: 2,
-    date: "SAT, MAR 23",
-    venue: "Warehouse 23",
-    location: "Brooklyn, NY",
-    ticketUrl: "#",
-  },
-  {
-    id: 3,
-    date: "FRI, APR 5",
-    venue: "Neon Nights",
-    location: "Los Angeles, CA",
-    ticketUrl: "#",
-  },
-  {
-    id: 4,
-    date: "SAT, APR 20",
-    venue: "Bass Underground",
-    location: "Chicago, IL",
-    ticketUrl: "#",
-  },
-];
+interface Event {
+  id: string;
+  title: string;
+  venue: string;
+  city: string;
+  state?: string | null;
+  date: Date;
+  ticketUrl?: string | null;
+}
 
-export function ShowCalendar() {
+interface ShowCalendarProps {
+  events: Event[];
+}
+
+export function ShowCalendar({ events }: ShowCalendarProps) {
+  // Se não houver eventos, não renderiza nada
+  if (!events || events.length === 0) {
+    return null;
+  }
+
+  // Formatar data no formato "FRI, MAR 15"
+  const formatDate = (date: Date) => {
+    const eventDate = new Date(date);
+    return eventDate
+      .toLocaleDateString("pt-BR", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      })
+      .toUpperCase();
+  };
+
   return (
     <section className="my-12 text-center">
       <h1 className="my-6 font-sans text-3xl font-bold tracking-tight text-white text-balance">
         Próximos shows
       </h1>
       <div className="space-y-3">
-        {shows.map((show) => (
+        {events.map((event) => (
           <Card
-            key={show.id}
+            key={event.id}
             className="border-2 bg-card p-5 transition-colors hover:border-primary"
           >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="space-y-2">
+              <div className="space-y-2 text-left">
                 <div className="flex items-center gap-2 text-primary">
                   <Calendar className="h-4 w-4" />
                   <span className="font-mono text-sm font-semibold">
-                    {show.date}
+                    {formatDate(event.date)}
                   </span>
                 </div>
                 <h3 className="font-sans text-lg font-bold text-card-foreground">
-                  {show.venue}
+                  {event.title}
                 </h3>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <MapPin className="h-4 w-4" />
-                  <span className="text-sm">{show.location}</span>
+                  <span className="text-sm">
+                    {event.venue} - {event.city}
+                    {event.state ? `, ${event.state}` : ""}
+                  </span>
                 </div>
               </div>
-              <Button
-                asChild
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                <a href={show.ticketUrl}>
-                  <Ticket className="mr-2 h-4 w-4" />
-                  Comprar ingressos
-                </a>
-              </Button>
+              {event.ticketUrl && (
+                <Button
+                  asChild
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  <a
+                    href={event.ticketUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Ticket className="mr-2 h-4 w-4" />
+                    Comprar ingressos
+                  </a>
+                </Button>
+              )}
             </div>
           </Card>
         ))}

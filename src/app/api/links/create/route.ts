@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { verifyAuth } from "@/app/lib/auth";
+import { convertToEmbed } from "@/lib/embedUtils";
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,10 +32,14 @@ export async function POST(req: NextRequest) {
     const maxOrder =
       page.links.length > 0 ? Math.max(...page.links.map((l) => l.order)) : -1;
 
+    // Gera embedUrl automaticamente se possível
+    const embedUrl = convertToEmbed(url, type);
+
     const link = await prisma.link.create({
       data: {
         title,
         url,
+        embedUrl, // Adiciona embedUrl
         type,
         order: maxOrder + 1,
         pageId,

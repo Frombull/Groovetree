@@ -54,6 +54,7 @@ model Link {
   id       String   @id @default(cuid())
   title    String
   url      String
+  embedUrl String?  // URL do embed (opcional, gerado automaticamente)
   type     LinkType @default(GENERIC)
   order    Int      @default(0)
   isActive Boolean  @default(true)
@@ -69,6 +70,7 @@ model Event {
   title     String
   venue     String
   city      String
+  state     String?  // Estado (opcional)
   date      DateTime
   ticketUrl String?
   isActive  Boolean  @default(true)

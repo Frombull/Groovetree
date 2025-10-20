@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -16,6 +16,8 @@ import {
   FaExternalLinkAlt,
   FaSoundcloud,
   FaApple,
+  FaCopy,
+  FaCheck,
 } from "react-icons/fa";
 import { IoMdLink, IoMdSettings } from "react-icons/io";
 import { MdEvent, MdLogout, MdSave, MdEdit } from "react-icons/md";
@@ -31,6 +33,7 @@ interface PageData {
   bio: string | null;
   avatarUrl: string | null;
   links: Link[];
+  events: Event[];
 }
 
 interface Link {
@@ -39,6 +42,17 @@ interface Link {
   url: string;
   type: string;
   order: number;
+  isActive: boolean;
+}
+
+interface Event {
+  id: string;
+  title: string;
+  venue: string;
+  city: string;
+  state?: string | null;
+  date: string;
+  ticketUrl?: string | null;
   isActive: boolean;
 }
 
@@ -137,18 +151,33 @@ const linkCategories: LinkCategory[] = [
 export default function EditPage() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [pageData, setPageData] = useState<PageData | null>(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("music");
   const [editingLink, setEditingLink] = useState<Link | null>(null);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
   const [linkForm, setLinkForm] = useState({
     title: "",
     url: "",
     type: "GENERIC",
   });
+  const [eventForm, setEventForm] = useState({
+    title: "",
+    venue: "",
+    city: "",
+    state: "",
+    date: "",
+    ticketUrl: "",
+  });
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const createPage = useCallback(async () => {
     try {
@@ -177,6 +206,7 @@ export default function EditPage() {
       if (response.ok) {
         const data = await response.json();
         setPageData(data);
+        setEvents(data.events || []); // Popula os eventos
       } else {
         await createPage();
       }
@@ -292,6 +322,85 @@ export default function EditPage() {
     }
   };
 
+  // Funções para gerenciar eventos
+  const handleSaveEvent = async () => {
+    if (
+      !eventForm.title ||
+      !eventForm.venue ||
+      !eventForm.city ||
+      !eventForm.date
+    ) {
+      toast.error("Preencha todos os campos obrigatórios");
+      return;
+    }
+
+    try {
+      const url = editingEvent
+        ? `/api/events/${editingEvent.id}`
+        : "/api/events/create";
+      const method = editingEvent ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(eventForm),
+      });
+
+      if (response.ok) {
+        toast.success(editingEvent ? "Show atualizado!" : "Show adicionado!");
+        setShowEventModal(false);
+        setEventForm({
+          title: "",
+          venue: "",
+          city: "",
+          state: "",
+          date: "",
+          ticketUrl: "",
+        });
+        setEditingEvent(null);
+        fetchPageData();
+      } else {
+        toast.error("Erro ao salvar show");
+      }
+    } catch (error) {
+      console.error("Error saving event:", error);
+      toast.error("Erro ao salvar show");
+    }
+  };
+
+  const handleEditEvent = (event: Event) => {
+    setEditingEvent(event);
+    setEventForm({
+      title: event.title,
+      venue: event.venue,
+      city: event.city,
+      state: event.state || "",
+      date: event.date.split("T")[0], // Formato YYYY-MM-DD
+      ticketUrl: event.ticketUrl || "",
+    });
+    setShowEventModal(true);
+  };
+
+  const handleDeleteEvent = async (eventId: string) => {
+    if (!confirm("Tem certeza que deseja deletar este show?")) return;
+
+    try {
+      const response = await fetch(`/api/events/${eventId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        toast.success("Show deletado!");
+        fetchPageData();
+      } else {
+        toast.error("Erro ao deletar show");
+      }
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      toast.error("Erro ao deletar show");
+    }
+  };
+
   const handleUpdatePage = async () => {
     try {
       const response = await fetch("/api/page/update", {
@@ -318,6 +427,60 @@ export default function EditPage() {
     await logout();
   };
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validar tamanho
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Imagem deve ter menos de 5MB");
+      return;
+    }
+
+    // Validar tipo
+    if (!file.type.startsWith("image/")) {
+      toast.error("Arquivo deve ser uma imagem");
+      return;
+    }
+
+    setUploadingAvatar(true);
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    try {
+      const response = await fetch("/api/upload/avatar", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const { avatarUrl } = await response.json();
+        setPageData((prev) => (prev ? { ...prev, avatarUrl } : null));
+        toast.success("Imagem atualizada!");
+        fetchPageData();
+      } else {
+        toast.error("Erro ao fazer upload da imagem");
+      }
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      toast.error("Erro ao fazer upload da imagem");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
+  const handleCopyUrl = () => {
+    const url = `${window.location.origin}/${pageData?.slug}`;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    toast.success("Link copiado!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   if (loading || isLoadingPage) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -340,7 +503,10 @@ export default function EditPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
+            <button
+              onClick={() => setShowShareModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+            >
               <RiShareFill className="w-5 h-5" />
               Share
             </button>
@@ -381,21 +547,32 @@ export default function EditPage() {
 
           {/* Avatar */}
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-3xl text-gray-500">
+            <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-3xl text-gray-500 overflow-hidden">
               {pageData.avatarUrl ? (
                 <Image
                   src={pageData.avatarUrl}
                   alt="Avatar"
                   width={80}
                   height={80}
-                  className="rounded-full"
+                  className="rounded-full object-cover w-full h-full"
                 />
               ) : (
                 <span>{pageData.title[0]}</span>
               )}
             </div>
-            <button className="px-4 py-2 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors">
-              Choose Image
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="hidden"
+            />
+            <button
+              onClick={handleAvatarClick}
+              disabled={uploadingAvatar}
+              className="px-4 py-2 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors disabled:opacity-50"
+            >
+              {uploadingAvatar ? "Uploading..." : "Choose Image"}
             </button>
           </div>
 
@@ -447,6 +624,94 @@ export default function EditPage() {
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Shows Section */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <MdEvent className="w-6 h-6 text-purple-600" />
+            Shows & Events
+          </h2>
+
+          {/* Add Event Button */}
+          <button
+            onClick={() => {
+              setEditingEvent(null);
+              setEventForm({
+                title: "",
+                venue: "",
+                city: "",
+                state: "",
+                date: "",
+                ticketUrl: "",
+              });
+              setShowEventModal(true);
+            }}
+            className="w-full py-4 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 mb-6"
+          >
+            <FaPlus className="w-5 h-5" />
+            Add New Show
+          </button>
+
+          {/* Events List */}
+          <div className="space-y-3">
+            {events && events.length > 0 ? (
+              events.map((event) => (
+                <div
+                  key={event.id}
+                  className="flex items-start gap-3 p-4 border border-gray-200 rounded-xl hover:border-purple-300 hover:shadow-md transition-all group"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-gray-900">{event.title}</p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      📍 {event.venue} - {event.city}
+                      {event.state ? `, ${event.state}` : ""}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      📅 {new Date(event.date).toLocaleDateString("pt-BR")}
+                    </p>
+                    {event.ticketUrl && (
+                      <a
+                        href={event.ticketUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-purple-600 hover:text-purple-700 mt-1 inline-flex items-center gap-1"
+                      >
+                        <FaExternalLinkAlt className="w-3 h-3" />
+                        Ver ingressos
+                      </a>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleEditEvent(event)}
+                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="Edit event"
+                    >
+                      <MdEdit className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteEvent(event.id)}
+                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete event"
+                    >
+                      <FaTrash className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-16 text-gray-400">
+                <p className="text-6xl mb-4">🎤</p>
+                <p className="text-lg font-medium text-gray-700">
+                  No shows yet
+                </p>
+                <p className="text-sm">
+                  Click the button above to add your first show
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -644,6 +909,236 @@ export default function EditPage() {
                   Save
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Share Modal */}
+      {showShareModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 text-white">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold">
+                  Compartilhe sua identidade musical
+                </h2>
+                <button
+                  onClick={() => setShowShareModal(false)}
+                  className="text-white hover:text-gray-200 transition-colors"
+                >
+                  <FaTimes className="w-6 h-6" />
+                </button>
+              </div>
+              <p className="text-purple-100">
+                Mostre ao mundo sua música e conecte seus fãs a todas as suas
+                plataformas em um só lugar!
+              </p>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Seu Groovetree URL
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={`groovetree.vercel.app/${pageData?.slug}`}
+                    readOnly
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-mono text-sm"
+                  />
+                  <button
+                    onClick={handleCopyUrl}
+                    className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                  >
+                    {copied ? (
+                      <>
+                        <FaCheck className="w-4 h-4" />
+                        Copiado!
+                      </>
+                    ) : (
+                      <>
+                        <FaCopy className="w-4 h-4" />
+                        Copiar
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-purple-50 rounded-lg p-4">
+                <h3 className="font-semibold text-purple-900 mb-2 flex items-center gap-2">
+                  <RiShareFill className="w-5 h-5" />
+                  Dicas para compartilhar:
+                </h3>
+                <ul className="space-y-2 text-sm text-purple-800">
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 mt-0.5">•</span>
+                    <span>Adicione este link na bio do Instagram</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 mt-0.5">•</span>
+                    <span>Compartilhe nas suas redes sociais</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 mt-0.5">•</span>
+                    <span>
+                      Use em cartões de visita e materiais promocionais
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              <Link
+                href={`/${pageData?.slug}`}
+                target="_blank"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"
+              >
+                <BsEyeFill className="w-4 h-4" />
+                Visualizar Página
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Event Modal (Add/Edit) */}
+      {showEventModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
+              <h2 className="text-xl font-semibold flex items-center gap-2">
+                <MdEvent className="w-6 h-6 text-purple-600" />
+                {editingEvent ? "Edit Show" : "Add New Show"}
+              </h2>
+              <button
+                onClick={() => {
+                  setShowEventModal(false);
+                  setEditingEvent(null);
+                  setEventForm({
+                    title: "",
+                    venue: "",
+                    city: "",
+                    state: "",
+                    date: "",
+                    ticketUrl: "",
+                  });
+                }}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <FaTimes className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              {/* Event Title */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Event Name *
+                </label>
+                <input
+                  type="text"
+                  value={eventForm.title}
+                  onChange={(e) =>
+                    setEventForm({ ...eventForm, title: e.target.value })
+                  }
+                  placeholder="Ex: Summer Tour 2025"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+              </div>
+
+              {/* Venue */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Venue *
+                </label>
+                <input
+                  type="text"
+                  value={eventForm.venue}
+                  onChange={(e) =>
+                    setEventForm({ ...eventForm, venue: e.target.value })
+                  }
+                  placeholder="Ex: Estádio Mineirão"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+              </div>
+
+              {/* City and State */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    City *
+                  </label>
+                  <input
+                    type="text"
+                    value={eventForm.city}
+                    onChange={(e) =>
+                      setEventForm({ ...eventForm, city: e.target.value })
+                    }
+                    placeholder="Ex: Belo Horizonte"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    value={eventForm.state}
+                    onChange={(e) =>
+                      setEventForm({ ...eventForm, state: e.target.value })
+                    }
+                    placeholder="Ex: MG"
+                    maxLength={2}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent uppercase"
+                  />
+                </div>
+              </div>
+
+              {/* Date */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Date *
+                </label>
+                <input
+                  type="date"
+                  value={eventForm.date}
+                  onChange={(e) =>
+                    setEventForm({ ...eventForm, date: e.target.value })
+                  }
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+              </div>
+
+              {/* Ticket URL */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Ticket URL
+                </label>
+                <input
+                  type="url"
+                  value={eventForm.ticketUrl}
+                  onChange={(e) =>
+                    setEventForm({ ...eventForm, ticketUrl: e.target.value })
+                  }
+                  placeholder="https://example.com/tickets"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Link para compra de ingressos (opcional)
+                </p>
+              </div>
+
+              {/* Save Button */}
+              <button
+                onClick={handleSaveEvent}
+                className="w-full py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <MdSave className="w-5 h-5" />
+                {editingEvent ? "Update Show" : "Add Show"}
+              </button>
             </div>
           </div>
         </div>

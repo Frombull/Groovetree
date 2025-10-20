@@ -1,55 +1,137 @@
-import clsx from "clsx";
+"use client";
 
-const musicEmbeds = [
-  {
-    name: "music.spotify",
-    embedUrl:
-      "https://open.spotify.com/embed/artist/0TnOYISbd1XYRBk9myaseg?utm_source=generator&theme=0",
-    color: "border-[#1DB954]/20",
-  },
-  {
-    name: "music.apple",
-    embedUrl: "https://embed.music.apple.com/us/artist/daft-punk/5468295",
-    color: "border-[#FA243C]/20",
-  },
-  {
-    name: "music.soundcloud",
-    embedUrl:
-      "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2169968298&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true",
-    color: "border-[#FF5500]/20",
-  },
-];
+import {
+  FaSpotify,
+  FaApple,
+  FaSoundcloud,
+  FaYoutube,
+  FaDeezer,
+} from "react-icons/fa";
+import { IoMdMusicalNote } from "react-icons/io";
 
-export default function MusicPlatforms() {
+interface Link {
+  id: string;
+  title: string;
+  url: string;
+  embedUrl?: string | null;
+  type: string;
+}
+
+interface MusicPlatformsProps {
+  links: Link[];
+}
+
+// Mapeamento de ícones e cores por tipo
+const platformConfig: Record<
+  string,
+  {
+    icon: React.ComponentType<{ className?: string }>;
+    color: string;
+    bgColor: string;
+  }
+> = {
+  SPOTIFY: {
+    icon: FaSpotify,
+    color: "text-[#1DB954]",
+    bgColor: "bg-[#1DB954]/10 hover:bg-[#1DB954]/20",
+  },
+  APPLE_MUSIC: {
+    icon: FaApple,
+    color: "text-[#FA243C]",
+    bgColor: "bg-[#FA243C]/10 hover:bg-[#FA243C]/20",
+  },
+  SOUNDCLOUD: {
+    icon: FaSoundcloud,
+    color: "text-[#FF5500]",
+    bgColor: "bg-[#FF5500]/10 hover:bg-[#FF5500]/20",
+  },
+  YOUTUBE: {
+    icon: FaYoutube,
+    color: "text-[#FF0000]",
+    bgColor: "bg-[#FF0000]/10 hover:bg-[#FF0000]/20",
+  },
+  DEEZER: {
+    icon: FaDeezer,
+    color: "text-[#00C7F2]",
+    bgColor: "bg-[#00C7F2]/10 hover:bg-[#00C7F2]/20",
+  },
+  BEATPORT: {
+    icon: IoMdMusicalNote,
+    color: "text-[#01FF95]",
+    bgColor: "bg-[#01FF95]/10 hover:bg-[#01FF95]/20",
+  },
+};
+
+export default function MusicPlatforms({ links }: MusicPlatformsProps) {
+  // Se não houver links, não renderiza nada
+  if (!links || links.length === 0) {
+    return null;
+  }
+
+  // Separa links com embed e sem embed
+  const embedLinks = links.filter((link) => link.embedUrl);
+  const cardLinks = links.filter((link) => !link.embedUrl);
+
   return (
-    <div className="text-center">
+    <div className="text-center mb-12">
       <h1 className="my-6 font-sans text-3xl font-bold tracking-tight text-white text-balance">
         Ouça agora
       </h1>
-      <div className="flex flex-col gap-8">
-        {musicEmbeds.map((platform) => {
-          return (
-            <div
-              key={platform.name}
-              className={`w-full overflow-hidden rounded-lg ${
-                platform.name === "music.spotify"
-                  ? "aspect-[16/4]"
-                  : "aspect-[16/9] md:aspect-[21/9]"
-              }`}
-            >
-              <iframe
-                src={platform.embedUrl}
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-                className="h-full w-full"
-              />
-            </div>
-          );
-        })}
-      </div>
+
+      {/* Embeds - Mostrados primeiro */}
+      {embedLinks.length > 0 && (
+        <div className="flex flex-col gap-8 mb-8">
+          {embedLinks.map((link) => {
+            const aspectRatio =
+              link.type === "SPOTIFY"
+                ? "aspect-[16/4]"
+                : "aspect-[16/9] md:aspect-[21/9]";
+
+            return (
+              <div
+                key={link.id}
+                className={`w-full overflow-hidden rounded-lg ${aspectRatio}`}
+              >
+                <iframe
+                  src={link.embedUrl!}
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  className="h-full w-full"
+                  title={link.title}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Cards - Para links sem embed */}
+      {cardLinks.length > 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {cardLinks.map((link) => {
+            const config = platformConfig[link.type] || platformConfig.SPOTIFY;
+            const Icon = config.icon;
+
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${config.bgColor} border border-white/10 rounded-xl p-6 transition-all duration-300 flex flex-col items-center justify-center gap-3 hover:scale-105 hover:border-white/20`}
+              >
+                <Icon className={`w-12 h-12 ${config.color}`} />
+                <span className="text-white font-medium text-sm">
+                  {link.title}
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
