@@ -7,10 +7,13 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Storage bucket name for profile pictures
 export const PROFILE_PICTURES_BUCKET = 'profile-pictures';
+export const PHOTOS_BUCKET = 'photos';
 
 // File upload constraints
 export const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+export const MAX_PHOTO_SIZE = 10 * 1024 * 1024; // 10MB
 export const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+export const ALLOWED_PHOTO_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
 
 export interface UploadResult {
   success: boolean;
@@ -81,7 +84,7 @@ export async function deleteProfilePicture(url: string): Promise<boolean> {
     const urlParts = url.split('/');
     const bucketIndex = urlParts.findIndex(part => part === PROFILE_PICTURES_BUCKET);
     if (bucketIndex === -1 || bucketIndex === urlParts.length - 1) return false;
-    
+
     // Get the path after the bucket name
     const filePath = urlParts.slice(bucketIndex + 1).join('/');
     if (!filePath) return false;

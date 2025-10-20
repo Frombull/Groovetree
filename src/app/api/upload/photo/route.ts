@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "@/app/lib/auth";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { existsSync } from "fs";
+import { supabase } from "@/lib/supabase";
+
+const PHOTOS_BUCKET = "photos";
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,35 +36,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validar tamanho (max 10MB para melhor qualidade)
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSize) {
+    // Validar tamanho (max 10MB)
+    if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: "File too large. Maximum size is 10MB" },
         { status: 400 }
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    // Gerar nome único
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${user.id}/photo-${Date.now()}.${fileExt}`;
 
-    // Criar nome único para o arquivo
-    const timestamp = Date.now();
-    const extension = file.name.split(".").pop();
-    const filename = `photo-${user.id}-${timestamp}.${extension}`;
+    // Upload para Supabase Storage
+    const { data, error } = await supabase.storage
+      .from(PHOTOS_BUCKET)
+      .upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
 
-    // Garantir que o diretório existe
-    const uploadDir = join(process.cwd(), "public", "uploads", "photos");
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
+    if (error) {
+      console.error("Upload error:", error);
+      return NextResponse.json(
+        { error: "Failed to upload photo" },
+        { status: 500 }
+      );
     }
 
-    // Salvar arquivo
-    const filepath = join(uploadDir, filename);
-    await writeFile(filepath, buffer);
-
-    // Retornar URL público
-    const publicUrl = `/uploads/photos/${filename}`;
+    // Obter URL pública
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from(PHOTOS_BUCKET).getPublicUrl(fileName);
 
     return NextResponse.json({ url: publicUrl });
   } catch (error) {

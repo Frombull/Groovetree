@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "@/app/lib/auth";
 import { prisma } from "@/app/lib/prisma";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { existsSync } from "fs";
+import { uploadProfilePicture } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,40 +26,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validar tamanho (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
+    // Validar tamanho (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
       return NextResponse.json(
-        { error: "File size must be less than 5MB" },
+        { error: "File size must be less than 2MB" },
         { status: 400 }
       );
     }
 
-    // Criar diretório se não existir
-    const uploadsDir = join(process.cwd(), "public", "uploads", "avatars");
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
+    // Upload para Supabase Storage
+    const uploadResult = await uploadProfilePicture(file, user.id);
+
+    if (!uploadResult.success) {
+      return NextResponse.json(
+        { error: uploadResult.error },
+        { status: 400 }
+      );
     }
 
-    // Gerar nome único para o arquivo
-    const timestamp = Date.now();
-    const extension = file.name.split(".").pop();
-    const filename = `${user.id}-${timestamp}.${extension}`;
-    const filepath = join(uploadsDir, filename);
-
-    // Salvar arquivo
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    await writeFile(filepath, buffer);
-
     // Atualizar avatar URL no banco
-    const avatarUrl = `/uploads/avatars/${filename}`;
-
     await prisma.page.updateMany({
       where: { userId: user.id },
-      data: { avatarUrl },
+      data: { avatarUrl: uploadResult.url },
     });
 
-    return NextResponse.json({ avatarUrl });
+    return NextResponse.json({ avatarUrl: uploadResult.url });
   } catch (error) {
     console.error("Error uploading avatar:", error);
     return NextResponse.json(
