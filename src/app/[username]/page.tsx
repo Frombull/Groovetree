@@ -17,6 +17,10 @@ interface UserPageProps {
 
 async function getUserPage(username: string) {
   try {
+    console.log(
+      `[USER PAGE] Attempting to fetch page for username: ${username}`
+    );
+
     const page = await prisma.page.findUnique({
       where: {
         slug: username,
@@ -56,20 +60,29 @@ async function getUserPage(username: string) {
       },
     });
 
+    console.log(`[USER PAGE] Page found:`, page ? "Yes" : "No");
     return page;
   } catch (error) {
-    console.error("Error fetching user page:", error);
+    console.error("[USER PAGE] Error fetching user page:", error);
     return null;
   }
 }
 
 export default async function UserPage({ params }: UserPageProps) {
   const { username } = await params;
+
+  console.log(`[USER PAGE] Rendering page for username: ${username}`);
+
   const page = await getUserPage(username);
 
-  if (!page) redirect("/");
+  if (!page) {
+    console.error(
+      `[USER PAGE] Page not found for username: ${username}, redirecting to home`
+    );
+    redirect("/");
+  }
 
-  console.log(page);
+  console.log(`[USER PAGE] Successfully loaded page for: ${username}`);
 
   const {
     avatarUrl,
