@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "npm run build:prod",
-    "build:prod": "next build --turbopack",
+    "build:prod": "prisma generate && next build --turbopack",
     "db:reset": "prisma migrate reset --force",
     "start": "next start",
     "lint": "eslint --fix",
