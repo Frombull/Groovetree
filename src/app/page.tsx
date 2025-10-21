@@ -61,16 +61,21 @@ export default function Home() {
 
               {/* URL Input */}
               <div className="mb-12 flex justify-center">
-                <div className="relative flex items-center w-full max-w-2xl bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
-                  <span className="text-gray-300 pl-6 text-lg">
-                    groovetree.vercel.app/
-                  </span>
-                  <input
-                    type="text"
-                    id="username-input"
-                    placeholder=""
-                    className="flex-1 bg-transparent text-gray-300 placeholder-gray-400 text-lg py-4 focus:outline-none"
-                  />
+                <div className="w-full max-w-2xl flex flex-col md:flex-row gap-3">
+                  {/* Input container */}
+                  <div className="relative flex items-center flex-1 bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
+                    <span className="text-gray-300 pl-4 md:pl-6 text-base md:text-lg whitespace-nowrap">
+                      groovetree.vercel.app/
+                    </span>
+                    <input
+                      type="text"
+                      id="username-input"
+                      placeholder=""
+                      className="flex-1 bg-transparent text-gray-300 placeholder-gray-400 text-base md:text-lg py-3 md:py-4 focus:outline-none min-w-0"
+                    />
+                  </div>
+
+                  {/* Button */}
                   <button
                     onClick={() => {
                       const input = document.getElementById(
@@ -81,7 +86,7 @@ export default function Home() {
                         username
                       )}`;
                     }}
-                    className="bg-gradient-to-tl from-[#2D1B69] to-[#4C1D95] text-white font-semibold py-4 px-8 rounded-xl hover:from-[#1A0C4E] hover:to-[#2D1B69] transition-all cursor-pointer shadow-lg"
+                    className="bg-gradient-to-tl from-[#2D1B69] to-[#4C1D95] text-white font-semibold py-4 px-8 rounded-xl hover:from-[#1A0C4E] hover:to-[#2D1B69] transition-all cursor-pointer shadow-lg whitespace-nowrap"
                   >
                     Create Page
                   </button>

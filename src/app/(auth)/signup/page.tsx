@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { FaGoogle, FaGithub, FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import {
+  FaGoogle,
+  FaGithub,
+  FaEye,
+  FaEyeSlash,
+  FaArrowLeft,
+} from "react-icons/fa";
 import { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
