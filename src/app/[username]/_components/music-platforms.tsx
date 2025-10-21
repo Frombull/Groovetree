@@ -87,25 +87,15 @@ export default function MusicPlatforms({
 
       {/* Embeds - Mostrados primeiro */}
       {embedLinks.length > 0 && (
-        <div
-          className={`mb-8 ${
-            embedLinks.length === 1
-              ? "flex justify-center"
-              : "grid grid-cols-1 md:grid-cols-2 gap-6"
-          }`}
-        >
+        <div className="mb-8 flex flex-col gap-6 max-w-3xl mx-auto">
           {embedLinks.map((link) => {
             const aspectRatio =
-              link.type === "SPOTIFY"
-                ? "aspect-[16/4]"
-                : "aspect-[16/9] md:aspect-[21/9]";
+              link.type === "SPOTIFY" ? "aspect-[16/4]" : "aspect-[16/9]";
 
             return (
               <div
                 key={link.id}
-                className={`overflow-hidden rounded-xl shadow-2xl ${aspectRatio} ${
-                  embedLinks.length === 1 ? "w-full max-w-3xl" : "w-full"
-                }`}
+                className={`overflow-hidden rounded-xl shadow-2xl ${aspectRatio} w-full`}
               >
                 <iframe
                   src={link.embedUrl!}
@@ -125,15 +115,7 @@ export default function MusicPlatforms({
 
       {/* Cards - Para links sem embed */}
       {cardLinks.length > 0 && (
-        <div
-          className={`gap-4 ${
-            cardLinks.length === 1
-              ? "flex justify-center"
-              : cardLinks.length === 2
-              ? "grid grid-cols-2 max-w-xl mx-auto"
-              : "grid grid-cols-2 md:grid-cols-3"
-          }`}
-        >
+        <div className="flex flex-col gap-4 max-w-xl mx-auto">
           {cardLinks.map((link) => {
             const config = platformConfig[link.type] || platformConfig.SPOTIFY;
             const Icon = config.icon;
@@ -148,7 +130,6 @@ export default function MusicPlatforms({
                   backdrop-blur-xl rounded-xl p-6 border shadow-xl
                   transition-all duration-300 flex flex-col items-center justify-center gap-3
                   hover:scale-105 hover:shadow-2xl
-                  ${cardLinks.length === 1 ? "max-w-xs w-full" : ""}
                   ${
                     isLight
                       ? "bg-black/5 border-black/10 hover:bg-black/10"
