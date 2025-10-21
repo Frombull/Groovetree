@@ -5,6 +5,7 @@ import { useAuth } from "@/app/hooks/useAuth";
 import { useTheme } from "@/app/contexts/ThemeContext";
 import DataExport from "@/app/components/DataExport";
 import DeleteAccountModal from "@/app/components/DeleteAccountModal";
+import Aurora from "@/app/components/Aurora";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -113,7 +114,8 @@ export default function SettingsPage() {
     setTheme(newTheme);
     setSettings((prev) => ({ ...prev, theme: newTheme }));
     toast.success(
-      `Theme changed to ${newTheme === "auto" ? "system preference" : newTheme
+      `Theme changed to ${
+        newTheme === "auto" ? "system preference" : newTheme
       } mode!`
     );
   };
@@ -190,8 +192,11 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="flex items-center justify-center min-h-screen">
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative">
+        <div className="absolute inset-0 opacity-30 dark:opacity-40">
+          <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
+        </div>
+        <div className="flex items-center justify-center min-h-screen relative z-10">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
         </div>
       </div>
@@ -199,9 +204,14 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative overflow-x-hidden">
+      {/* Aurora Background */}
+      <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
+        <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
+      </div>
+
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 sticky top-0 z-40">
+      <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-700 px-6 py-4 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/">
@@ -231,11 +241,11 @@ export default function SettingsPage() {
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden">
+      <div className="max-w-4xl mx-auto p-6 relative z-10">
+        <div className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm overflow-hidden border dark:border-gray-800">
           <div className="flex">
             {/* Sidebar */}
-            <div className="w-64 bg-gray-50 dark:bg-gray-700 border-r border-gray-200 dark:border-gray-600">
+            <div className="w-64 bg-gray-50 dark:bg-slate-900 border-r border-gray-200 dark:border-gray-800">
               <nav className="p-4 space-y-2">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
@@ -243,10 +253,11 @@ export default function SettingsPage() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors cursor-pointer ${activeTab === tab.id
+                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors cursor-pointer ${
+                        activeTab === tab.id
                           ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700"
                           : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
-                        }`}
+                      }`}
                     >
                       <Icon className="w-5 h-5" />
                       <span className="font-medium">{tab.label}</span>
@@ -280,7 +291,7 @@ export default function SettingsPage() {
                               currentPassword: e.target.value,
                             }))
                           }
-                          className="w-full px-4 py-3 pr-12 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className={`w-full px-4 py-3 pr-12 border text-gray-700 border-gray-300 dark:border-gray-800 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
                           placeholder="Current password"
                         />
                         <button
@@ -309,7 +320,7 @@ export default function SettingsPage() {
                               newPassword: e.target.value,
                             }))
                           }
-                          className="w-full px-4 py-3 pr-12 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-3 pr-12 border text-gray-700 border-gray-300 dark:border-gray-800 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           placeholder="New Password"
                         />
                         <button
@@ -336,7 +347,7 @@ export default function SettingsPage() {
                               confirmPassword: e.target.value,
                             }))
                           }
-                          className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-800 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           placeholder="Confirm New Password"
                         />
                       </div>
@@ -370,7 +381,7 @@ export default function SettingsPage() {
                   </h2>
 
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900 rounded-lg border dark:border-gray-800">
                       <div>
                         <h3 className="font-medium text-gray-900 dark:text-gray-100">
                           Email Notifications
@@ -398,7 +409,7 @@ export default function SettingsPage() {
                       </label>
                     </div>
 
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900 rounded-lg border dark:border-gray-800">
                       <div>
                         <h3 className="font-medium text-gray-900 dark:text-gray-100">
                           Push Notifications
@@ -426,7 +437,7 @@ export default function SettingsPage() {
                       </label>
                     </div>
 
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900 rounded-lg border dark:border-gray-800">
                       <div>
                         <h3 className="font-medium text-gray-900 dark:text-gray-100">
                           Marketing and Promotions
@@ -478,7 +489,7 @@ export default function SettingsPage() {
                   </h2>
 
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900 rounded-lg border dark:border-gray-800">
                       <div>
                         <h3 className="font-medium text-gray-900 dark:text-gray-100">
                           Cool Option
@@ -543,10 +554,11 @@ export default function SettingsPage() {
                         {/* Light Theme */}
                         <button
                           onClick={() => handleThemeChange("light")}
-                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "light"
+                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
+                            theme === "light"
                               ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                               : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                            }`}
+                          }`}
                         >
                           <div className="flex items-center space-x-3 mb-3">
                             <FaSun className="w-5 h-5 text-yellow-500" />
@@ -569,10 +581,11 @@ export default function SettingsPage() {
                         {/* Dark Theme */}
                         <button
                           onClick={() => handleThemeChange("dark")}
-                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "dark"
+                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
+                            theme === "dark"
                               ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                               : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                            }`}
+                          }`}
                         >
                           <div className="flex items-center space-x-3 mb-3">
                             <FaMoon className="w-5 h-5 text-blue-400" />
@@ -595,10 +608,11 @@ export default function SettingsPage() {
                         {/* Auto Theme */}
                         <button
                           onClick={() => handleThemeChange("auto")}
-                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "auto"
+                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
+                            theme === "auto"
                               ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                               : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                            }`}
+                          }`}
                         >
                           <div className="flex items-center space-x-3 mb-3">
                             <FaDesktop className="w-5 h-5 text-gray-500" />
@@ -650,7 +664,7 @@ export default function SettingsPage() {
                             language: e.target.value,
                           }))
                         }
-                        className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:text-gray-300 disabled:italic"
+                        className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-800 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:text-gray-300 disabled:italic"
                       >
                         <option value="en-US">English</option>
                         <option value="pt-BR">Português</option>

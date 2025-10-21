@@ -109,8 +109,13 @@ export default function Home() {
       <Features />
 
       {/* Platform Icons Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-8 md:px-16 text-center">
+      <section className="py-20 bg-white relative overflow-hidden">
+        {/* Aurora Background */}
+        <div className="absolute inset-0 opacity-20">
+          <Aurora colorStops={["#10b981", "#3b82f6", "#8b5cf6"]} />
+        </div>
+
+        <div className="container mx-auto px-8 md:px-16 text-center relative z-10">
           <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Connect all your platforms
           </h3>
@@ -133,9 +138,14 @@ export default function Home() {
       {/* How it Works Section */}
       <section
         id="how-it-works"
-        className="py-20 bg-gradient-to-br from-purple-50 to-purple-100"
+        className="py-20 bg-gradient-to-br from-purple-50 to-purple-100 relative overflow-hidden"
       >
-        <div className="container mx-auto px-8 md:px-16">
+        {/* Aurora Background */}
+        <div className="absolute inset-0 opacity-25">
+          <Aurora colorStops={["#f59e0b", "#ec4899", "#8b5cf6"]} />
+        </div>
+
+        <div className="container mx-auto px-8 md:px-16 relative z-10">
           <div className="text-center mb-16">
             <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               How it works
@@ -186,8 +196,13 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] text-white">
-        <div className="container mx-auto px-8 md:px-16 text-center">
+      <section className="py-20 bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] text-white relative overflow-hidden">
+        {/* Aurora Background */}
+        <div className="absolute inset-0 opacity-30">
+          <Aurora colorStops={["#06b6d4", "#a855f7", "#ec4899"]} />
+        </div>
+
+        <div className="container mx-auto px-8 md:px-16 text-center relative z-10">
           <h3 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to create your own page?
           </h3>
