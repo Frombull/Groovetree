@@ -17,6 +17,12 @@ export async function GET() {
             },
             events: {
               orderBy: { date: 'asc' }
+            },
+            embeds: {
+              orderBy: { order: 'asc' }
+            },
+            photos: {
+              orderBy: { order: 'asc' }
             }
           }
         }
@@ -59,11 +65,17 @@ export async function GET() {
       } : null,
       links: userData.page?.links || [],
       events: userData.page?.events || [],
+      embeds: userData.page?.embeds || [],
+      photos: userData.page?.photos || [],
       statistics: {
         totalLinks: userData.page?.links.length || 0,
         activeLinks: userData.page?.links.filter(link => link.isActive).length || 0,
         totalEvents: userData.page?.events.length || 0,
         activeEvents: userData.page?.events.filter(event => event.isActive).length || 0,
+        totalEmbeds: userData.page?.embeds.length || 0,
+        activeEmbeds: userData.page?.embeds.filter(embed => embed.isActive).length || 0,
+        totalPhotos: userData.page?.photos.length || 0,
+        activePhotos: userData.page?.photos.filter(photo => photo.isActive).length || 0,
       }
     };
 

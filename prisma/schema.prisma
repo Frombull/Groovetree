@@ -14,7 +14,7 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  pages     Page[] // User can have multiple pages
+  page      Page? // User can have only one page
 }
 
 model Page {
@@ -27,7 +27,7 @@ model Page {
   textColor          String?
   backgroundImageUrl String?
 
-  userId String
+  userId String @unique // One-to-one relationship
   user   User    @relation(fields: [userId], references: [id])
   links  Link[]
   events Event[]
