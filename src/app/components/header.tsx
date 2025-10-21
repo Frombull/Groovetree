@@ -20,7 +20,7 @@ export default function Header() {
         <div className="bg-transparent rounded-4xl shadow-2xl px-3 md:px-4 lg:px-8 py-3 md:py-4 lg:py-6">
           {/* Layout flexível para melhor responsividade */}
           <div className="flex items-center justify-between gap-2 md:gap-4">
-            {/* Logo à esquerda */}
+            {/* Logo */}
             <div className="flex items-center space-x-4 lg:space-x-10">
               <Link href="/">
                 <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap">
@@ -46,30 +46,28 @@ export default function Header() {
               )}
             </div>
 
-            {/* Centro - Pesquisa ou botões de navegação (settings) */}
-            {!isSettingsPage && (
+            {/* Centro - Botões de navegação settings ou Pesquisa */}
+            {isSettingsPage ? (
+              <div className="flex-1 flex justify-center">
+                <div className="flex items-center gap-6">
+                  <Link href="/">
+                    <span className="flex items-center gap-2 text-base md:text-lg text-white font-semibold hover:text-purple-400 transition-colors cursor-pointer whitespace-nowrap">
+                      <FaHome className="text-sm md:text-base" />
+                      Home
+                    </span>
+                  </Link>
+                  <Link href="/dashboard/edit">
+                    <span className="flex items-center gap-2 text-base md:text-lg text-white font-semibold hover:text-purple-400 transition-colors cursor-pointer whitespace-nowrap">
+                      <FaEdit className="text-sm md:text-base" />
+                      Edit Page
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            ) : (
               <div className="flex-1 hidden md:flex justify-center mx-2 md:mx-4">
                 <div className="w-full max-w-md">
                   <ArtistSearch />
-                </div>
-              </div>
-            )}
-
-            {isSettingsPage && (
-              <div className="flex-1 flex justify-center mx-2 md:mx-4">
-                <div className="flex justify-center gap-2 md:gap-3">
-                  <Link href="/">
-                    <button className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all border border-white/30 hover:border-purple-400 cursor-pointer">
-                      <FaHome className="text-sm" />
-                      <span className="hidden md:inline text-sm font-semibold">Home</span>
-                    </button>
-                  </Link>
-                  <Link href="/dashboard/edit">
-                    <button className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all border border-white/30 hover:border-purple-400 cursor-pointer">
-                      <FaEdit className="text-sm" />
-                      <span className="hidden md:inline text-sm font-semibold">Edit Page</span>
-                    </button>
-                  </Link>
                 </div>
               </div>
             )}
