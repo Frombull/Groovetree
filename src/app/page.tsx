@@ -97,7 +97,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="absolute z-40 -right-14 top-[800px]">
+      <div className="absolute z-40 -right-14 top-[700px]">
         <CircularText
           text="GROOVE*TREE*GROOVE*TREE*"
           onHover="speedUp"
