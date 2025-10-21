@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaGoogle, FaGithub, FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
 import { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -56,7 +56,15 @@ function SignupContent() {
   };
 
   return (
-    <div className="min-h-screen flex font-sans">
+    <div className="min-h-screen flex font-sans relative">
+      {/* Botão de voltar */}
+      <Link
+        href="/"
+        className="absolute top-6 left-6 z-10 p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-600 hover:text-gray-900"
+        title="Back to home"
+      >
+        <FaArrowLeft className="w-5 h-5" />
+      </Link>
       {/* Left */}
       <div
         className="hidden md:block w-1/2 bg-cover bg-center"

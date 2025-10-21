@@ -213,6 +213,18 @@ export default function EditPage() {
       if (response.ok) {
         const data = await response.json();
         setPageData(data);
+      } else {
+        const errorData = await response.json();
+        console.error("Error creating page:", errorData);
+        if (errorData.error === "User already has a page") {
+          console.log("User already has a page, trying to fetch it...");
+          // Se o usuário já tem uma página, tenta buscar ela
+          const fetchResponse = await fetch("/api/page/me");
+          if (fetchResponse.ok) {
+            const data = await fetchResponse.json();
+            setPageData(data);
+          }
+        }
       }
     } catch (error) {
       console.error("Error creating page:", error);
@@ -741,7 +753,7 @@ export default function EditPage() {
             </button>
 
             <Link
-              href=""
+              href="/settings"
               className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <IoMdSettings className="w-5 h-5" />

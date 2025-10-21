@@ -5,29 +5,30 @@ import { useAuth } from "@/app/hooks/useAuth";
 import UserMenu from "./UserMenu";
 import { usePathname } from "next/navigation";
 import ArtistSearch from "./ArtistSearch";
+import { FaHome, FaEdit } from "react-icons/fa";
 
 export default function Header() {
   const { user, loading } = useAuth();
   const pathname = usePathname();
 
-  // se for /settings, não mostra os links
-  const hideNav = pathname === "/settings";
+  // se for /settings, não mostra os links e pesquisa
+  const isSettingsPage = pathname === "/settings";
 
   return (
-    <header className="relative z-10 pt-8 px-8 md:px-16">
+    <header className="relative z-10 pt-4 md:pt-8 px-4 md:px-8 lg:px-16">
       <div className="container mx-auto">
-        <div className="bg-transparent rounded-4xl shadow-2xl px-4 md:px-8 py-4 md:py-6">
-          {/* Layout em grid para melhor distribuição */}
-          <div className="grid grid-cols-3 items-center gap-4">
-            {/* Logo e navegação à esquerda */}
-            <div className="flex items-center space-x-10">
+        <div className="bg-transparent rounded-4xl shadow-2xl px-3 md:px-4 lg:px-8 py-3 md:py-4 lg:py-6">
+          {/* Layout flexível para melhor responsividade */}
+          <div className="flex items-center justify-between gap-2 md:gap-4">
+            {/* Logo à esquerda */}
+            <div className="flex items-center space-x-4 lg:space-x-10">
               <Link href="/">
-                <h1 className="text-2xl md:text-3xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap">
+                <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap">
                   Groovetree
                 </h1>
               </Link>
 
-              {!hideNav && (
+              {!isSettingsPage && (
                 <nav className="hidden lg:flex items-center space-x-6">
                   <a
                     href="#features"
@@ -45,22 +46,52 @@ export default function Header() {
               )}
             </div>
 
-            {/* Barra de pesquisa centralizada */}
-            <div className="hidden md:flex justify-center">
-              <ArtistSearch />
-            </div>
+            {/* Centro - Pesquisa ou botões de navegação (settings) */}
+            {!isSettingsPage && (
+              <div className="flex-1 hidden md:flex justify-center mx-2 md:mx-4">
+                <div className="w-full max-w-md">
+                  <ArtistSearch />
+                </div>
+              </div>
+            )}
+
+            {isSettingsPage && (
+              <div className="flex-1 flex justify-center mx-2 md:mx-4">
+                <div className="flex justify-center gap-2 md:gap-3">
+                  <Link href="/">
+                    <button className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all border border-white/30 hover:border-purple-400 cursor-pointer">
+                      <FaHome className="text-sm" />
+                      <span className="hidden md:inline text-sm font-semibold">Home</span>
+                    </button>
+                  </Link>
+                  <Link href="/dashboard/edit">
+                    <button className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all border border-white/30 hover:border-purple-400 cursor-pointer">
+                      <FaEdit className="text-sm" />
+                      <span className="hidden md:inline text-sm font-semibold">Edit Page</span>
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            )}
 
             {/* Botões de autenticação à direita */}
-            <div className="flex items-center justify-end space-x-2 md:space-x-4">
+            <div className="flex items-center justify-end space-x-2">
+              {/* Lupa mobile - aparece apenas em mobile e não em settings */}
+              {!isSettingsPage && (
+                <div className="md:hidden">
+                  <ArtistSearch isMobile />
+                </div>
+              )}
+
               {loading ? (
-                <div className="animate-pulse bg-gray-200 h-10 w-20 rounded-full"></div>
+                <div className="animate-pulse bg-gray-200 h-10 w-10 md:w-20 rounded-full"></div>
               ) : user ? (
                 <UserMenu user={user} />
               ) : (
                 <>
-                  <Link href="/login">
+                  <Link href="/login" className="hidden sm:block">
                     <button
-                      className="bg-transparent hover:opacity-90 dark:text-gray-300 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 hover:border-purple-400 transition-all cursor-pointer text-sm md:text-base"
+                      className="bg-transparent hover:opacity-90 dark:text-gray-300 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 hover:border-purple-400 transition-all cursor-pointer text-sm md:text-base whitespace-nowrap"
                       data-cy="login-button-header"
                     >
                       Login
@@ -68,7 +99,7 @@ export default function Header() {
                   </Link>
                   <Link href="/signup">
                     <button
-                      className="bg-transparent hover:opacity-90 dark:text-gray-300 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 hover:border-purple-400 transition-all cursor-pointer text-sm md:text-base"
+                      className="bg-transparent hover:opacity-90 dark:text-gray-300 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 hover:border-purple-400 transition-all cursor-pointer text-sm md:text-base whitespace-nowrap"
                       data-cy="signup-button-header"
                     >
                       Sign Up
@@ -77,11 +108,6 @@ export default function Header() {
                 </>
               )}
             </div>
-          </div>
-
-          {/* Barra de pesquisa mobile (abaixo em mobile) */}
-          <div className="md:hidden mt-4">
-            <ArtistSearch />
           </div>
         </div>
       </div>
