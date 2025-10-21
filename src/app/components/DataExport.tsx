@@ -55,18 +55,6 @@ export default function DataExport() {
         Download a complete copy of all your data stored in Groovetree.
       </p>
 
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
-        <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">What will be exported:</h4>
-        <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-          <li>• Profile information</li>
-          <li>• Artist page information</li>
-          <li>• Links and configurations</li>
-          <li>• Events</li>
-          <li>• Embeds</li>
-          <li>• Usage statistics</li>
-        </ul>
-      </div>
-
       <button
         onClick={handleExport}
         disabled={isExporting}

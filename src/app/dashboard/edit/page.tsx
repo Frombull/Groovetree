@@ -1099,11 +1099,10 @@ export default function EditPage() {
               setShowPhotoModal(true);
             }}
             disabled={photos.length >= 4}
-            className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${
-              photos.length >= 4
+            className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${photos.length >= 4
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-purple-600 text-white hover:bg-purple-700"
-            }`}
+              }`}
           >
             <FaPlus className="w-5 h-5" />
             Add Photo {photos.length >= 4 && "(Máximo atingido)"}
@@ -1183,13 +1182,12 @@ export default function EditPage() {
                   onDragOver={(e) => handleDragOver(e, link.id)}
                   onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, link.id)}
-                  className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${
-                    dragOverItem === link.id
+                  className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${dragOverItem === link.id
                       ? "border-purple-500 bg-purple-50 shadow-lg scale-105"
                       : draggedItem === link.id
-                      ? "border-gray-300 opacity-50"
-                      : "border-gray-200 hover:border-purple-300 hover:shadow-md"
-                  }`}
+                        ? "border-gray-300 opacity-50"
+                        : "border-gray-200 hover:border-purple-300 hover:shadow-md"
+                    }`}
                 >
                   <FaGripVertical className="text-gray-400 group-hover:text-purple-600 cursor-grab active:cursor-grabbing transition-colors flex-shrink-0" />
                   <div className="flex-1 min-w-0">
@@ -1255,11 +1253,10 @@ export default function EditPage() {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${
-                    selectedCategory === category.id
+                  className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${selectedCategory === category.id
                       ? "bg-purple-600 text-white shadow-lg shadow-purple-200"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
                   {category.icon}
                   <span>{category.name}</span>
@@ -1376,25 +1373,24 @@ export default function EditPage() {
             <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold">
-                  Compartilhe sua identidade musical
+                  Share your musical identity
                 </h2>
                 <button
                   onClick={() => setShowShareModal(false)}
-                  className="text-white hover:text-gray-200 transition-colors"
+                  className="text-white hover:text-gray-200 transition-colors cursor-pointer"
                 >
                   <FaTimes className="w-6 h-6" />
                 </button>
               </div>
               <p className="text-purple-100">
-                Mostre ao mundo sua música e conecte seus fãs a todas as suas
-                plataformas em um só lugar!
+                Show the world your music and connect your fans to all your platforms in one place!
               </p>
             </div>
 
             <div className="p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Seu Groovetree URL
+                  Your Groovetree URL
                 </label>
                 <div className="flex items-center gap-2">
                   <input
@@ -1405,53 +1401,30 @@ export default function EditPage() {
                   />
                   <button
                     onClick={handleCopyUrl}
-                    className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                    className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2 cursor-pointer"
                   >
                     {copied ? (
                       <>
                         <FaCheck className="w-4 h-4" />
-                        Copiado!
+                        Copied!
                       </>
                     ) : (
                       <>
                         <FaCopy className="w-4 h-4" />
-                        Copiar
+                        Copy
                       </>
                     )}
                   </button>
                 </div>
               </div>
 
-              <div className="bg-purple-50 rounded-lg p-4">
-                <h3 className="font-semibold text-purple-900 mb-2 flex items-center gap-2">
-                  <RiShareFill className="w-5 h-5" />
-                  Dicas para compartilhar:
-                </h3>
-                <ul className="space-y-2 text-sm text-purple-800">
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-600 mt-0.5">•</span>
-                    <span>Adicione este link na bio do Instagram</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-600 mt-0.5">•</span>
-                    <span>Compartilhe nas suas redes sociais</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-purple-600 mt-0.5">•</span>
-                    <span>
-                      Use em cartões de visita e materiais promocionais
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
               <Link
                 href={`/${pageData?.slug}`}
                 target="_blank"
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"
+                className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"
               >
                 <BsEyeFill className="w-4 h-4" />
-                Visualizar Página
+                View Page
               </Link>
             </div>
           </div>
@@ -1694,8 +1667,8 @@ export default function EditPage() {
                 {uploadingPhoto
                   ? "Uploading..."
                   : editingPhoto
-                  ? "Update Photo"
-                  : "Add Photo"}
+                    ? "Update Photo"
+                    : "Add Photo"}
               </button>
             </div>
           </div>
