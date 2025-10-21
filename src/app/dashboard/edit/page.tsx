@@ -1232,7 +1232,7 @@ export default function EditPage() {
               <h2 className="text-2xl font-bold">Add Link</h2>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
               >
                 <FaTimes className="w-6 h-6" />
               </button>
@@ -1244,7 +1244,7 @@ export default function EditPage() {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${
+                  className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${
                     selectedCategory === category.id
                       ? "bg-purple-600 text-white shadow-lg shadow-purple-200"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -1265,7 +1265,7 @@ export default function EditPage() {
                     <button
                       key={item.type}
                       onClick={() => handleAddLink(item.type)}
-                      className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all text-left group"
+                      className="flex items-center cursor-pointer gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all text-left group"
                     >
                       <div className="flex-shrink-0">{item.icon}</div>
                       <div className="flex-1 min-w-0">
@@ -1469,7 +1469,7 @@ export default function EditPage() {
                     ticketUrl: "",
                   });
                 }}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
               >
                 <FaTimes className="w-5 h-5" />
               </button>
@@ -1578,7 +1578,7 @@ export default function EditPage() {
               {/* Save Button */}
               <button
                 onClick={handleSaveEvent}
-                className="w-full py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 cursor-pointer bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2"
               >
                 <MdSave className="w-5 h-5" />
                 {editingEvent ? "Update Show" : "Add Show"}
@@ -1607,7 +1607,7 @@ export default function EditPage() {
                     photoInputRef.current.value = "";
                   }
                 }}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
               >
                 <FaTimes className="w-6 h-6" />
               </button>
@@ -1625,7 +1625,7 @@ export default function EditPage() {
                   accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
                   onChange={handlePhotoUpload}
                   disabled={uploadingPhoto}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full cursor-pointer px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   JPEG, PNG, WebP ou GIF (máx. 10MB para melhor qualidade)

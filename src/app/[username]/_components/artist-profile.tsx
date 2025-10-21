@@ -7,6 +7,7 @@ import {
 } from "@/app/components/ui/avatar";
 
 export function ArtistProfile({
+  name,
   avatarUrl,
   title,
   bio,
@@ -23,7 +24,7 @@ export function ArtistProfile({
       <Avatar className="mx-auto h-32 w-32 border-4 border-primary">
         <AvatarImage src={avatarUrl} alt="Artist" />
         <AvatarFallback className="bg-secondary text-foreground text-4xl">
-          DJ
+          {name && name.slice(0, 2).toUpperCase()}
         </AvatarFallback>
       </Avatar>
       <h1
