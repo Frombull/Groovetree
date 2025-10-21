@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FaGoogle, FaGithub, FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import {
+  FaGoogle,
+  FaGithub,
+  FaEye,
+  FaEyeSlash,
+  FaArrowLeft,
+} from "react-icons/fa";
 import { useState } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";

@@ -206,7 +206,6 @@ export default function EditPage() {
         body: JSON.stringify({
           slug: user?.email?.split("@")[0] || "user",
           title: user?.name || "My Page",
-          bio: "Bio do artista.",
         }),
       });
 
@@ -874,14 +873,14 @@ export default function EditPage() {
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <IoMdSettings className="w-6 h-6 text-purple-600" />
-            Personalização da Página
+            Page Customization
           </h2>
 
           <div className="space-y-4">
             {/* Background Color */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Cor de Fundo
+                Background Color
               </label>
               <div className="flex items-center gap-3">
                 <input
@@ -913,7 +912,7 @@ export default function EditPage() {
             {/* Text Color */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Cor do Texto
+                Text Color
               </label>
               <div className="flex items-center gap-3">
                 <input
@@ -945,7 +944,7 @@ export default function EditPage() {
             {/* Background Image URL */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                URL da Imagem de Fundo
+                Background Image URL
               </label>
               <input
                 type="url"
@@ -960,7 +959,7 @@ export default function EditPage() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Deixe vazio para usar apenas a cor de fundo
+                Leave empty to use only background color
               </p>
             </div>
 
@@ -980,7 +979,7 @@ export default function EditPage() {
                 }}
               >
                 <p className="font-semibold text-lg drop-shadow-lg">
-                  Texto de exemplo
+                  Sample text
                 </p>
               </div>
             </div>
@@ -991,7 +990,7 @@ export default function EditPage() {
               className="w-full py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <MdSave className="w-5 h-5" />
-              Salvar Personalização
+              Save Customization
             </button>
           </div>
         </div>
@@ -1151,9 +1150,9 @@ export default function EditPage() {
               <div className="col-span-2 sm:col-span-4 text-center py-16 text-gray-400">
                 <p className="text-6xl mb-4">📸</p>
                 <p className="text-lg font-medium text-gray-700">
-                  Nenhuma foto ainda
+                  No photos added yet
                 </p>
-                <p className="text-sm">Adicione até 4 fotos para a galeria</p>
+                <p className="text-sm">Add up to 4 photos to the gallery</p>
               </div>
             )}
           </div>
@@ -1583,7 +1582,7 @@ export default function EditPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Link para compra de ingressos (opcional)
+                  Ticket purchase link (optional)
                 </p>
               </div>
 
@@ -1640,7 +1639,7 @@ export default function EditPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  JPEG, PNG, WebP ou GIF (máx. 10MB para melhor qualidade)
+                  JPEG, PNG, WebP or GIF (máx. 10MB for better quality)
                 </p>
               </div>
 
@@ -1672,15 +1671,16 @@ export default function EditPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Texto que aparece sobre a foto (opcional, máx. 100 caracteres)
+                  Text that appears above the photo (optional, max. 100
+                  characters)
                 </p>
               </div>
 
               {/* Info */}
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                 <p className="text-sm text-purple-800">
-                  💡 <strong>Dica:</strong> Use imagens com proporção quadrada
-                  (1:1) para melhor visualização. Máximo de 4 fotos.
+                  💡 <strong>Hint:</strong> Use square aspect ratio images (1:1)
+                  for better visualization. Maximum of 4 photos.
                 </p>
               </div>
 
