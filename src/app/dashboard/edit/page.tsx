@@ -771,6 +771,7 @@ export default function EditPage() {
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors hover:cursor-pointer"
+              data-cy="logout-button"
             >
               <MdLogout className="w-5 h-5" />
               Logout
@@ -786,6 +787,7 @@ export default function EditPage() {
             href={`/${pageData.slug}`}
             target="_blank"
             className="group relative inline-flex items-center gap-2 px-8 py-4 bg-transparent text-gray-900 dark:text-white font-semibold text-base rounded-full cursor-pointer transition-all duration-300 hover:scale-105"
+            data-cy="page-preview-button"
           >
             {/* Borda com gradiente Aurora */}
             <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-green-500 to-purple-600 p-[2px]">
@@ -864,6 +866,7 @@ export default function EditPage() {
               onBlur={handleUpdatePage}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="Your artist name"
+              data-cy="page-artist-name"
             />
           </div>
 
@@ -881,6 +884,7 @@ export default function EditPage() {
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
               rows={3}
               placeholder="Tell your audience about yourself"
+              data-cy="page-bio-description"
             />
           </div>
 
@@ -939,6 +943,7 @@ export default function EditPage() {
                   }
                   placeholder="#000000"
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  data-cy="page-background-color"
                 />
               </div>
             </div>
@@ -971,6 +976,7 @@ export default function EditPage() {
                   }
                   placeholder="#ffffff"
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  data-cy="page-text-color"
                 />
               </div>
             </div>
@@ -991,6 +997,7 @@ export default function EditPage() {
                 }
                 placeholder="https://example.com/background.jpg"
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                data-cy="page-background-image-url"
               />
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Leave empty to use only background color
@@ -1024,6 +1031,7 @@ export default function EditPage() {
             <button
               onClick={handleUpdatePage}
               className="w-full py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              data-cy="page-save-customization-button"
             >
               <MdSave className="w-5 h-5" />
               Save Customization

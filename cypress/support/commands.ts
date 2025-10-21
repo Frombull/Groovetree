@@ -54,9 +54,9 @@ Cypress.Commands.add('Login', (
 
 
 Cypress.Commands.add('Logout', () => {
-    cy.get('[data-cy="user-menu"]').click();
+    //cy.get('[data-cy="user-menu"]').click();
 
     cy.get('[data-cy="logout-button"]').click();
 
-    cy.get('[data-cy="user-menu"]').should('not.exist');
+    //cy.get('[data-cy="user-menu"]').should('not.exist');
 })

@@ -114,7 +114,9 @@ npx prisma generate
 
 ### 6. Popule o banco de dados (opcional)
 
-Execute o seed para adicionar dados de exemplo:
+    ```bash
+    Em nosso time do Postman
+    ```
 
 ```bash
 npx tsx prisma/seed.ts
