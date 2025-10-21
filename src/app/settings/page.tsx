@@ -1,18 +1,14 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/app/hooks/useAuth';
-import { useTheme } from '@/app/contexts/ThemeContext';
-import Header from '@/app/components/header';
-import AvatarUpload from '@/app/components/AvatarUpload';
-import AccountStats from '@/app/components/AccountStats';
-import DataExport from '@/app/components/DataExport';
-import DeleteAccountModal from '@/app/components/DeleteAccountModal';
-import { profilePictureService } from '@/lib/profilePicture';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
+import { useAuth } from "@/app/hooks/useAuth";
+import { useTheme } from "@/app/contexts/ThemeContext";
+import Header from "@/app/components/header";
+import DataExport from "@/app/components/DataExport";
+import DeleteAccountModal from "@/app/components/DeleteAccountModal";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import {
-  FaUser,
   FaLock,
   FaBell,
   FaPalette,
@@ -52,7 +48,7 @@ export default function SettingsPage() {
   const { user, loading } = useAuth();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState("security");
   const [settings, setSettings] = useState<UserSettings>({
     name: "",
     email: "",
@@ -79,8 +75,6 @@ export default function SettingsPage() {
     confirmPassword: "",
   });
   const [isSaving, setIsSaving] = useState(false);
-  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
-  const [currentAvatarUrl, setCurrentAvatarUrl] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -91,7 +85,6 @@ export default function SettingsPage() {
         name: user.name || "",
         email: user.email || "",
       }));
-      setCurrentAvatarUrl(user.page?.avatarUrl || null);
     }
   }, [user]);
 
@@ -124,60 +117,6 @@ export default function SettingsPage() {
     );
   };
 
-  const handleAvatarChange = async (file: File | null) => {
-    if (!user?.id) {
-      toast.error("User not found");
-      return;
-    }
-
-    if (!file) {
-      // Handle avatar removal
-      if (currentAvatarUrl) {
-        setIsUploadingAvatar(true);
-        try {
-          const success = await profilePictureService.deleteAvatar(
-            currentAvatarUrl
-          );
-          if (success) {
-            setCurrentAvatarUrl(null);
-            toast.success("Profile picture removed successfully");
-            // TODO: Update user profile in database
-          } else {
-            toast.error("Failed to remove profile picture");
-          }
-        } catch (err) {
-          console.error("Error removing avatar:", err);
-          toast.error("Error removing profile picture");
-        } finally {
-          setIsUploadingAvatar(false);
-        }
-      }
-      return;
-    }
-
-    setIsUploadingAvatar(true);
-    try {
-      const result = await profilePictureService.uploadAvatar(
-        file,
-        user.id,
-        currentAvatarUrl || undefined
-      );
-
-      if (result.success && result.url) {
-        setCurrentAvatarUrl(result.url);
-        toast.success("Profile picture updated successfully!");
-        // TODO: Update user profile in database with new avatar URL
-      } else {
-        toast.error(result.error || "Failed to upload profile picture");
-      }
-    } catch (err) {
-      console.error("Error uploading avatar:", err);
-      toast.error("Error uploading profile picture");
-    } finally {
-      setIsUploadingAvatar(false);
-    }
-  };
-
   const handlePasswordChange = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast.error("Passwords do not match!.");
@@ -206,10 +145,10 @@ export default function SettingsPage() {
   const handleDeleteAccount = async (password: string) => {
     setIsDeleting(true);
     try {
-      const response = await fetch('/api/user/delete', {
-        method: 'DELETE',
+      const response = await fetch("/api/user/delete", {
+        method: "DELETE",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ password }),
       });
@@ -217,23 +156,24 @@ export default function SettingsPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Error deleting account');
+        throw new Error(data.error || "Error deleting account");
       }
 
-      toast.success('Account Deleted.');
+      toast.success("Account Deleted.");
       setShowDeleteModal(false);
 
       // Redirect to home page after successful deletion
-      router.push('/');
+      router.push("/");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Error deleting account');
+      toast.error(
+        error instanceof Error ? error.message : "Error deleting account"
+      );
     } finally {
       setIsDeleting(false);
     }
   };
 
   const tabs = [
-    { id: "profile", label: "Profile", icon: FaUser },
     { id: "security", label: "Security", icon: FaLock },
     { id: "notifications", label: "Notifications", icon: FaBell },
     { id: "privacy", label: "Privacy", icon: FaShield },
@@ -286,138 +226,6 @@ export default function SettingsPage() {
 
             {/* Main content */}
             <div className="flex-1 p-8 dark:text-gray-100">
-              {/* Tab: Profile */}
-              {activeTab === "profile" && (
-                <div className="space-y-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    Profile Information
-                  </h2>
-
-                  {/* Profile picture and basic info */}
-                  <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-center my-8">
-                    <div className="md:col-span-2 flex justify-center">
-                      <AvatarUpload
-                        currentAvatar={currentAvatarUrl}
-                        onAvatarChange={handleAvatarChange}
-                        size="lg"
-                        isUploading={isUploadingAvatar}
-                      />
-                    </div>
-
-                    {/* Name and Email fields */}
-                    <div className="md:col-span-3 space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Name
-                        </label>
-                        <input
-                          type="text"
-                          value={settings.name}
-                          onChange={(e) =>
-                            setSettings((prev) => ({
-                              ...prev,
-                              name: e.target.value,
-                            }))
-                          }
-                          className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          placeholder="Your Name"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          value={settings.email}
-                          onChange={(e) =>
-                            setSettings((prev) => ({
-                              ...prev,
-                              email: e.target.value,
-                            }))
-                          }
-                          className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          placeholder="your@email.com"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Bio
-                      </label>
-                      <textarea
-                        value={settings.bio}
-                        onChange={(e) =>
-                          setSettings((prev) => ({
-                            ...prev,
-                            bio: e.target.value,
-                          }))
-                        }
-                        rows={4}
-                        className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:italic"
-                        placeholder="Tell us a little about yourself..."
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Location
-                      </label>
-                      <input
-                        type="text"
-                        value={settings.location}
-                        onChange={(e) =>
-                          setSettings((prev) => ({
-                            ...prev,
-                            location: e.target.value,
-                          }))
-                        }
-                        className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:italic"
-                        placeholder="City"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Website
-                      </label>
-                      <input
-                        type="url"
-                        value={settings.website}
-                        onChange={(e) =>
-                          setSettings((prev) => ({
-                            ...prev,
-                            website: e.target.value,
-                          }))
-                        }
-                        className="w-full px-4 py-3 border text-gray-700 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:italic"
-                        placeholder="https://yoursite.com"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Account stats */}
-                  <AccountStats />
-
-                  <button
-                    onClick={handleSave}
-                    disabled={isSaving}
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center cursor-pointer"
-                  >
-                    {isSaving ? (
-                      <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    ) : (
-                      <FaSave className="mr-2 " />
-                    )}
-                    {isSaving ? "Saving..." : "Save Changes"}
-                  </button>
-                </div>
-              )}
-
               {/* Tab: Security */}
               {activeTab === "security" && (
                 <div className="space-y-6">
@@ -851,15 +659,20 @@ export default function SettingsPage() {
               {/* Tab: DeleteAccount */}
               {activeTab === "delete_account" && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-bold text-red-900 dark:text-red-400">Delete Account</h2>
+                  <h2 className="text-2xl font-bold text-red-900 dark:text-red-400">
+                    Delete Account
+                  </h2>
 
                   <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
                     <div className="flex items-center mb-4">
                       <FaTrash className="text-red-700 dark:text-red-400 mr-2" />
-                      <h3 className="text-lg font-semibold text-red-900 dark:text-red-400">Danger Zone</h3>
+                      <h3 className="text-lg font-semibold text-red-900 dark:text-red-400">
+                        Danger Zone
+                      </h3>
                     </div>
                     <p className="text-red-700 dark:text-red-300 mb-6">
-                      This action is irreversible. Deleting your account will permanently remove all your data.
+                      This action is irreversible. Deleting your account will
+                      permanently remove all your data.
                     </p>
                     <button
                       onClick={() => setShowDeleteModal(true)}

@@ -12,7 +12,9 @@ export async function POST(req: NextRequest) {
     }
 
     const { slug, title, bio } = await req.json();
-    console.log(`[CREATE PAGE] Attempting to create page for user ${user.id} with slug: ${slug}`);
+    console.log(
+      `[CREATE PAGE] Attempting to create page for user ${user.id} with slug: ${slug}`
+    );
 
     // Verifica se já existe uma página para este usuário
     const existingPage = await prisma.page.findFirst({
@@ -20,7 +22,9 @@ export async function POST(req: NextRequest) {
     });
 
     if (existingPage) {
-      console.error(`[CREATE PAGE] User ${user.id} already has a page with slug: ${existingPage.slug}`);
+      console.error(
+        `[CREATE PAGE] User ${user.id} already has a page with slug: ${existingPage.slug}`
+      );
       return NextResponse.json(
         { error: "User already has a page", existingSlug: existingPage.slug },
         { status: 400 }
@@ -33,11 +37,11 @@ export async function POST(req: NextRequest) {
       const cleanSlug = baseSlug
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, '-')        // Substitui espaços por hífens
-        .replace(/[^\w\-]/g, '')     // Remove caracteres especiais
-        .replace(/\-\-+/g, '-')      // Remove hífens duplicados
-        .replace(/^-+/, '')          // Remove hífens do início
-        .replace(/-+$/, '');         // Remove hífens do final
+        .replace(/\s+/g, "-") // Substitui espaços por hífens
+        .replace(/[^\w\-]/g, "") // Remove caracteres especiais
+        .replace(/\-\-+/g, "-") // Remove hífens duplicados
+        .replace(/^-+/, "") // Remove hífens do início
+        .replace(/-+$/, ""); // Remove hífens do final
 
       let uniqueSlug = cleanSlug;
       let counter = 1;
@@ -52,7 +56,7 @@ export async function POST(req: NextRequest) {
     };
 
     // Gera um slug base a partir do username ou slug fornecido
-    const baseSlug = slug || user.name || user.email.split('@')[0];
+    const baseSlug = slug || user.name || user.email.split("@")[0];
 
     // Tentar criar a página com retry em caso de conflito
     type PageWithRelations = Awaited<ReturnType<typeof prisma.page.create>>;
@@ -65,7 +69,9 @@ export async function POST(req: NextRequest) {
         const finalSlug = await generateUniqueSlug(baseSlug);
 
         if (finalSlug !== slug && attempts === 0) {
-          console.log(`[CREATE PAGE] Slug '${slug}' was in use or invalid, generated unique slug: ${finalSlug}`);
+          console.log(
+            `[CREATE PAGE] Slug '${slug}' was in use or invalid, generated unique slug: ${finalSlug}`
+          );
         }
 
         page = await prisma.page.create({
@@ -81,20 +87,32 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        console.log(`[CREATE PAGE] Page created successfully with slug: ${finalSlug}`);
+        console.log(
+          `[CREATE PAGE] Page created successfully with slug: ${finalSlug}`
+        );
       } catch (error: unknown) {
         // Se for erro de slug duplicado (P2002), tenta novamente
-        const prismaError = error as { code?: string; meta?: { target?: string[] } };
-        if (prismaError.code === 'P2002' && prismaError.meta?.target?.includes('slug')) {
+        const prismaError = error as {
+          code?: string;
+          meta?: { target?: string[] };
+        };
+        if (
+          prismaError.code === "P2002" &&
+          prismaError.meta?.target?.includes("slug")
+        ) {
           attempts++;
-          console.log(`[CREATE PAGE] Slug conflict detected, retrying... (attempt ${attempts}/${maxAttempts})`);
+          console.log(
+            `[CREATE PAGE] Slug conflict detected, retrying... (attempt ${attempts}/${maxAttempts})`
+          );
 
           if (attempts >= maxAttempts) {
-            throw new Error(`Failed to create page after ${maxAttempts} attempts due to slug conflicts`);
+            throw new Error(
+              `Failed to create page after ${maxAttempts} attempts due to slug conflicts`
+            );
           }
 
           // Aguarda um pouco antes de tentar novamente
-          await new Promise(resolve => setTimeout(resolve, 100 * attempts));
+          await new Promise((resolve) => setTimeout(resolve, 100 * attempts));
         } else {
           // Se for outro tipo de erro, lança novamente
           throw error;
