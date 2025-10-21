@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useAuth } from "@/app/hooks/useAuth";
-import { useTheme } from "@/app/contexts/ThemeContext";
-import Header from "@/app/components/header";
-import AvatarUpload from "@/app/components/AvatarUpload";
-import AccountStats from "@/app/components/AccountStats";
-import DataExport from "@/app/components/DataExport";
-import { profilePictureService } from "@/lib/profilePicture";
-import toast from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/app/hooks/useAuth';
+import { useTheme } from '@/app/contexts/ThemeContext';
+import Header from '@/app/components/header';
+import AvatarUpload from '@/app/components/AvatarUpload';
+import AccountStats from '@/app/components/AccountStats';
+import DataExport from '@/app/components/DataExport';
+import DeleteAccountModal from '@/app/components/DeleteAccountModal';
+import { profilePictureService } from '@/lib/profilePicture';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 import {
   FaUser,
   FaLock,
@@ -49,7 +51,8 @@ interface UserSettings {
 export default function SettingsPage() {
   const { user, loading } = useAuth();
   const { theme, setTheme } = useTheme();
-  const [activeTab, setActiveTab] = useState("profile");
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState('profile');
   const [settings, setSettings] = useState<UserSettings>({
     name: "",
     email: "",
@@ -78,6 +81,8 @@ export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [currentAvatarUrl, setCurrentAvatarUrl] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -195,6 +200,35 @@ export default function SettingsPage() {
       toast.error("Error altering password.");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async (password: string) => {
+    setIsDeleting(true);
+    try {
+      const response = await fetch('/api/user/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Error deleting account');
+      }
+
+      toast.success('Account Deleted.');
+      setShowDeleteModal(false);
+
+      // Redirect to home page after successful deletion
+      router.push('/');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Error deleting account');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -817,23 +851,22 @@ export default function SettingsPage() {
               {/* Tab: DeleteAccount */}
               {activeTab === "delete_account" && (
                 <div className="space-y-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
-                    Delete your Groovetree account
-                  </h2>
+                  <h2 className="text-2xl font-bold text-red-900 dark:text-red-400">Delete Account</h2>
 
                   <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
                     <div className="flex items-center mb-4">
-                      <FaTrash className="text-red-700 dark:red-900 mr-2" />
-                      <h3 className="text-lg font-semibold text-red-900 dark:text-red-400">
-                        Danger Zone Copy
-                      </h3>
+                      <FaTrash className="text-red-700 dark:text-red-400 mr-2" />
+                      <h3 className="text-lg font-semibold text-red-900 dark:text-red-400">Danger Zone</h3>
                     </div>
-                    <p className="text-red-700 dark:text-red-300 mb-4">
-                      These actions are irreversible. Be sure before proceeding.
+                    <p className="text-red-700 dark:text-red-300 mb-6">
+                      This action is irreversible. Deleting your account will permanently remove all your data.
                     </p>
-                    <button className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center cursor-pointer">
+                    <button
+                      onClick={() => setShowDeleteModal(true)}
+                      className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center cursor-pointer"
+                    >
                       <FaTrash className="mr-2" />
-                      Delete account
+                      Delete Account Permanently
                     </button>
                   </div>
                 </div>
@@ -842,6 +875,14 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+
+      {/* Delete Account Modal */}
+      <DeleteAccountModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteAccount}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }
