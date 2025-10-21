@@ -87,7 +87,7 @@ export default function Header() {
                 <UserMenu user={user} />
               ) : (
                 <>
-                  <Link href="/login" className="hidden sm:block">
+                  <Link href="/login">
                     <button
                       className="bg-transparent hover:opacity-90 dark:text-gray-300 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 hover:border-purple-400 transition-all cursor-pointer text-sm md:text-base whitespace-nowrap"
                       data-cy="login-button-header"
