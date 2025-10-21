@@ -20,9 +20,9 @@ export default function Header() {
           {/* Layout em grid para melhor distribuição */}
           <div className="grid grid-cols-3 items-center gap-4">
             {/* Logo e navegação à esquerda */}
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-10">
               <Link href="/">
-                <h1 className="text-2xl md:text-3xl font-light text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap">
+                <h1 className="text-2xl md:text-3xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap">
                   Groovetree
                 </h1>
               </Link>
@@ -31,13 +31,13 @@ export default function Header() {
                 <nav className="hidden lg:flex items-center space-x-6">
                   <a
                     href="#features"
-                    className="text-gray-300 dark:text-gray-300 hover:text-purple-400 transition-colors text-sm"
+                    className="text-gray-300 dark:text-gray-300 hover:text-purple-400 transition-colors text-sm font-bold "
                   >
                     Resources
                   </a>
                   <a
                     href="#how-it-works"
-                    className="text-gray-300 dark:text-gray-300 hover:text-purple-400 transition-colors text-sm"
+                    className="text-gray-300 dark:text-gray-300 hover:text-purple-400 transition-colors text-sm font-bold "
                   >
                     How it works
                   </a>

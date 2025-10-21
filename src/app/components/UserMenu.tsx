@@ -1,11 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useAuth } from '@/app/hooks/useAuth';
-import { FaCog, FaSignOutAlt, FaUser } from 'react-icons/fa';
-
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useAuth } from "@/app/hooks/useAuth";
+import { FaCog, FaSignOutAlt, FaUser, FaChevronDown } from "react-icons/fa";
 
 interface User {
   id: string;
@@ -35,9 +34,9 @@ export default function UserMenu({ user }: UserMenuProps) {
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -47,44 +46,70 @@ export default function UserMenu({ user }: UserMenuProps) {
     await logout();
   };
 
+  const avatarUrl = user.page?.avatarUrl || "/default-profile-picture.png";
+
   return (
     <div className="relative" ref={menuRef}>
-      {/* PFP */}
+      {/* PFP com Username */}
       <button
         data-cy="user-menu"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="flex items-center justify-between px-3 py-2 rounded-full hover:bg-white/10 transition-all focus:outline-none focus:ring-2 focus:ring-purple-400 min-w-[220px] gap-3 cursor-pointer"
       >
-        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 hover:border-purple-300 transition-colors">
-          <Image
-            src={user.page?.avatarUrl || '/default-profile-picture.png'}
-            alt={user.name || 'User'}
-            width={40}
-            height={40}
-            className="w-full h-full object-cover cursor-pointer"
-          />
+        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-white/30 hover:border-purple-400 transition-all shadow-lg flex-shrink-0">
+          {user.page?.avatarUrl ? (
+            <Image
+              src={avatarUrl}
+              alt={user.name || "User"}
+              width={56}
+              height={56}
+              className="w-full h-full object-cover "
+              unoptimized={avatarUrl.startsWith("http")}
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+              <FaUser className="text-white text-2xl" />
+            </div>
+          )}
         </div>
+        <div className="hidden md:block flex-1 text-left">
+          <span className="text-white font-bold text-base">
+            {user.name || "User"}
+          </span>
+        </div>
+        <FaChevronDown
+          className={`hidden md:block text-white text-xs transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
       </button>
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-2 z-50">
+        <div className="absolute right-0 mt-3 w-64 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-600/50 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-full overflow-hidden">
-                <Image
-                  src={user.page?.avatarUrl || '/default-profile-picture.png'}
-                  alt={user.name || 'User'}
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-purple-200 dark:ring-purple-600">
+                {user.page?.avatarUrl ? (
+                  <Image
+                    src={avatarUrl}
+                    alt={user.name || "User"}
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover"
+                    unoptimized={avatarUrl.startsWith("http")}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                    <FaUser className="text-white text-xl" />
+                  </div>
+                )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-300 truncate">
-                  {user.name || 'User'}
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+                  {user.name || "User"}
                 </p>
-                <p className="text-sm text-gray-500 truncate">
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                   {user.email}
                 </p>
               </div>
@@ -93,34 +118,37 @@ export default function UserMenu({ user }: UserMenuProps) {
 
           <div className="py-1">
             <Link
-              href={user.page?.slug ? `/${user.page.slug}` : '/dashboard'}
-              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-              onClick={() => setIsOpen(false)}>
-              <FaUser className="mr-2" />
-              {user.page?.slug ? 'My Artist Page' : 'Create Artist Page'}
+              href="/dashboard/edit"
+              className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all group"
+              onClick={() => setIsOpen(false)}
+            >
+              <FaUser className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
+              Artist Page
             </Link>
 
             <Link
               href="/settings"
-              className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-              onClick={() => setIsOpen(false)}>
-              <FaCog className="mr-2" />
+              className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all group"
+              onClick={() => setIsOpen(false)}
+            >
+              <FaCog className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
               Settings
             </Link>
 
-            <div className="border-t border-gray-100 my-1"></div>
+            <div className="border-t border-gray-100 dark:border-gray-700 my-2 mx-2"></div>
 
             <button
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              data-cy="logout-button">
+              className="flex items-center w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group"
+              data-cy="logout-button"
+            >
               {isLoggingOut ? (
-                <div className="w-4 h-4 mr-2 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 mr-3 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                <FaSignOutAlt className="mr-2" />
+                <FaSignOutAlt className="mr-3 group-hover:translate-x-0.5 transition-transform" />
               )}
-              {isLoggingOut ? 'Logging out...' : 'Logout'}
+              {isLoggingOut ? "Logging out..." : "Logout"}
             </button>
           </div>
         </div>
