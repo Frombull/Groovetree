@@ -12,10 +12,23 @@ export interface AuthUser {
   } | null;
 }
 
-export async function getAuthUser(): Promise<AuthUser | null> {
+export async function getAuthUser(req?: Request): Promise<AuthUser | null> {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("auth-token")?.value;
+    let token: string | null | undefined = null;
+
+    // Se uma requisição foi passada, tenta pegar o token do header Authorization primeiro
+    if (req) {
+      const authHeader = req.headers.get("authorization");
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        token = authHeader.substring(7); // Remove "Bearer " do início
+      }
+    }
+
+    // Se não encontrou no header ou não foi passada uma requisição, tenta pegar dos cookies
+    if (!token) {
+      const cookieStore = await cookies();
+      token = cookieStore.get("auth-token")?.value;
+    }
 
     if (!token) {
       return null;
@@ -55,8 +68,8 @@ export async function getAuthUser(): Promise<AuthUser | null> {
   }
 }
 
-export async function requireAuth(): Promise<AuthUser> {
-  const user = await getAuthUser();
+export async function requireAuth(req?: Request): Promise<AuthUser> {
+  const user = await getAuthUser(req);
 
   if (!user) {
     throw new Error("Unauthenticated user");
@@ -67,17 +80,27 @@ export async function requireAuth(): Promise<AuthUser> {
 
 export async function verifyAuth(req: Request): Promise<AuthUser | null> {
   try {
-    // Extrai o token dos cookies da requisição
-    const cookieHeader = req.headers.get("cookie");
-    if (!cookieHeader) return null;
+    let token: string | null = null;
 
-    const cookies = cookieHeader.split(";").reduce((acc, cookie) => {
-      const [key, value] = cookie.trim().split("=");
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>);
+    // Primeiro tenta pegar o token do header Authorization (Bearer token)
+    const authHeader = req.headers.get("authorization");
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.substring(7); // Remove "Bearer " do início
+    }
 
-    const token = cookies["auth-token"];
+    // Se não encontrou no header, tenta pegar dos cookies
+    if (!token) {
+      const cookieHeader = req.headers.get("cookie");
+      if (cookieHeader) {
+        const cookies = cookieHeader.split(";").reduce((acc, cookie) => {
+          const [key, value] = cookie.trim().split("=");
+          acc[key] = value;
+          return acc;
+        }, {} as Record<string, string>);
+        token = cookies["auth-token"];
+      }
+    }
+
     if (!token) return null;
 
     const decoded = jwt.verify(
