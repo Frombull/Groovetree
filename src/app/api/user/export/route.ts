@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/app/lib/auth';
 import { prisma } from '@/app/lib/prisma';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const user = await requireAuth();
+    const user = await requireAuth(request);
     
     // Search user data
     const userData = await prisma.user.findUnique({

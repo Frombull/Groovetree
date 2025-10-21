@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 
 export async function DELETE(request: NextRequest) {
   try {
-    const user = await requireAuth();
+    const user = await requireAuth(request);
     const { password } = await request.json();
 
     if (!password) {

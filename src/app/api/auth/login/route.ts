@@ -44,9 +44,10 @@ export async function POST(request: NextRequest) {
       { expiresIn: '7d' }
     );
 
-    // Cookie ans
+    // Cookie and response with token
     const response = NextResponse.json({
       message: 'Logged in',
+      token: token, // Token incluído na resposta para uso no Postman
       user: {
         id: user.id,
         email: user.email,
