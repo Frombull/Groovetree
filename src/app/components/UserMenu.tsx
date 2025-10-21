@@ -50,13 +50,13 @@ export default function UserMenu({ user }: UserMenuProps) {
 
   return (
     <div className="relative" ref={menuRef}>
-      {/* PFP com Username */}
+      {/* PFP com Username - responsivo */}
       <button
         data-cy="user-menu"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between px-3 py-2 rounded-full hover:bg-white/10 transition-all focus:outline-none focus:ring-2 focus:ring-purple-400 min-w-[220px] gap-3 cursor-pointer"
+        className="flex items-center justify-between px-2 py-2 md:px-3 rounded-full hover:bg-white/10 transition-all focus:outline-none focus:ring-2 focus:ring-purple-400 md:min-w-[220px] gap-2 md:gap-3 cursor-pointer"
       >
-        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-white/30 hover:border-purple-400 transition-all shadow-lg flex-shrink-0">
+        <div className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full overflow-hidden border-2 border-white/30 hover:border-purple-400 transition-all shadow-lg flex-shrink-0">
           {user.page?.avatarUrl ? (
             <Image
               src={avatarUrl}
@@ -68,12 +68,12 @@ export default function UserMenu({ user }: UserMenuProps) {
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
-              <FaUser className="text-white text-2xl" />
+              <FaUser className="text-white text-lg md:text-2xl" />
             </div>
           )}
         </div>
         <div className="hidden md:block flex-1 text-left">
-          <span className="text-white font-bold text-base">
+          <span className="text-white font-bold text-sm lg:text-base">
             {user.name || "User"}
           </span>
         </div>

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FaGoogle, FaGithub, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaGoogle, FaGithub, FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
 import { useState } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
@@ -34,7 +34,15 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex text-gray-800 bg-white font-sans">
+    <div className="min-h-screen flex text-gray-800 bg-white font-sans relative">
+      {/* Botão de voltar */}
+      <Link
+        href="/"
+        className="absolute top-6 left-6 z-10 p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-600 hover:text-gray-900"
+        title="Back to home"
+      >
+        <FaArrowLeft className="w-5 h-5" />
+      </Link>
       {/* Left */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 sm:p-12">
         <div className="w-full max-w-md">
