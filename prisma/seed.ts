@@ -22,7 +22,7 @@ async function main() {
         email: "joaotestedasilva@gmail.com",
         name: "João Teste da Silva",
         password: defaultPassword,
-        pages: {
+        page: {
           create: {
             slug: "joao-teste-da-silva",
             title: "João Teste da Silva - Músico",
@@ -56,7 +56,7 @@ async function main() {
         },
       },
       include: {
-        pages: {
+        page: {
           include: {
             links: true,
           },
@@ -68,7 +68,7 @@ async function main() {
         email: "admin@gmail.com",
         name: "Admin",
         password: defaultPassword,
-        pages: {
+        page: {
           create: {
             slug: "admin",
             title: "Admin - Fiscal de POO",
@@ -87,7 +87,7 @@ async function main() {
         },
       },
       include: {
-        pages: {
+        page: {
           include: {
             links: true,
           },
