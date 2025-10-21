@@ -93,16 +93,16 @@ export default function ArtistSearch() {
 
       {/* Menu dropdown com resultados */}
       {isOpen && results.length > 0 && (
-        <div className="absolute top-full mt-3 w-full bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="absolute top-full mt-3 w-full bg-white/20 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/40 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="max-h-96 overflow-y-auto">
             {results.map((artist) => (
               <button
                 key={artist.slug}
                 onClick={() => handleSelectArtist(artist.slug)}
-                className="w-full flex items-center gap-4 p-4 hover:bg-purple-50 transition-all text-left border-b border-gray-100 last:border-b-0 group"
+                className="w-full flex items-center gap-4 p-4 hover:bg-black/30 backdrop-blur-sm transition-all text-left border-b border-white/20 last:border-b-0 group cursor-pointer"
               >
                 {/* Avatar */}
-                <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600 flex-shrink-0 ring-2 ring-purple-200 group-hover:ring-purple-400 transition-all">
+                <div className="relative w-14 h-14 rounded-full overflow-hidden bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600 flex-shrink-0 ring-2 ring-white/40 group-hover:ring-purple-300/80 transition-all shadow-lg">
                   {artist.avatarUrl ? (
                     <Image
                       src={artist.avatarUrl}
@@ -119,10 +119,10 @@ export default function ArtistSearch() {
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-gray-900 truncate group-hover:text-purple-600 transition-colors">
+                  <h4 className="font-semibold text-white drop-shadow-lg truncate group-hover:text-purple-300 transition-colors">
                     {artist.title}
                   </h4>
-                  <p className="text-sm text-gray-500 truncate">
+                  <p className="text-sm text-white/80 drop-shadow truncate">
                     @{artist.slug}
                     {artist.user.name && ` • ${artist.user.name}`}
                   </p>
@@ -130,7 +130,7 @@ export default function ArtistSearch() {
 
                 {/* Ícone de seta */}
                 <svg
-                  className="w-5 h-5 text-gray-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all"
+                  className="w-5 h-5 text-white/70 group-hover:text-purple-300 group-hover:translate-x-1 transition-all drop-shadow"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -150,13 +150,15 @@ export default function ArtistSearch() {
 
       {/* Mensagem quando não há resultados */}
       {isOpen && query.length >= 2 && results.length === 0 && !isLoading && (
-        <div className="absolute top-full mt-3 w-full bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 p-8 text-center z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
-              <Search className="text-gray-400" size={32} />
+        <div className="absolute top-full mt-3 w-full bg-white/20 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/40 p-6 text-center z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-12 h-12 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center shadow-lg ring-2 ring-white/40">
+              <Search className="text-white drop-shadow-lg" size={24} />
             </div>
-            <p className="text-gray-600 font-medium">No artists found</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-white font-semibold drop-shadow-lg text-sm">
+              No artists found
+            </p>
+            <p className="text-xs text-white/90 drop-shadow">
               Try searching with a different name
             </p>
           </div>

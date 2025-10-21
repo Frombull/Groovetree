@@ -41,7 +41,14 @@ export async function getAuthUser(): Promise<AuthUser | null> {
       },
     });
 
-    return user;
+    if (!user) return null;
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      page: user.pages?.[0] || null,
+    };
   } catch (error) {
     console.error("Error verifying authentication:", error);
     return null;

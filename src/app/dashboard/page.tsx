@@ -11,7 +11,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        router.push("/login");
+        router.push("/");
       } else {
         // Redireciona para a página de edição
         router.push("/dashboard/edit");
