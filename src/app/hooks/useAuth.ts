@@ -31,14 +31,14 @@ export function useAuth() {
     try {
       const response = await fetch("/api/auth/me");
       if (response.ok) {
-        const user = await response.json();
+        const data = await response.json();
+        // Verifica se a resposta tem um usuário ou é { user: null }
+        const user = data.user !== undefined ? data.user : data;
         setAuthState({ user, loading: false });
       } else {
-        // 401 é esperado quando não está logado - não é um erro
         setAuthState({ user: null, loading: false });
       }
     } catch (error) {
-      // Apenas loga erros reais (não 401)
       console.error("Error verifying authentication:", error);
       setAuthState({ user: null, loading: false });
     }
