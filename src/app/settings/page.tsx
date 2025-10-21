@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useTheme } from "@/app/contexts/ThemeContext";
-import Header from "@/app/components/header";
 import DataExport from "@/app/components/DataExport";
 import DeleteAccountModal from "@/app/components/DeleteAccountModal";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   FaLock,
   FaBell,
@@ -24,6 +24,8 @@ import {
   FaDesktop,
 } from "react-icons/fa";
 import { FaShield } from "react-icons/fa6";
+import { IoMdSettings } from "react-icons/io";
+import { MdLogout } from "react-icons/md";
 
 interface UserSettings {
   name: string;
@@ -45,7 +47,7 @@ interface UserSettings {
 }
 
 export default function SettingsPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("security");
@@ -111,8 +113,7 @@ export default function SettingsPage() {
     setTheme(newTheme);
     setSettings((prev) => ({ ...prev, theme: newTheme }));
     toast.success(
-      `Theme changed to ${
-        newTheme === "auto" ? "system preference" : newTheme
+      `Theme changed to ${newTheme === "auto" ? "system preference" : newTheme
       } mode!`
     );
   };
@@ -173,6 +174,10 @@ export default function SettingsPage() {
     }
   };
 
+  const handleLogout = async () => {
+    await logout();
+  };
+
   const tabs = [
     { id: "security", label: "Security", icon: FaLock },
     { id: "notifications", label: "Notifications", icon: FaBell },
@@ -185,21 +190,49 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
-        <Header />
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <Header />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Header */}
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Link href="/">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-900 bg-clip-text text-transparent">
+                Groovetree
+              </h1>
+            </Link>
+          </div>
 
-      <div className="container mx-auto px-8 md:px-16 py-8">
-        <div className="bg-white dark:bg-gray-800 rounded-4xl shadow-lg overflow-hidden">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/dashboard/edit"
+              className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            >
+              <IoMdSettings className="w-5 h-5" />
+              Edit Page
+            </Link>
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors hover:cursor-pointer"
+            >
+              <MdLogout className="w-5 h-5" />
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden">
           <div className="flex">
             {/* Sidebar */}
             <div className="w-64 bg-gray-50 dark:bg-gray-700 border-r border-gray-200 dark:border-gray-600">
@@ -210,11 +243,10 @@ export default function SettingsPage() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors cursor-pointer ${
-                        activeTab === tab.id
+                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors cursor-pointer ${activeTab === tab.id
                           ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700"
                           : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
-                      }`}
+                        }`}
                     >
                       <Icon className="w-5 h-5" />
                       <span className="font-medium">{tab.label}</span>
@@ -511,11 +543,10 @@ export default function SettingsPage() {
                         {/* Light Theme */}
                         <button
                           onClick={() => handleThemeChange("light")}
-                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
-                            theme === "light"
+                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "light"
                               ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                               : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center space-x-3 mb-3">
                             <FaSun className="w-5 h-5 text-yellow-500" />
@@ -538,11 +569,10 @@ export default function SettingsPage() {
                         {/* Dark Theme */}
                         <button
                           onClick={() => handleThemeChange("dark")}
-                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
-                            theme === "dark"
+                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "dark"
                               ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                               : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center space-x-3 mb-3">
                             <FaMoon className="w-5 h-5 text-blue-400" />
@@ -565,11 +595,10 @@ export default function SettingsPage() {
                         {/* Auto Theme */}
                         <button
                           onClick={() => handleThemeChange("auto")}
-                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
-                            theme === "auto"
+                          className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "auto"
                               ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                               : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center space-x-3 mb-3">
                             <FaDesktop className="w-5 h-5 text-gray-500" />
@@ -667,7 +696,7 @@ export default function SettingsPage() {
                     <div className="flex items-center mb-4">
                       <FaTrash className="text-red-700 dark:text-red-400 mr-2" />
                       <h3 className="text-lg font-semibold text-red-900 dark:text-red-400">
-                        Danger Zone
+                        Delete All Your Data
                       </h3>
                     </div>
                     <p className="text-red-700 dark:text-red-300 mb-6">
