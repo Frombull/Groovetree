@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Aurora from "@/app/components/Aurora";
 import {
   FaPlus,
   FaTimes,
@@ -721,8 +722,11 @@ export default function EditPage() {
 
   if (loading || isLoadingPage) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative flex items-center justify-center">
+        <div className="absolute inset-0 opacity-30 dark:opacity-40">
+          <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
+        </div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600 relative z-10"></div>
       </div>
     );
   }
@@ -730,9 +734,14 @@ export default function EditPage() {
   if (!pageData) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative overflow-x-hidden">
+      {/* Aurora Background */}
+      <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
+        <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
+      </div>
+
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-40">
+      <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800 px-6 py-4 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/">
@@ -753,7 +762,7 @@ export default function EditPage() {
 
             <Link
               href="/settings"
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             >
               <IoMdSettings className="w-5 h-5" />
               Settings
@@ -761,7 +770,7 @@ export default function EditPage() {
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors hover:cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors hover:cursor-pointer"
               data-cy="logout-button"
             >
               <MdLogout className="w-5 h-5" />
@@ -771,25 +780,50 @@ export default function EditPage() {
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto p-6 space-y-6">
-        {/* Profile Section */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Profile</h2>
-            <Link
-              href={`/${pageData.slug}`}
-              target="_blank"
-              className="flex items-center gap-2 px-4 py-2 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors"
-              data-cy="page-preview-button"
+      <div className="max-w-4xl mx-auto p-6 space-y-6 relative z-10 ">
+        {/* Preview Page Button - Destaque Principal */}
+        <div className="flex justify-center mb-6">
+          <Link
+            href={`/${pageData.slug}`}
+            target="_blank"
+            className="group relative inline-flex items-center gap-2 px-8 py-4 bg-transparent text-gray-900 dark:text-white font-semibold text-base rounded-full cursor-pointer transition-all duration-300 hover:scale-105"
+            data-cy="page-preview-button"
+          >
+            {/* Borda com gradiente Aurora */}
+            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-green-500 to-purple-600 p-[2px]">
+              <span className="flex h-full w-full items-center justify-center rounded-full bg-white dark:bg-slate-950"></span>
+            </span>
+
+            {/* Conteúdo do botão */}
+            <BsEyeFill className="w-5 h-5 relative z-10" />
+            <span className="relative z-10">See Your Page</span>
+            <svg
+              className="w-4 h-4 relative z-10 transform group-hover:translate-x-1 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <BsEyeFill className="w-4 h-4" />
-              Preview Page
-            </Link>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </Link>
+        </div>
+
+        {/* Profile Section */}
+        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+              Profile
+            </h2>
           </div>
 
           {/* Avatar */}
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center text-3xl text-gray-500 overflow-hidden">
+            <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-3xl text-gray-500 dark:text-gray-300 overflow-hidden">
               {pageData.avatarUrl ? (
                 <Image
                   src={pageData.avatarUrl}
@@ -812,7 +846,7 @@ export default function EditPage() {
             <button
               onClick={handleAvatarClick}
               disabled={uploadingAvatar}
-              className="px-4 py-2 text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-50 transition-colors disabled:opacity-50 hover:cursor-pointer"
+              className="px-4 py-2 text-purple-600 dark:text-purple-400 border border-purple-600 dark:border-purple-400 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors disabled:opacity-50 hover:cursor-pointer"
             >
               {uploadingAvatar ? "Uploading..." : "Choose Image"}
             </button>
@@ -820,7 +854,7 @@ export default function EditPage() {
 
           {/* Profile Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Profile Title
             </label>
             <input
@@ -830,7 +864,7 @@ export default function EditPage() {
                 setPageData({ ...pageData, title: e.target.value })
               }
               onBlur={handleUpdatePage}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="Your artist name"
               data-cy="page-artist-name"
             />
@@ -838,7 +872,7 @@ export default function EditPage() {
 
           {/* Bio */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Bio
             </label>
             <textarea
@@ -847,7 +881,7 @@ export default function EditPage() {
                 setPageData({ ...pageData, bio: e.target.value })
               }
               onBlur={handleUpdatePage}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
               rows={3}
               placeholder="Tell your audience about yourself"
               data-cy="page-bio-description"
@@ -856,26 +890,26 @@ export default function EditPage() {
 
           {/* Groovetree URL */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Groovetree URL
             </label>
             <div className="flex items-center gap-2">
-              <span className="text-gray-500 text-sm">
+              <span className="text-gray-500 dark:text-gray-400 text-sm">
                 groovetree.vercel.app/
               </span>
               <input
                 type="text"
                 value={pageData.slug}
                 disabled
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-slate-900 text-gray-500 dark:text-gray-400"
               />
             </div>
           </div>
         </div>
 
         {/* Customization Section */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <IoMdSettings className="w-6 h-6 text-purple-600" />
             Page Customization
           </h2>
@@ -883,7 +917,7 @@ export default function EditPage() {
           <div className="space-y-4">
             {/* Background Color */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Background Color
               </label>
               <div className="flex items-center gap-3">
@@ -908,7 +942,7 @@ export default function EditPage() {
                     })
                   }
                   placeholder="#000000"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   data-cy="page-background-color"
                 />
               </div>
@@ -916,7 +950,7 @@ export default function EditPage() {
 
             {/* Text Color */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Text Color
               </label>
               <div className="flex items-center gap-3">
@@ -941,7 +975,7 @@ export default function EditPage() {
                     })
                   }
                   placeholder="#ffffff"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   data-cy="page-text-color"
                 />
               </div>
@@ -949,7 +983,7 @@ export default function EditPage() {
 
             {/* Background Image URL */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Background Image URL
               </label>
               <input
@@ -962,17 +996,19 @@ export default function EditPage() {
                   })
                 }
                 placeholder="https://example.com/background.jpg"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 data-cy="page-background-image-url"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Leave empty to use only background color
               </p>
             </div>
 
             {/* Preview */}
-            <div className="mt-4 p-4 rounded-lg border border-gray-200">
-              <p className="text-sm font-medium text-gray-700 mb-2">Preview:</p>
+            <div className="mt-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Preview:
+              </p>
               <div
                 className="h-24 rounded-lg flex items-center justify-center"
                 style={{
@@ -1004,8 +1040,8 @@ export default function EditPage() {
         </div>
 
         {/* Shows Section */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <MdEvent className="w-6 h-6 text-purple-600" />
             Shows & Events
           </h2>
@@ -1036,15 +1072,17 @@ export default function EditPage() {
               events.map((event) => (
                 <div
                   key={event.id}
-                  className="flex items-start gap-3 p-4 border border-gray-200 rounded-xl hover:border-purple-300 hover:shadow-md transition-all group"
+                  className="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md transition-all group"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900">{event.title}</p>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="font-medium text-gray-900 dark:text-gray-100">
+                      {event.title}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                       📍 {event.venue} - {event.city}
                       {event.state ? `, ${event.state}` : ""}
                     </p>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                       📅 {new Date(event.date).toLocaleDateString("pt-BR")}
                     </p>
                     {event.ticketUrl && (
@@ -1052,7 +1090,7 @@ export default function EditPage() {
                         href={event.ticketUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-purple-600 hover:text-purple-700 mt-1 inline-flex items-center gap-1"
+                        className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 mt-1 inline-flex items-center gap-1"
                       >
                         <FaExternalLinkAlt className="w-3 h-3" />
                         Ver ingressos
@@ -1080,10 +1118,10 @@ export default function EditPage() {
             ) : (
               <div className="text-center py-16 text-gray-400">
                 <p className="text-6xl mb-4">🎤</p>
-                <p className="text-lg font-medium text-gray-700">
+                <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
                   No shows yet
                 </p>
-                <p className="text-sm">
+                <p className="text-sm dark:text-gray-400">
                   Click the button above to add your first show
                 </p>
               </div>
@@ -1092,8 +1130,8 @@ export default function EditPage() {
         </div>
 
         {/* Photo Gallery Section */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <MdPhotoLibrary className="w-6 h-6 text-purple-600" />
             Photo Gallery
           </h2>
@@ -1107,10 +1145,11 @@ export default function EditPage() {
               setShowPhotoModal(true);
             }}
             disabled={photos.length >= 4}
-            className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${photos.length >= 4
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+            className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${
+              photos.length >= 4
+                ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                 : "bg-purple-600 text-white hover:bg-purple-700"
-              }`}
+            }`}
           >
             <FaPlus className="w-5 h-5" />
             Add Photo {photos.length >= 4 && "(Máximo atingido)"}
@@ -1122,7 +1161,7 @@ export default function EditPage() {
               photos.map((photo) => (
                 <div
                   key={photo.id}
-                  className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all"
+                  className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md transition-all"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -1156,18 +1195,22 @@ export default function EditPage() {
             ) : (
               <div className="col-span-2 sm:col-span-4 text-center py-16 text-gray-400">
                 <p className="text-6xl mb-4">📸</p>
-                <p className="text-lg font-medium text-gray-700">
+                <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
                   No photos added yet
                 </p>
-                <p className="text-sm">Add up to 4 photos to the gallery</p>
+                <p className="text-sm dark:text-gray-400">
+                  Add up to 4 photos to the gallery
+                </p>
               </div>
             )}
           </div>
         </div>
 
         {/* Links Section */}
-        <div className="bg-white rounded-2xl shadow-sm p-6">
-          <h2 className="text-xl font-semibold mb-4">Links</h2>
+        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+            Links
+          </h2>
 
           {/* Add Button */}
           <button
@@ -1190,19 +1233,20 @@ export default function EditPage() {
                   onDragOver={(e) => handleDragOver(e, link.id)}
                   onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, link.id)}
-                  className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${dragOverItem === link.id
-                      ? "border-purple-500 bg-purple-50 shadow-lg scale-105"
+                  className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${
+                    dragOverItem === link.id
+                      ? "border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg scale-105"
                       : draggedItem === link.id
-                        ? "border-gray-300 opacity-50"
-                        : "border-gray-200 hover:border-purple-300 hover:shadow-md"
-                    }`}
+                      ? "border-gray-300 dark:border-gray-600 opacity-50"
+                      : "border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md"
+                  }`}
                 >
-                  <FaGripVertical className="text-gray-400 group-hover:text-purple-600 cursor-grab active:cursor-grabbing transition-colors flex-shrink-0" />
+                  <FaGripVertical className="text-gray-400 dark:text-gray-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 cursor-grab active:cursor-grabbing transition-colors flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">
+                    <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
                       {link.title}
                     </p>
-                    <p className="text-sm text-gray-500 truncate flex items-center gap-1">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate flex items-center gap-1">
                       <FaExternalLinkAlt className="w-3 h-3" />
                       {link.url}
                     </p>
@@ -1228,10 +1272,10 @@ export default function EditPage() {
             ) : (
               <div className="text-center py-16 text-gray-400">
                 <p className="text-6xl mb-4">🎵</p>
-                <p className="text-lg font-medium text-gray-700">
+                <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
                   No links yet
                 </p>
-                <p className="text-sm">
+                <p className="text-sm dark:text-gray-400">
                   Click the button above to add your first link
                 </p>
               </div>
@@ -1243,28 +1287,31 @@ export default function EditPage() {
       {/* Add Link Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl">
+          <div className="bg-white dark:bg-slate-950 backdrop-blur-md rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden flex flex-col shadow-2xl border dark:border-gray-800">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
-              <h2 className="text-2xl font-bold">Add Link</h2>
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                Add Link
+              </h2>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer"
               >
                 <FaTimes className="w-6 h-6" />
               </button>
             </div>
 
             {/* Categories Tabs */}
-            <div className="flex gap-2 p-4 border-b border-gray-200/50 overflow-x-auto">
+            <div className="flex gap-2 p-4 border-b border-gray-200 dark:border-gray-800 overflow-x-auto">
               {linkCategories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${selectedCategory === category.id
-                      ? "bg-purple-600 text-white shadow-lg shadow-purple-200"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                  className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${
+                    selectedCategory === category.id
+                      ? "bg-purple-600 dark:bg-purple-700 text-white shadow-lg shadow-purple-200 dark:shadow-purple-900/50"
+                      : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700"
+                  }`}
                 >
                   {category.icon}
                   <span>{category.name}</span>
@@ -1281,18 +1328,18 @@ export default function EditPage() {
                     <button
                       key={item.type}
                       onClick={() => handleAddLink(item.type)}
-                      className="flex items-center cursor-pointer gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all text-left group"
+                      className="flex items-center cursor-pointer gap-4 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-purple-400 dark:hover:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all text-left group"
                     >
                       <div className="flex-shrink-0">{item.icon}</div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 group-hover:text-purple-700 truncate">
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-purple-700 dark:group-hover:text-purple-400 truncate">
                           {item.name}
                         </h3>
-                        <p className="text-sm text-gray-500 truncate">
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                           {item.description}
                         </p>
                       </div>
-                      <FaPlus className="text-gray-400 group-hover:text-purple-600 w-5 h-5 flex-shrink-0" />
+                      <FaPlus className="text-gray-400 dark:text-gray-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 w-5 h-5 flex-shrink-0" />
                     </button>
                   ))}
               </div>
@@ -1304,9 +1351,9 @@ export default function EditPage() {
       {/* Edit/Create Link Modal */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-md w-full shadow-2xl">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
-              <h2 className="text-2xl font-bold">
+          <div className="bg-white dark:bg-slate-950 backdrop-blur-md rounded-2xl max-w-md w-full shadow-2xl border dark:border-gray-800">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                 {editingLink ? "Edit Link" : "New Link"}
               </h2>
               <button
@@ -1314,7 +1361,7 @@ export default function EditPage() {
                   setShowEditModal(false);
                   setEditingLink(null);
                 }}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <FaTimes className="w-6 h-6" />
               </button>
@@ -1322,7 +1369,7 @@ export default function EditPage() {
 
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Title
                 </label>
                 <input
@@ -1331,13 +1378,13 @@ export default function EditPage() {
                   onChange={(e) =>
                     setLinkForm({ ...linkForm, title: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="e.g., My Spotify"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   URL
                 </label>
                 <input
@@ -1346,7 +1393,7 @@ export default function EditPage() {
                   onChange={(e) =>
                     setLinkForm({ ...linkForm, url: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="https://..."
                 />
               </div>
@@ -1357,7 +1404,7 @@ export default function EditPage() {
                     setShowEditModal(false);
                     setEditingLink(null);
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                 >
                   Cancel
                 </button>
@@ -1377,7 +1424,7 @@ export default function EditPage() {
       {/* Share Modal */}
       {showShareModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-md w-full overflow-hidden shadow-2xl">
+          <div className="bg-white dark:bg-slate-950 backdrop-blur-md rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border dark:border-gray-800">
             <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold">
@@ -1391,13 +1438,14 @@ export default function EditPage() {
                 </button>
               </div>
               <p className="text-purple-100">
-                Show the world your music and connect your fans to all your platforms in one place!
+                Show the world your music and connect your fans to all your
+                platforms in one place!
               </p>
             </div>
 
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Your Groovetree URL
                 </label>
                 <div className="flex items-center gap-2">
@@ -1405,7 +1453,7 @@ export default function EditPage() {
                     type="text"
                     value={`groovetree.vercel.app/${pageData?.slug}`}
                     readOnly
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-mono text-sm"
+                    className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-slate-900 text-gray-700 dark:text-gray-300 font-mono text-sm"
                   />
                   <button
                     onClick={handleCopyUrl}
@@ -1429,7 +1477,7 @@ export default function EditPage() {
               <Link
                 href={`/${pageData?.slug}`}
                 target="_blank"
-                className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 border border-purple-600 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors"
+                className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 border border-purple-600 dark:border-purple-400 text-purple-600 dark:text-purple-400 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
               >
                 <BsEyeFill className="w-4 h-4" />
                 View Page
@@ -1442,9 +1490,9 @@ export default function EditPage() {
       {/* Event Modal (Add/Edit) */}
       {showEventModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-200/50 px-6 py-4 flex justify-between items-center">
-              <h2 className="text-xl font-semibold flex items-center gap-2">
+          <div className="bg-white dark:bg-slate-950 backdrop-blur-md rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border dark:border-gray-800">
+            <div className="sticky top-0 bg-white dark:bg-slate-950 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex justify-between items-center">
+              <h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
                 <MdEvent className="w-6 h-6 text-purple-600" />
                 {editingEvent ? "Edit Show" : "Add New Show"}
               </h2>
@@ -1461,16 +1509,16 @@ export default function EditPage() {
                     ticketUrl: "",
                   });
                 }}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
               >
-                <FaTimes className="w-5 h-5" />
+                <FaTimes className="w-5 h-5 text-gray-500 dark:text-gray-400" />
               </button>
             </div>
 
             <div className="p-6 space-y-4">
               {/* Event Title */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Event Name *
                 </label>
                 <input
@@ -1480,13 +1528,13 @@ export default function EditPage() {
                     setEventForm({ ...eventForm, title: e.target.value })
                   }
                   placeholder="Ex: Summer Tour 2025"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
               {/* Venue */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Venue *
                 </label>
                 <input
@@ -1496,14 +1544,14 @@ export default function EditPage() {
                     setEventForm({ ...eventForm, venue: e.target.value })
                   }
                   placeholder="Ex: Estádio Mineirão"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
               {/* City and State */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     City *
                   </label>
                   <input
@@ -1513,11 +1561,11 @@ export default function EditPage() {
                       setEventForm({ ...eventForm, city: e.target.value })
                     }
                     placeholder="Ex: Belo Horizonte"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     State
                   </label>
                   <input
@@ -1528,14 +1576,14 @@ export default function EditPage() {
                     }
                     placeholder="Ex: MG"
                     maxLength={2}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent uppercase"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent uppercase"
                   />
                 </div>
               </div>
 
               {/* Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Date *
                 </label>
                 <input
@@ -1544,13 +1592,13 @@ export default function EditPage() {
                   onChange={(e) =>
                     setEventForm({ ...eventForm, date: e.target.value })
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
               {/* Ticket URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Ticket URL
                 </label>
                 <input
@@ -1560,9 +1608,9 @@ export default function EditPage() {
                     setEventForm({ ...eventForm, ticketUrl: e.target.value })
                   }
                   placeholder="https://example.com/tickets"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Ticket purchase link (optional)
                 </p>
               </div>
@@ -1583,10 +1631,10 @@ export default function EditPage() {
       {/* Photo Modal */}
       {showPhotoModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-gray-200/50 px-6 py-4 flex justify-between items-center">
-              <h2 className="text-xl font-semibold flex items-center gap-2">
-                <MdPhotoLibrary className="w-6 h-6 text-purple-600" />
+          <div className="bg-white dark:bg-slate-950 backdrop-blur-md rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border dark:border-gray-800">
+            <div className="sticky top-0 bg-white dark:bg-slate-950 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex justify-between items-center">
+              <h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                <MdPhotoLibrary className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                 {editingPhoto ? "Edit Photo" : "Add New Photo"}
               </h2>
               <button
@@ -1599,7 +1647,7 @@ export default function EditPage() {
                     photoInputRef.current.value = "";
                   }
                 }}
-                className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer"
               >
                 <FaTimes className="w-6 h-6" />
               </button>
@@ -1608,7 +1656,7 @@ export default function EditPage() {
             <div className="p-6 space-y-4">
               {/* Image Upload */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Upload Image <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -1617,16 +1665,16 @@ export default function EditPage() {
                   accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
                   onChange={handlePhotoUpload}
                   disabled={uploadingPhoto}
-                  className="w-full cursor-pointer px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full cursor-pointer px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 dark:file:bg-purple-900/30 file:text-purple-700 dark:file:text-purple-400 hover:file:bg-purple-100 dark:hover:file:bg-purple-900/50 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   JPEG, PNG, WebP or GIF (máx. 10MB for better quality)
                 </p>
               </div>
 
               {/* Image Preview */}
               {(photoPreview || photoForm.imageUrl) && (
-                <div className="rounded-lg overflow-hidden border border-gray-200">
+                <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={photoPreview || photoForm.imageUrl}
@@ -1638,7 +1686,7 @@ export default function EditPage() {
 
               {/* Caption */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Caption
                 </label>
                 <input
@@ -1649,17 +1697,17 @@ export default function EditPage() {
                   }
                   placeholder="Ex: Show em São Paulo 2024"
                   maxLength={100}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Text that appears above the photo (optional, max. 100
                   characters)
                 </p>
               </div>
 
               {/* Info */}
-              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                <p className="text-sm text-purple-800">
+              <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+                <p className="text-sm text-purple-800 dark:text-purple-300">
                   💡 <strong>Hint:</strong> Use square aspect ratio images (1:1)
                   for better visualization. Maximum of 4 photos.
                 </p>
@@ -1675,8 +1723,8 @@ export default function EditPage() {
                 {uploadingPhoto
                   ? "Uploading..."
                   : editingPhoto
-                    ? "Update Photo"
-                    : "Add Photo"}
+                  ? "Update Photo"
+                  : "Add Photo"}
               </button>
             </div>
           </div>

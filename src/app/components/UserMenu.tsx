@@ -86,8 +86,8 @@ export default function UserMenu({ user }: UserMenuProps) {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-64 bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-600/50 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+        <div className="absolute right-0 mt-3 w-64 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-800/50 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-purple-200 dark:ring-purple-600">
                 {user.page?.avatarUrl ? (
@@ -135,7 +135,7 @@ export default function UserMenu({ user }: UserMenuProps) {
               Settings
             </Link>
 
-            <div className="border-t border-gray-100 dark:border-gray-700 my-2 mx-2"></div>
+            <div className="border-t border-gray-100 dark:border-gray-800 my-2 mx-2"></div>
 
             <button
               onClick={handleLogout}
