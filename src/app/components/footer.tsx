@@ -1,7 +1,7 @@
 import { FaLinkedin, FaInstagram, FaYoutube } from 'react-icons/fa';
 import { FaXTwitter } from "react-icons/fa6";
 
-export default function Footer () {
+export default function Footer() {
   return (
     <footer className="bg-[#F0F0F0] text-black pt-16 pb-8 px-8 md:px-16">
       <div className="container mx-auto">
@@ -20,7 +20,7 @@ export default function Footer () {
               </button>
             </div>
             <p className="text-xs text-gray-500 mt-3">
-              By subscribing, you consent to our <a href="#" className="underline">Privacy Policy</a> and agree to receive updates.
+              By subscribing, you consent to our <a href="/privacy-policy" className="underline">Privacy Policy</a> and agree to receive updates.
             </p>
           </div>
 
@@ -30,15 +30,15 @@ export default function Footer () {
             <ul className="space-y-3">
               <li className="flex items-center gap-3">
                 <FaLinkedin size={24} />
-                <a href="#" className="underline hover:text-gray-600 transition-colors">Marco Di Toro</a>
+                <a href="https://www.linkedin.com/in/marcoditoro/" className="underline hover:text-gray-600 transition-colors">Marco Di Toro</a>
               </li>
               <li className="flex items-center gap-3">
                 <FaLinkedin size={24} />
-                <a href="#" className="underline hover:text-gray-600 transition-colors">Vitor Torres</a>
+                <a href="https://www.linkedin.com/in/vitorgonzaga10/" className="underline hover:text-gray-600 transition-colors">Vitor Torres</a>
               </li>
               <li className="flex items-center gap-3">
                 <FaLinkedin size={24} />
-                <a href="#" className="underline hover:text-gray-600 transition-colors">Gabriel Costa</a>
+                <a href="https://github.com/JoaoGabrielCostaa" className="underline hover:text-gray-600 transition-colors">Gabriel Costa</a>
               </li>
             </ul>
           </div>
@@ -69,13 +69,13 @@ export default function Footer () {
         <div className="flex flex-col md:flex-row justify-between items-center text-sm mt-6 text-gray-700">
           <div className="mb-4 md:mb-0">
             <p>Made with ♥</p>
-            <p>© 2025 Groovetree. All rights reserved.</p>
+            <p>2025 Groovetree.</p>
           </div>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <a href="#" className="underline hover:text-black">Contact</a>
-            <a href="#" className="underline hover:text-black">Privacy Policy</a>
-            <a href="#" className="underline hover:text-black">Terms of Service</a>
-            <a href="#" className="underline hover:text-black">Cookie Policy</a>
+            <a href="/privacy-policy" className="underline hover:text-black">Privacy Policy</a>
+            <a href="/terms-of-service" className="underline hover:text-black">Terms of Service</a>
+            <a href="/cookie-policy" className="underline hover:text-black">Cookie Policy</a>
           </div>
         </div>
       </div>
