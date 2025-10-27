@@ -55,9 +55,9 @@ export default function Features() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
-            { src: "/embedvideos.png", alt: "Embed Videos Feature" },
-            { src: "/promoteshows.png", alt: "Promote Shows Feature" },
-            { src: "/streammusic.png", alt: "Stream Music Feature" },
+            { src: "/embedvideos.webp", alt: "Embed Videos Feature" },
+            { src: "/promoteshows.webp", alt: "Promote Shows Feature" },
+            { src: "/streammusic.webp", alt: "Stream Music Feature" },
           ].map((card, index) => (
             <div
               key={index}

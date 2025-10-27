@@ -74,7 +74,7 @@ function SignupContent() {
       {/* Left */}
       <div
         className="hidden md:block w-1/2 bg-cover bg-center"
-        style={{ backgroundImage: "url('/signup-page-bg.jpg')" }}
+        style={{ backgroundImage: "url('/signup-page-bg.webp')" }}
       ></div>
 
       {/* Right */}

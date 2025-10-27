@@ -158,7 +158,7 @@ export default function Login() {
       {/* Right */}
       <div className="hidden md:block w-1/2 bg-gray-100 relative">
         <Image
-          src="/login-page-bg.jpg"
+          src="/login-page-bg.webp"
           alt="Groovetree artists"
           fill
           className="object-cover"
