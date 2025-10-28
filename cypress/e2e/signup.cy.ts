@@ -1,6 +1,6 @@
 describe('Signup', () => {
     it('Should signup', () => {
-      cy.visit('http://localhost:3000/')
+      cy.visit('/')
       cy.get('a[href="/signup"]').click()
 
       const carroça = (Date.now() / 1000)

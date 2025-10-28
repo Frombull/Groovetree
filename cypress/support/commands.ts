@@ -43,7 +43,7 @@ Cypress.Commands.add('Login', (
     email = 'admin@gmail.com', 
     password = 'admin'
   ) => {
-    cy.visit('http://localhost:3000/')
+    cy.visit('/')
   
     cy.get('a[href="/login"]').click()
   
