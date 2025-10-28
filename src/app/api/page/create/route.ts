@@ -31,17 +31,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Função para gerar um slug único baseado no username
     const generateUniqueSlug = async (baseSlug: string): Promise<string> => {
       // Limpa o slug: remove espaços, caracteres especiais, converte para lowercase
       const cleanSlug = baseSlug
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, "-") // Substitui espaços por hífens
-        .replace(/[^\w\-]/g, "") // Remove caracteres especiais
-        .replace(/\-\-+/g, "-") // Remove hífens duplicados
-        .replace(/^-+/, "") // Remove hífens do início
-        .replace(/-+$/, ""); // Remove hífens do final
+        .replace(/\s+/g, "-")     // Substitui espaços por hífens
+        .replace(/[^\w\-]/g, "")  // Remove caracteres especiais
+        .replace(/\-\-+/g, "-")   // Remove hífens duplicados
+        .replace(/^-+/, "")       // Remove hífens do início
+        .replace(/-+$/, "");      // Remove hífens do final
 
       let uniqueSlug = cleanSlug;
       let counter = 1;

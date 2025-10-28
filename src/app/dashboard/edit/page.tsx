@@ -198,6 +198,8 @@ export default function EditPage() {
   const [copied, setCopied] = useState(false);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [dragOverItem, setDragOverItem] = useState<string | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [originalPageData, setOriginalPageData] = useState<PageData | null>(null);
 
   const createPage = useCallback(async () => {
     try {
@@ -237,8 +239,10 @@ export default function EditPage() {
       if (response.ok) {
         const data = await response.json();
         setPageData(data);
+        setOriginalPageData(data); // Salva os dados originais
         setEvents(data.events || []); // Popula os eventos
         setPhotos(data.photos || []); // Popula as fotos
+        setHasUnsavedChanges(false); // Reset unsaved changes
       } else {
         await createPage();
       }
@@ -583,14 +587,29 @@ export default function EditPage() {
       });
 
       if (response.ok) {
-        toast.success("Página atualizada!");
+        toast.success("Changes saved!");
+        setOriginalPageData(pageData); // Update original data
+        setHasUnsavedChanges(false); // Reset unsaved changes
       } else {
-        toast.error("Erro ao atualizar página");
+        toast.error("Error updating page");
       }
     } catch (error) {
       console.error("Error updating page:", error);
-      toast.error("Erro ao atualizar página");
+      toast.error("Error updating page");
     }
+  };
+
+  const checkForUnsavedChanges = (newPageData: PageData) => {
+    if (!originalPageData) return;
+
+    const hasChanges =
+      newPageData.title !== originalPageData.title ||
+      newPageData.bio !== originalPageData.bio ||
+      newPageData.backgroundColor !== originalPageData.backgroundColor ||
+      newPageData.textColor !== originalPageData.textColor ||
+      newPageData.backgroundImageUrl !== originalPageData.backgroundImageUrl;
+
+    setHasUnsavedChanges(hasChanges);
   };
 
   const handleLogout = async () => {
@@ -607,13 +626,13 @@ export default function EditPage() {
 
     // Validar tamanho
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Imagem deve ter menos de 5MB");
+      toast.error("Images should me < 5MB");
       return;
     }
 
     // Validar tipo
     if (!file.type.startsWith("image/")) {
-      toast.error("Arquivo deve ser uma imagem");
+      toast.error("File should be an image");
       return;
     }
 
@@ -630,14 +649,14 @@ export default function EditPage() {
       if (response.ok) {
         const { avatarUrl } = await response.json();
         setPageData((prev) => (prev ? { ...prev, avatarUrl } : null));
-        toast.success("Imagem atualizada!");
+        toast.success("Image updated!");
         fetchPageData();
       } else {
-        toast.error("Erro ao fazer upload da imagem");
+        toast.error("Error uploading image");
       }
     } catch (error) {
       console.error("Error uploading avatar:", error);
-      toast.error("Erro ao fazer upload da imagem");
+      toast.error("Error uploading image");
     } finally {
       setUploadingAvatar(false);
     }
@@ -647,7 +666,7 @@ export default function EditPage() {
     const url = `${window.location.origin}/${pageData?.slug}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
-    toast.success("Link copiado!");
+    toast.success("Link copied!");
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -712,10 +731,10 @@ export default function EditPage() {
           })
         )
       );
-      toast.success("Ordem atualizada!");
+      toast.success("Order updated!");
     } catch (error) {
       console.error("Error updating order:", error);
-      toast.error("Erro ao atualizar ordem");
+      toast.error("Eoor updating order");
       fetchPageData(); // Revert on error
     }
   };
@@ -860,10 +879,11 @@ export default function EditPage() {
             <input
               type="text"
               value={pageData.title}
-              onChange={(e) =>
-                setPageData({ ...pageData, title: e.target.value })
-              }
-              onBlur={handleUpdatePage}
+              onChange={(e) => {
+                const newPageData = { ...pageData, title: e.target.value };
+                setPageData(newPageData);
+                checkForUnsavedChanges(newPageData);
+              }}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="Your artist name"
               data-cy="page-artist-name"
@@ -877,10 +897,11 @@ export default function EditPage() {
             </label>
             <textarea
               value={pageData.bio || ""}
-              onChange={(e) =>
-                setPageData({ ...pageData, bio: e.target.value })
-              }
-              onBlur={handleUpdatePage}
+              onChange={(e) => {
+                const newPageData = { ...pageData, bio: e.target.value };
+                setPageData(newPageData);
+                checkForUnsavedChanges(newPageData);
+              }}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
               rows={3}
               placeholder="Tell your audience about yourself"
@@ -924,23 +945,27 @@ export default function EditPage() {
                 <input
                   type="color"
                   value={pageData?.backgroundColor || "#000000"}
-                  onChange={(e) =>
-                    setPageData({
+                  onChange={(e) => {
+                    const newPageData = {
                       ...pageData!,
                       backgroundColor: e.target.value,
-                    })
-                  }
+                    };
+                    setPageData(newPageData);
+                    checkForUnsavedChanges(newPageData);
+                  }}
                   className="h-10 w-20 rounded-lg border border-gray-300 cursor-pointer"
                 />
                 <input
                   type="text"
                   value={pageData?.backgroundColor || "#000000"}
-                  onChange={(e) =>
-                    setPageData({
+                  onChange={(e) => {
+                    const newPageData = {
                       ...pageData!,
                       backgroundColor: e.target.value,
-                    })
-                  }
+                    };
+                    setPageData(newPageData);
+                    checkForUnsavedChanges(newPageData);
+                  }}
                   placeholder="#000000"
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   data-cy="page-background-color"
@@ -957,23 +982,27 @@ export default function EditPage() {
                 <input
                   type="color"
                   value={pageData?.textColor || "#ffffff"}
-                  onChange={(e) =>
-                    setPageData({
+                  onChange={(e) => {
+                    const newPageData = {
                       ...pageData!,
                       textColor: e.target.value,
-                    })
-                  }
+                    };
+                    setPageData(newPageData);
+                    checkForUnsavedChanges(newPageData);
+                  }}
                   className="h-10 w-20 rounded-lg border border-gray-300 cursor-pointer"
                 />
                 <input
                   type="text"
                   value={pageData?.textColor || "#ffffff"}
-                  onChange={(e) =>
-                    setPageData({
+                  onChange={(e) => {
+                    const newPageData = {
                       ...pageData!,
                       textColor: e.target.value,
-                    })
-                  }
+                    };
+                    setPageData(newPageData);
+                    checkForUnsavedChanges(newPageData);
+                  }}
                   placeholder="#ffffff"
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   data-cy="page-text-color"
@@ -989,12 +1018,14 @@ export default function EditPage() {
               <input
                 type="url"
                 value={pageData?.backgroundImageUrl || ""}
-                onChange={(e) =>
-                  setPageData({
+                onChange={(e) => {
+                  const newPageData = {
                     ...pageData!,
                     backgroundImageUrl: e.target.value,
-                  })
-                }
+                  };
+                  setPageData(newPageData);
+                  checkForUnsavedChanges(newPageData);
+                }}
                 placeholder="https://example.com/background.jpg"
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 data-cy="page-background-image-url"
@@ -1030,11 +1061,14 @@ export default function EditPage() {
             {/* Save Button */}
             <button
               onClick={handleUpdatePage}
-              className="w-full py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              className={`w-full py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer ${hasUnsavedChanges
+                  ? "bg-red-600 hover:bg-red-700 text-white"
+                  : "bg-purple-600 hover:bg-purple-700 text-white"
+                }`}
               data-cy="page-save-customization-button"
             >
               <MdSave className="w-5 h-5" />
-              Save Customization
+              {hasUnsavedChanges ? "Save Changes" : "Save Customization"}
             </button>
           </div>
         </div>
@@ -1145,11 +1179,10 @@ export default function EditPage() {
               setShowPhotoModal(true);
             }}
             disabled={photos.length >= 4}
-            className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${
-              photos.length >= 4
+            className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${photos.length >= 4
                 ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                 : "bg-purple-600 text-white hover:bg-purple-700"
-            }`}
+              }`}
           >
             <FaPlus className="w-5 h-5" />
             Add Photo {photos.length >= 4 && "(Máximo atingido)"}
@@ -1233,13 +1266,12 @@ export default function EditPage() {
                   onDragOver={(e) => handleDragOver(e, link.id)}
                   onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, link.id)}
-                  className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${
-                    dragOverItem === link.id
+                  className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${dragOverItem === link.id
                       ? "border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg scale-105"
                       : draggedItem === link.id
-                      ? "border-gray-300 dark:border-gray-600 opacity-50"
-                      : "border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md"
-                  }`}
+                        ? "border-gray-300 dark:border-gray-600 opacity-50"
+                        : "border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md"
+                    }`}
                 >
                   <FaGripVertical className="text-gray-400 dark:text-gray-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 cursor-grab active:cursor-grabbing transition-colors flex-shrink-0" />
                   <div className="flex-1 min-w-0">
@@ -1307,11 +1339,10 @@ export default function EditPage() {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${
-                    selectedCategory === category.id
+                  className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${selectedCategory === category.id
                       ? "bg-purple-600 dark:bg-purple-700 text-white shadow-lg shadow-purple-200 dark:shadow-purple-900/50"
                       : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700"
-                  }`}
+                    }`}
                 >
                   {category.icon}
                   <span>{category.name}</span>
@@ -1723,8 +1754,8 @@ export default function EditPage() {
                 {uploadingPhoto
                   ? "Uploading..."
                   : editingPhoto
-                  ? "Update Photo"
-                  : "Add Photo"}
+                    ? "Update Photo"
+                    : "Add Photo"}
               </button>
             </div>
           </div>

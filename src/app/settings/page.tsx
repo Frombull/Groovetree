@@ -80,6 +80,7 @@ export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -173,6 +174,33 @@ export default function SettingsPage() {
       );
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const handleSendTestEmail = async () => {
+    setIsSendingEmail(true);
+    try {
+      const response = await fetch("/api/send-mail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send email");
+      }
+
+      toast.success("Email sent! Check your inbox.");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to send email"
+      );
+    } finally {
+      setIsSendingEmail(false);
     }
   };
 
@@ -463,6 +491,32 @@ export default function SettingsPage() {
                         />
                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
                       </label>
+                    </div>
+
+                    {/* Test Email Section */}
+                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-medium text-blue-900 dark:text-blue-100">
+                            Test Email
+                          </h3>
+                          <p className="text-sm text-blue-700 dark:text-blue-300">
+                            Send a test email to verify your email configuration
+                          </p>
+                        </div>
+                        <button
+                          onClick={handleSendTestEmail}
+                          disabled={isSendingEmail}
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+                        >
+                          {isSendingEmail ? (
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          ) : (
+                            <FaBell className="w-4 h-4" />
+                          )}
+                          {isSendingEmail ? "Sending..." : "Send Test"}
+                        </button>
+                      </div>
                     </div>
                   </div>
 
