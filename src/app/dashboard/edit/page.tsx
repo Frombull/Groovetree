@@ -21,6 +21,10 @@ import {
   FaCheck,
   FaFacebook,
   FaHeart,
+  FaWhatsapp,
+  FaEnvelope,
+  FaRedditAlien,
+  FaLinkedin,
 } from "react-icons/fa";
 import { IoMdSettings, IoMdMusicalNote } from "react-icons/io";
 import {
@@ -668,6 +672,56 @@ export default function EditPage() {
     setCopied(true);
     toast.success("Link copied!");
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const getShareUrl = () => `${window.location.origin}/${pageData?.slug}`;
+  const getShareText = () => `Check out my Groovetree page!`;
+
+  const socialPlatforms = [
+    {
+      name: "X",
+      icon: <BsTwitterX className="w-6 h-6" />,
+      color: "bg-black hover:bg-gray-800",
+      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareText())}&url=${encodeURIComponent(getShareUrl())}`,
+    },
+    {
+      name: "Facebook",
+      icon: <FaFacebook className="w-6 h-6" />,
+      color: "bg-blue-600 hover:bg-blue-700",
+      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl())}`,
+    },
+    {
+      name: "WhatsApp",
+      icon: <FaWhatsapp className="w-6 h-6" />,
+      color: "bg-green-500 hover:bg-green-600",
+      url: `https://wa.me/?text=${encodeURIComponent(`${getShareText()} ${getShareUrl()}`)}`,
+    },
+    {
+      name: "Email",
+      icon: <FaEnvelope className="w-6 h-6" />,
+      color: "bg-gray-600 hover:bg-gray-700",
+      url: `mailto:?subject=${encodeURIComponent("Check out my Groovetree page!")}&body=${encodeURIComponent(`${getShareText()}\n\n${getShareUrl()}`)}`,
+    },
+    {
+      name: "Reddit",
+      icon: <FaRedditAlien className="w-6 h-6" />,
+      color: "bg-orange-600 hover:bg-orange-700",
+      url: `https://reddit.com/submit?title=${encodeURIComponent(getShareText())}&url=${encodeURIComponent(getShareUrl())}`,
+    },
+    {
+      name: "LinkedIn",
+      icon: <FaLinkedin className="w-6 h-6" />,
+      color: "bg-blue-700 hover:bg-blue-800",
+      url: `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(getShareText())} ${encodeURIComponent(getShareUrl())}`,
+    },
+  ];
+
+  const handleSocialShare = (url: string) => {
+    if (url.startsWith('mailto:')) {
+      window.location.href = url;
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   };
 
   // Drag and Drop handlers
@@ -1455,11 +1509,11 @@ export default function EditPage() {
       {/* Share Modal */}
       {showShareModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-slate-950 backdrop-blur-md rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border dark:border-gray-800">
+          <div className="bg-white dark:bg-slate-950 backdrop-blur-md rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border dark:border-gray-800">
             <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 text-white">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">
-                  Share your musical identity
+                  Share your page
                 </h2>
                 <button
                   onClick={() => setShowShareModal(false)}
@@ -1468,13 +1522,30 @@ export default function EditPage() {
                   <FaTimes className="w-6 h-6" />
                 </button>
               </div>
-              <p className="text-purple-100">
-                Show the world your music and connect your fans to all your
-                platforms in one place!
-              </p>
             </div>
 
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-6">
+              {/* Social Media Buttons */}
+              <div>
+                <div className="flex gap-4 overflow-x-auto py-2 justify-center">
+                  {socialPlatforms.map((platform) => (
+                    <div key={platform.name} className="flex flex-col items-center gap-2 flex-shrink-0">
+                      <button
+                        onClick={() => handleSocialShare(platform.url)}
+                        className={`w-14 h-14 rounded-full ${platform.color} text-white flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-lg cursor-pointer`}
+                        title={`Share on ${platform.name}`}
+                      >
+                        {platform.icon}
+                      </button>
+                      <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                        {platform.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* URL Section */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Your Groovetree URL
@@ -1505,10 +1576,11 @@ export default function EditPage() {
                 </div>
               </div>
 
+              {/* View Page Button */}
               <Link
                 href={`/${pageData?.slug}`}
                 target="_blank"
-                className="mt-5 w-full flex items-center justify-center gap-2 px-4 py-3 border border-purple-600 dark:border-purple-400 text-purple-600 dark:text-purple-400 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-purple-600 dark:border-purple-400 text-purple-600 dark:text-purple-400 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
               >
                 <BsEyeFill className="w-4 h-4" />
                 View Page
