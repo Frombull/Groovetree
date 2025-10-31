@@ -667,6 +667,7 @@ export default function EditPage() {
   };
 
   const handleCopyUrl = () => {
+    if (typeof window === 'undefined') return;
     const url = `${window.location.origin}/${pageData?.slug}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
@@ -674,49 +675,55 @@ export default function EditPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const getShareUrl = () => `${window.location.origin}/${pageData?.slug}`;
+  const getShareUrl = () => typeof window !== 'undefined' ? `${window.location.origin}/${pageData?.slug}` : '';
   const getShareText = () => `Check out my Groovetree page!`;
 
-  const socialPlatforms = [
-    {
-      name: "X",
-      icon: <BsTwitterX className="w-6 h-6" />,
-      color: "bg-black hover:bg-gray-800",
-      url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareText())}&url=${encodeURIComponent(getShareUrl())}`,
-    },
-    {
-      name: "Facebook",
-      icon: <FaFacebook className="w-6 h-6" />,
-      color: "bg-blue-600 hover:bg-blue-700",
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl())}`,
-    },
-    {
-      name: "WhatsApp",
-      icon: <FaWhatsapp className="w-6 h-6" />,
-      color: "bg-green-500 hover:bg-green-600",
-      url: `https://wa.me/?text=${encodeURIComponent(`${getShareText()} ${getShareUrl()}`)}`,
-    },
-    {
-      name: "Email",
-      icon: <FaEnvelope className="w-6 h-6" />,
-      color: "bg-gray-600 hover:bg-gray-700",
-      url: `mailto:?subject=${encodeURIComponent("Check out my Groovetree page!")}&body=${encodeURIComponent(`${getShareText()}\n\n${getShareUrl()}`)}`,
-    },
-    {
-      name: "Reddit",
-      icon: <FaRedditAlien className="w-6 h-6" />,
-      color: "bg-orange-600 hover:bg-orange-700",
-      url: `https://reddit.com/submit?title=${encodeURIComponent(getShareText())}&url=${encodeURIComponent(getShareUrl())}`,
-    },
-    {
-      name: "LinkedIn",
-      icon: <FaLinkedin className="w-6 h-6" />,
-      color: "bg-blue-700 hover:bg-blue-800",
-      url: `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(getShareText())} ${encodeURIComponent(getShareUrl())}`,
-    },
-  ];
+  const getSocialPlatforms = () => {
+    const shareUrl = getShareUrl();
+    const shareText = getShareText();
+    
+    return [
+      {
+        name: "X",
+        icon: <BsTwitterX className="w-6 h-6" />,
+        color: "bg-black hover:bg-gray-800",
+        url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+      },
+      {
+        name: "Facebook",
+        icon: <FaFacebook className="w-6 h-6" />,
+        color: "bg-blue-600 hover:bg-blue-700",
+        url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+      },
+      {
+        name: "WhatsApp",
+        icon: <FaWhatsapp className="w-6 h-6" />,
+        color: "bg-green-500 hover:bg-green-600",
+        url: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,
+      },
+      {
+        name: "Email",
+        icon: <FaEnvelope className="w-6 h-6" />,
+        color: "bg-gray-600 hover:bg-gray-700",
+        url: `mailto:?subject=${encodeURIComponent("Check out my Groovetree page!")}&body=${encodeURIComponent(`${shareText}\n\n${shareUrl}`)}`,
+      },
+      {
+        name: "Reddit",
+        icon: <FaRedditAlien className="w-6 h-6" />,
+        color: "bg-orange-600 hover:bg-orange-700",
+        url: `https://reddit.com/submit?title=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+      },
+      {
+        name: "LinkedIn",
+        icon: <FaLinkedin className="w-6 h-6" />,
+        color: "bg-blue-700 hover:bg-blue-800",
+        url: `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(shareText)} ${encodeURIComponent(shareUrl)}`,
+      },
+    ];
+  };
 
   const handleSocialShare = (url: string) => {
+    if (typeof window === 'undefined') return;
     if (url.startsWith('mailto:')) {
       window.location.href = url;
     } else {
@@ -1528,7 +1535,7 @@ export default function EditPage() {
               {/* Social Media Buttons */}
               <div>
                 <div className="flex gap-4 overflow-x-auto py-2 justify-center">
-                  {socialPlatforms.map((platform) => (
+                  {getSocialPlatforms().map((platform) => (
                     <div key={platform.name} className="flex flex-col items-center gap-2 flex-shrink-0">
                       <button
                         onClick={() => handleSocialShare(platform.url)}
