@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/app/hooks/useAuth";
-import { FaCog, FaSignOutAlt, FaUser, FaChevronDown } from "react-icons/fa";
+import { FaCog, FaSignOutAlt, FaUser, FaChevronDown, FaCalendar } from "react-icons/fa";
 
 interface User {
   id: string;
@@ -118,12 +118,31 @@ export default function UserMenu({ user }: UserMenuProps) {
 
           <div className="py-1">
             <Link
-              href="/dashboard/edit"
+              href={user.page?.slug || '/'}
               className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all group"
               onClick={() => setIsOpen(false)}
             >
               <FaUser className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
-              Artist Page
+              Your Page
+            </Link>
+
+            <Link
+              href="/dashboard/edit"
+              className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all group"
+              onClick={() => setIsOpen(false)}
+            >
+              <FaCog className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
+              Page Settings
+            </Link>
+
+            
+            <Link
+              href="/dashboard/shows"
+              className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all group"
+              onClick={() => setIsOpen(false)}
+            >
+              <FaCalendar className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
+              My Shows
             </Link>
 
             <Link
@@ -132,7 +151,7 @@ export default function UserMenu({ user }: UserMenuProps) {
               onClick={() => setIsOpen(false)}
             >
               <FaCog className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
-              Settings
+              User Settings
             </Link>
 
             <div className="border-t border-gray-100 dark:border-gray-800 my-2 mx-2"></div>
