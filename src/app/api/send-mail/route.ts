@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
     // Send test e-mail
     const { data, error } = await resend.emails.send({
-      from: 'Groovetree <onboarding@resend.dev>', // Use o domínio padrão do Resend para testes
+      from: 'Groovetree <noreply@groovetr.ee>',
       to: [user.email],
       subject: 'Groovetree - Test Email',
       html: `
