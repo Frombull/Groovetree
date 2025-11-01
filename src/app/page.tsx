@@ -62,7 +62,7 @@ export default function Home() {
               <TextType
                 text={[
                   "Create your personalized page.",
-                  "The ultimate Musictree for DJs and artists",
+                  "The ultimate Musictree for DJs and artists.",
                   "Unite your music, socials, and fans with a single link.",
                   "Grow your audience by sharing all your music profile.",
                   "Make it easy for fans to find your latest tracks.",
