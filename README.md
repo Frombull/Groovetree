@@ -14,7 +14,7 @@ Descrição feliz :)
 
 # Rodando o projeto
 
-1.  Instale as dependências do projeto
+1.  Instale as dependências
 
     ```bash
     npm install
@@ -27,33 +27,27 @@ Descrição feliz :)
     ```
     Ao final, o terminal vai mostrar as credenciais de acesso local, guarde elas para o próximo passo.
 
-3. Crie um ``.env`` na pasta raiz, seguindo o template de ``.env.template``. Em seguida, preencha com as informações fornecidas pelo comando ``supabase start``
+3. Crie um ``.env`` na pasta raiz, seguindo o template de ``.env.template`` E preencha.
 
-4. Sincronize o Banco de Dados com o Schema
+4. Execute as Migrações do Banco de Dados
     ```bash
-    npx prisma db push
+    npx prisma migrate dev
     ```
+    Esse comando aplica todas as migrações, cria o DB local e gera o cliente Prisma.
 
-5. Gere o cliente Prisma
-    ```bash
-    npx prisma generate
-    ```
-
-6. Rode o SEED do DB (opcional)
+5. Rode o SEED do DB (opcional)
 
     ```bash
     npx tsx prisma/seed.ts
     ```
 
-7. Rodando em DEV
+6. Rodando em DEV
 
     ```bash
     npm run dev
     ```
-    
-    Ficará disponível em http://localhost:3000
 
-8. Criando migração (reminder)
+    E Para criar migração nova:
     
     ```bash
     npx prisma migrate dev --name <nome-da-mudanca>
