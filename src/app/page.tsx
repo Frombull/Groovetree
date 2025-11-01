@@ -1,6 +1,5 @@
 "use client";
 
-import Footer from "@/app/components/footer";
 import Header from "@/app/components/header";
 import {
   FaSpotify,
@@ -9,13 +8,31 @@ import {
   FaInstagram,
   FaTiktok,
   FaApple,
+  FaTwitter
 } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
-import Features from "./components/Features";
-import Aurora from "./components/Aurora";
-import TextType from "./components/TextType";
-import CircularText from "./components/CircularText";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() => import("./components/footer"), {
+  ssr: false,
+});
+
+const Aurora = dynamic(() => import("./components/Aurora"), { 
+  ssr: false 
+});
+
+const TextType = dynamic(() => import("./components/TextType"), {
+  ssr: false,
+});
+
+const Features = dynamic(() => import("./components/Features"), {
+  loading: () => <div className="h-[500px]" />, // Placeholder
+});
+
+const CircularText = dynamic(() => import("./components/CircularText"), {
+  ssr: false,
+});
+
 
 export default function Home() {
   return (
@@ -44,10 +61,11 @@ export default function Home() {
               </h2>
               <TextType
                 text={[
-                  "Create your personalized page and connect your fans to all your music platforms in one place. The ultimate Musictree for DJs and artists.",
-                  "Unite your music, socials, and fans with a single, beautiful link.",
-                  "Grow your audience by sharing all your music and profiles in one spot.",
-                  "Make it easy for fans to find your latest tracks and follow you everywhere.",
+                  "Create your personalized page.",
+                  "The ultimate Musictree for DJs and artists.",
+                  "Unite your music, socials, and fans with a single link.",
+                  "Grow your audience by sharing all your music profile.",
+                  "Make it easy for fans to find your latest tracks.",
                   "Your music. Your links. Your brand. All together.",
                   "Share your groove. Amplify your reach. Connect with your fans.",
                 ]}
@@ -65,7 +83,7 @@ export default function Home() {
                   {/* Input container */}
                   <div className="relative flex items-center flex-1 bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
                     <span className="text-gray-300 pl-4 md:pl-6 text-base md:text-lg whitespace-nowrap">
-                      groovetr.ee
+                      groovetr.ee/
                     </span>
                     <input
                       type="text"
@@ -130,7 +148,7 @@ export default function Home() {
             <FaYoutube className="text-5xl text-red-500 hover:scale-110 transition-transform" />
             <FaInstagram className="text-5xl text-[#4C1D95] hover:scale-110 transition-transform" />
             <FaTiktok className="text-5xl text-black hover:scale-110 transition-transform" />
-            <FaXTwitter className="text-5xl text-black hover:scale-110 transition-transform" />
+            <FaTwitter className="text-5xl text-black hover:scale-110 transition-transform" />
           </div>
         </div>
       </section>
