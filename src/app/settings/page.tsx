@@ -5,7 +5,7 @@ import { useAuth } from "@/app/hooks/useAuth";
 import { useTheme } from "@/app/contexts/ThemeContext";
 import DataExport from "@/app/components/DataExport";
 import DeleteAccountModal from "@/app/components/DeleteAccountModal";
-import Aurora from "@/app/components/Aurora";
+// import Aurora from "@/app/components/Aurora";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -303,9 +303,9 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative">
-        <div className="absolute inset-0 opacity-30 dark:opacity-40">
+        {/* <div className="absolute inset-0 opacity-30 dark:opacity-40">
           <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
-        </div>
+        </div> */}
         <div className="flex items-center justify-center min-h-screen relative z-10">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
         </div>
@@ -316,9 +316,9 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative">
       {/* Aurora Background */}
-      <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
+      {/* <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
         <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
-      </div>
+      </div> */}
 
       {/* Header */}
       <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-700 px-6 py-4 sticky top-0 z-40">

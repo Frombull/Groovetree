@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Aurora from "@/app/components/Aurora";
+// import Aurora from "@/app/components/Aurora";
 import {
   FaPlus,
   FaTimes,
@@ -808,9 +808,9 @@ export default function EditPage() {
   if (loading || isLoadingPage) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative flex items-center justify-center">
-        <div className="absolute inset-0 opacity-30 dark:opacity-40">
+        {/* <div className="absolute inset-0 opacity-30 dark:opacity-40">
           <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
-        </div>
+        </div> */}
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600 relative z-10"></div>
       </div>
     );
@@ -821,9 +821,9 @@ export default function EditPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative overflow-x-hidden">
       {/* Aurora Background */}
-      <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
+      {/* <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
         <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
-      </div>
+      </div> */}
 
       {/* Header */}
       <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800 px-6 py-4 sticky top-0 z-40">
