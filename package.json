@@ -5,17 +5,11 @@
   "scripts": {
     "dev": "next dev --turbopack",
     
-    "build": "npm run build:prod",
+    "build": "npx prisma generate && npx prisma migrate deploy && next build",
     
-    "build:prod": "prisma generate && next build",
-    
-    "vercel-build": "npm run build:prod && npm run db:migrate",
-    
-    "db:reset": "prisma migrate reset --force",
     "start": "next start",
     "lint": "eslint --fix",
     "postinstall": "prisma generate",
-    "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio"

@@ -1,6 +1,6 @@
 # GrooveTree
 
-Descrição feliz
+Descrição feliz :)
 
 
 
@@ -53,6 +53,11 @@ Descrição feliz
     
     Ficará disponível em http://localhost:3000
 
+8. Criando migração (reminder)
+    
+    ```bash
+    npx prisma migrate dev --name <nome-da-mudanca>
+    ```
 
 
 # Testes
