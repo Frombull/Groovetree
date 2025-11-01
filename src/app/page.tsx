@@ -17,9 +17,9 @@ const Footer = dynamic(() => import("./components/footer"), {
   ssr: false,
 });
 
-const Aurora = dynamic(() => import("./components/Aurora"), { 
-  ssr: false 
-});
+// const Aurora = dynamic(() => import("./components/Aurora"), { 
+//   ssr: false 
+// });
 
 const TextType = dynamic(() => import("./components/TextType"), {
   ssr: false,
@@ -40,12 +40,12 @@ export default function Home() {
       {/* Hero Section */}
       <div className="relative min-h-screen bg-gradient-to-br bg-[#060010] text-white overflow-hidden">
         {/* Background Elements */}
-        <Aurora
+        {/* <Aurora
           colorStops={["#3A29FF", "#FF94B4", "#FF3232"]}
           blend={0.5}
           amplitude={1.0}
           speed={0.5}
-        />
+        /> */}
 
         {/* Header */}
         <div className="z-[9999]">
@@ -129,9 +129,9 @@ export default function Home() {
       {/* Platform Icons Section */}
       <section className="py-20 bg-white relative overflow-hidden">
         {/* Aurora Background */}
-        <div className="absolute inset-0 opacity-20">
+        {/* <div className="absolute inset-0 opacity-20">
           <Aurora colorStops={["#10b981", "#3b82f6", "#8b5cf6"]} />
-        </div>
+        </div> */}
 
         <div className="container mx-auto px-8 md:px-16 text-center relative z-10">
           <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -159,9 +159,9 @@ export default function Home() {
         className="py-20 bg-gradient-to-br from-purple-50 to-purple-100 relative overflow-hidden"
       >
         {/* Aurora Background */}
-        <div className="absolute inset-0 opacity-25">
+        {/* <div className="absolute inset-0 opacity-25">
           <Aurora colorStops={["#f59e0b", "#ec4899", "#8b5cf6"]} />
-        </div>
+        </div> */}
 
         <div className="container mx-auto px-8 md:px-16 relative z-10">
           <div className="text-center mb-16">
@@ -216,9 +216,9 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-[#2D1B69] to-[#4C1D95] text-white relative overflow-hidden">
         {/* Aurora Background */}
-        <div className="absolute inset-0 opacity-30">
+        {/* <div className="absolute inset-0 opacity-30">
           <Aurora colorStops={["#06b6d4", "#a855f7", "#ec4899"]} />
-        </div>
+        </div> */}
 
         <div className="container mx-auto px-8 md:px-16 text-center relative z-10">
           <h3 className="text-4xl md:text-5xl font-bold mb-6">
