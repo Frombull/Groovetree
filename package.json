@@ -11,7 +11,6 @@
     
     "vercel-build": "npm run build:prod && npm run db:migrate",
     
-    "db:reset": "prisma migrate reset --force",
     "start": "next start",
     "lint": "eslint --fix",
     "postinstall": "prisma generate",
