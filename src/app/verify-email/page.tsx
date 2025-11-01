@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import Aurora from "@/app/components/Aurora";
+// import Aurora from "@/app/components/Aurora";
 import { FaCheckCircle, FaTimesCircle, FaSpinner } from "react-icons/fa";
 
 function VerifyEmailContent() {
@@ -58,9 +58,9 @@ function VerifyEmailContent() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative flex items-center justify-center">
       {/* Aurora Background */}
-      <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
+      {/* <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
         <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
-      </div>
+      </div> */}
 
       <div className="relative z-10 max-w-md w-full mx-4">
         <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border dark:border-gray-800 p-8">
@@ -132,9 +132,9 @@ export default function VerifyEmailPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative flex items-center justify-center">
-        <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
+        {/* <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
           <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
-        </div>
+        </div> */}
         <div className="relative z-10 max-w-md w-full mx-4">
           <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border dark:border-gray-800 p-8">
             <div className="text-center mb-8">
