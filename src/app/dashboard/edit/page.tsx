@@ -211,7 +211,7 @@ export default function EditPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          slug: user?.email?.split("@")[0] || "user",
+          slug: user?.name || "user",
           title: user?.name || "My Page",
         }),
       });
@@ -582,6 +582,7 @@ export default function EditPage() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          slug: pageData?.slug,
           title: pageData?.title,
           bio: pageData?.bio,
           backgroundColor: pageData?.backgroundColor,
@@ -591,11 +592,14 @@ export default function EditPage() {
       });
 
       if (response.ok) {
-        toast.success("Changes saved!");
-        setOriginalPageData(pageData); // Update original data
+        const updatedData = await response.json();
+        setPageData(updatedData);
+        setOriginalPageData(updatedData); // Update original data
         setHasUnsavedChanges(false); // Reset unsaved changes
+        toast.success("Changes saved");
       } else {
-        toast.error("Error updating page");
+        const errorData = await response.json();
+        toast.error(errorData.error || "Error updating page");
       }
     } catch (error) {
       console.error("Error updating page:", error);
@@ -607,6 +611,7 @@ export default function EditPage() {
     if (!originalPageData) return;
 
     const hasChanges =
+      newPageData.slug !== originalPageData.slug ||
       newPageData.title !== originalPageData.title ||
       newPageData.bio !== originalPageData.bio ||
       newPageData.backgroundColor !== originalPageData.backgroundColor ||
@@ -681,7 +686,7 @@ export default function EditPage() {
   const getSocialPlatforms = () => {
     const shareUrl = getShareUrl();
     const shareText = getShareText();
-    
+
     return [
       {
         name: "X",
@@ -977,15 +982,24 @@ export default function EditPage() {
             </label>
             <div className="flex items-center gap-2">
               <span className="text-gray-500 dark:text-gray-400 text-sm">
-                groovetree.vercel.app/
+                groovetr.ee/
               </span>
               <input
                 type="text"
                 value={pageData.slug}
-                disabled
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-slate-900 text-gray-500 dark:text-gray-400"
+                onChange={(e) => {
+                  const newPageData = { ...pageData, slug: e.target.value };
+                  setPageData(newPageData);
+                  checkForUnsavedChanges(newPageData);
+                }}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                placeholder="your-username"
+                data-cy="page-slug"
               />
             </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Only letters, numbers and hyphens.
+            </p>
           </div>
         </div>
 
@@ -1122,9 +1136,10 @@ export default function EditPage() {
             {/* Save Button */}
             <button
               onClick={handleUpdatePage}
-              className={`w-full py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer ${hasUnsavedChanges
-                  ? "bg-red-600 hover:bg-red-700 text-white"
-                  : "bg-purple-600 hover:bg-purple-700 text-white"
+              disabled={!hasUnsavedChanges}
+              className={`w-full py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 ${hasUnsavedChanges
+                ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+                : "bg-gray-400 text-gray-200 cursor-not-allowed"
                 }`}
               data-cy="page-save-customization-button"
             >
@@ -1211,14 +1226,7 @@ export default function EditPage() {
                 </div>
               ))
             ) : (
-              <div className="text-center py-16 text-gray-400">
-                <p className="text-6xl mb-4">🎤</p>
-                <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
-                  No shows yet
-                </p>
-                <p className="text-sm dark:text-gray-400">
-                  Click the button above to add your first show
-                </p>
+              <div className="py-16">
               </div>
             )}
           </div>
@@ -1241,8 +1249,8 @@ export default function EditPage() {
             }}
             disabled={photos.length >= 4}
             className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${photos.length >= 4
-                ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                : "bg-purple-600 text-white hover:bg-purple-700"
+              ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+              : "bg-purple-600 text-white hover:bg-purple-700"
               }`}
           >
             <FaPlus className="w-5 h-5" />
@@ -1287,14 +1295,7 @@ export default function EditPage() {
                 </div>
               ))
             ) : (
-              <div className="col-span-2 sm:col-span-4 text-center py-16 text-gray-400">
-                <p className="text-6xl mb-4">📸</p>
-                <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
-                  No photos added yet
-                </p>
-                <p className="text-sm dark:text-gray-400">
-                  Add up to 4 photos to the gallery
-                </p>
+              <div className="py-16">
               </div>
             )}
           </div>
@@ -1328,10 +1329,10 @@ export default function EditPage() {
                   onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, link.id)}
                   className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${dragOverItem === link.id
-                      ? "border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg scale-105"
-                      : draggedItem === link.id
-                        ? "border-gray-300 dark:border-gray-600 opacity-50"
-                        : "border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md"
+                    ? "border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg scale-105"
+                    : draggedItem === link.id
+                      ? "border-gray-300 dark:border-gray-600 opacity-50"
+                      : "border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md"
                     }`}
                 >
                   <FaGripVertical className="text-gray-400 dark:text-gray-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 cursor-grab active:cursor-grabbing transition-colors flex-shrink-0" />
@@ -1363,14 +1364,7 @@ export default function EditPage() {
                 </div>
               ))
             ) : (
-              <div className="text-center py-16 text-gray-400">
-                <p className="text-6xl mb-4">🎵</p>
-                <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
-                  No links yet
-                </p>
-                <p className="text-sm dark:text-gray-400">
-                  Click the button above to add your first link
-                </p>
+              <div className="py-16">
               </div>
             )}
           </div>
@@ -1401,8 +1395,8 @@ export default function EditPage() {
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
                   className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${selectedCategory === category.id
-                      ? "bg-purple-600 dark:bg-purple-700 text-white shadow-lg shadow-purple-200 dark:shadow-purple-900/50"
-                      : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700"
+                    ? "bg-purple-600 dark:bg-purple-700 text-white shadow-lg shadow-purple-200 dark:shadow-purple-900/50"
+                    : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700"
                     }`}
                 >
                   {category.icon}
@@ -1560,7 +1554,7 @@ export default function EditPage() {
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
-                    value={`groovetree.vercel.app/${pageData?.slug}`}
+                    value={`groovetr.ee/${pageData?.slug}`}
                     readOnly
                     className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-slate-900 text-gray-700 dark:text-gray-300 font-mono text-sm"
                   />

@@ -65,7 +65,7 @@ export default function Home() {
                   {/* Input container */}
                   <div className="relative flex items-center flex-1 bg-white/10 backdrop-blur-md rounded-2xl p-2 border border-white/20">
                     <span className="text-gray-300 pl-4 md:pl-6 text-base md:text-lg whitespace-nowrap">
-                      groovetree.vercel.app/
+                      groovetr.ee
                     </span>
                     <input
                       type="text"

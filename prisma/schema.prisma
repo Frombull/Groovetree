@@ -8,13 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  page      Page? // User can have only one page
+  id                     String    @id @default(cuid())
+  email                  String    @unique
+  name                   String?
+  password               String
+  emailVerified          Boolean   @default(false)
+  emailVerificationToken String?   @unique
+  emailVerificationExpiry DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  page                   Page? // User can have only one page
 }
 
 model Page {

@@ -6,6 +6,7 @@ export interface AuthUser {
   id: string;
   email: string;
   name: string | null;
+  emailVerified: boolean;
   page?: {
     slug: string;
     avatarUrl?: string | null;
@@ -45,6 +46,7 @@ export async function getAuthUser(req?: Request): Promise<AuthUser | null> {
         id: true,
         email: true,
         name: true,
+        emailVerified: true,
         page: {
           select: {
             slug: true,
@@ -60,6 +62,7 @@ export async function getAuthUser(req?: Request): Promise<AuthUser | null> {
       id: user.id,
       email: user.email,
       name: user.name,
+      emailVerified: user.emailVerified,
       page: user.page || null,
     };
   } catch (error) {
@@ -114,6 +117,7 @@ export async function verifyAuth(req: Request): Promise<AuthUser | null> {
         id: true,
         email: true,
         name: true,
+        emailVerified: true,
         page: {
           select: {
             slug: true,
@@ -129,6 +133,7 @@ export async function verifyAuth(req: Request): Promise<AuthUser | null> {
       id: user.id,
       email: user.email,
       name: user.name,
+      emailVerified: user.emailVerified,
       page: user.page || null,
     };
   } catch (error) {

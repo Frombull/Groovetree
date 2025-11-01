@@ -39,10 +39,6 @@ interface UserSettings {
     push: boolean;
     marketing: boolean;
   };
-  privacy: {
-    profilePublic: boolean;
-    showEmail: boolean;
-  };
   theme: "light" | "dark" | "auto";
   language: string;
 }
@@ -64,10 +60,6 @@ export default function SettingsPage() {
       push: true,
       marketing: false,
     },
-    privacy: {
-      profilePublic: true,
-      showEmail: false,
-    },
     theme: theme,
     language: "en-US",
   });
@@ -84,9 +76,8 @@ export default function SettingsPage() {
   const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   const sections = [
-    { id: "security", label: "Security", icon: FaLock },
+    { id: "account", label: "Account", icon: FaLock },
     { id: "notifications", label: "Notifications", icon: FaBell },
-    { id: "privacy", label: "Privacy", icon: FaShield },
     { id: "appearance", label: "Appearance", icon: FaPalette },
     { id: "language", label: "Language", icon: FaGlobe },
     { id: "data", label: "Data", icon: FaDatabase },
@@ -278,6 +269,33 @@ export default function SettingsPage() {
     }
   };
 
+  const handleSendVerificationEmail = async () => {
+    setIsSendingEmail(true);
+    try {
+      const response = await fetch("/api/auth/send-verification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send verification email");
+      }
+
+      toast.success("Verification email sent! Check your inbox.");
+    } catch (error) {
+      console.error("Error sending verification email:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to send verification email"
+      );
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
   const handleLogout = async () => {
     await logout();
   };
@@ -349,8 +367,8 @@ export default function SettingsPage() {
                       key={section.id}
                       onClick={() => scrollToSection(section.id)}
                       className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 cursor-pointer ${activeSection === section.id
-                          ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 shadow-sm"
-                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+                        ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 shadow-sm"
+                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
                         }`}
                     >
                       <Icon className="w-5 h-5" />
@@ -364,16 +382,54 @@ export default function SettingsPage() {
 
           {/* Main content */}
           <div className="flex-1 space-y-12 dark:text-gray-100">
-            {/* Security Section */}
+            {/* Account Section */}
             <section
-              id="security"
-              ref={(el) => { sectionRefs.current.security = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
-            >
+              id="account"
+              ref={(el) => { sectionRefs.current.account = el; }}
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8">
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
-                  Account Security
+                  Account
                 </h2>
+
+                {/* Email Verification Status */}
+                <div className="p-4 bg-gray-50 dark:bg-slate-900 rounded-lg border dark:border-gray-800">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <FaShield className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      <div>
+                        <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                          Email Verification
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {user?.email || "No email"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {user?.emailVerified ? (
+                        <span className="flex items-center gap-2 px-3 py-1.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-sm font-medium">
+                          <FaCheck className="w-4 h-4" />
+                          Verified
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2 px-3 py-1.5 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-full text-sm font-medium">
+                          Not Verified
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  {!user?.emailVerified && (
+                    <div className="mt-3 pt-3 border-t dark:border-gray-700">
+                      <button
+                        onClick={handleSendVerificationEmail}
+                        disabled={isSendingEmail}
+                        className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium cursor-pointer disabled:opacity-50">
+                        {isSendingEmail ? "Sending..." : "Send verification email"}
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 <div className="space-y-4">
                   <div>
@@ -583,7 +639,7 @@ export default function SettingsPage() {
                       <button
                         onClick={handleSendTestEmail}
                         disabled={isSendingEmail}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2 cursor-pointer"
                       >
                         {isSendingEmail ? (
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -611,61 +667,6 @@ export default function SettingsPage() {
               </div>
             </section>
 
-            {/* Privacy Section */}
-            <section
-              id="privacy"
-              ref={(el) => { sectionRefs.current.privacy = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
-            >
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
-                  Privacy Settings
-                </h2>
-
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900 rounded-lg border dark:border-gray-800">
-                    <div>
-                      <h3 className="font-medium text-gray-900 dark:text-gray-100">
-                        Cool Option
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Description
-                      </p>
-                    </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={settings.privacy.showEmail}
-                        onChange={(e) =>
-                          setSettings((prev) => ({
-                            ...prev,
-                            privacy: {
-                              ...prev.privacy,
-                              showEmail: e.target.checked,
-                            },
-                          }))
-                        }
-                        className="sr-only peer"
-                      />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                    </label>
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 flex items-center"
-                >
-                  {isSaving ? (
-                    <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  ) : (
-                    <FaSave className="mr-2" />
-                  )}
-                  {isSaving ? "Saving..." : "Save Changes"}
-                </button>
-              </div>
-            </section>
             {/* Appearance Section */}
             <section
               id="appearance"
@@ -692,8 +693,8 @@ export default function SettingsPage() {
                       <button
                         onClick={() => handleThemeChange("light")}
                         className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "light"
-                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                          : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                           }`}
                       >
                         <div className="flex items-center space-x-3 mb-3">
@@ -718,8 +719,8 @@ export default function SettingsPage() {
                       <button
                         onClick={() => handleThemeChange("dark")}
                         className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "dark"
-                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                          : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                           }`}
                       >
                         <div className="flex items-center space-x-3 mb-3">
@@ -744,8 +745,8 @@ export default function SettingsPage() {
                       <button
                         onClick={() => handleThemeChange("auto")}
                         className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "auto"
-                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                          : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                           }`}
                       >
                         <div className="flex items-center space-x-3 mb-3">

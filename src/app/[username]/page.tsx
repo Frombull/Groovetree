@@ -170,7 +170,6 @@ export default async function UserPage({ params }: UserPageProps) {
             Groovetree
           </Link>
           {". "}
-          Todos os direitos reservados.
         </p>
       </div>
     </main>

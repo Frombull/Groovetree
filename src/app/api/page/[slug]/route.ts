@@ -8,7 +8,7 @@ export async function GET(
   try {
     const { slug } = await params;
 
-    // Busca a página sem precisar de autenticação (páginas são públicas)
+    // Busca página sem autenticação, páginas públicas
     const page = await prisma.page.findUnique({
       where: { slug },
       include: {

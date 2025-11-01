@@ -11,6 +11,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const {
+      slug,
       title,
       bio,
       avatarUrl,
@@ -27,9 +28,38 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "Page not found" }, { status: 404 });
     }
 
+    // verify slug
+    let finalSlug = page.slug;
+    if (slug !== undefined && slug !== page.slug) {
+      // Clean slug string
+      const cleanSlug = slug
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]/g, "")
+        .replace(/\-\-+/g, "-")
+        .replace(/^-+/, "")
+        .replace(/-+$/, "");
+
+      // Check duplicate slug
+      const existingPage = await prisma.page.findUnique({
+        where: { slug: cleanSlug },
+      });
+
+      if (existingPage && existingPage.id !== page.id) {
+        return NextResponse.json(
+          { error: "Slug already in use" },
+          { status: 400 }
+        );
+      }
+
+      finalSlug = cleanSlug;
+    }
+
     const updatedPage = await prisma.page.update({
       where: { id: page.id },
       data: {
+        ...(slug !== undefined && { slug: finalSlug }),
         ...(title !== undefined && { title }),
         ...(bio !== undefined && { bio }),
         ...(avatarUrl !== undefined && { avatarUrl }),

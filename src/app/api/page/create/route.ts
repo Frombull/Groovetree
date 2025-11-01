@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     };
 
     // Gera um slug base a partir do username ou slug fornecido
-    const baseSlug = slug || user.name || user.email.split("@")[0];
+    const baseSlug = slug || user.name || "user";
 
     // Tentar criar a página com retry em caso de conflito
     type PageWithRelations = Awaited<ReturnType<typeof prisma.page.create>>;

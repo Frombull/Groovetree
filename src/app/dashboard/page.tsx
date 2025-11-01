@@ -13,7 +13,6 @@ export default function DashboardPage() {
       if (!user) {
         router.push("/");
       } else {
-        // Redireciona para a página de edição
         router.push("/dashboard/edit");
       }
     }

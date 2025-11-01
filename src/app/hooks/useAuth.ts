@@ -6,6 +6,7 @@ interface User {
   id: string;
   email: string;
   name: string | null;
+  emailVerified: boolean;
   page?: {
     slug: string;
     avatarUrl?: string | null;
