@@ -25,7 +25,7 @@ const TextType = dynamic(() => import("./components/TextType"), {
   ssr: false,
 });
 
-const Features = dynamic(() => import("./components/Features"), {
+const FeaturedArtists = dynamic(() => import("./components/FeaturedArtists"), {
   loading: () => <div className="h-[500px]" />, // Placeholder
 });
 
@@ -123,8 +123,8 @@ export default function Home() {
         />
       </div>
 
-      {/* Features Section */}
-      <Features />
+      {/* Featured Artists */}
+      <FeaturedArtists />
 
       {/* Platform Icons Section */}
       <section className="py-20 bg-white relative overflow-hidden">
