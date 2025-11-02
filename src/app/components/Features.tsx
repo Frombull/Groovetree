@@ -14,9 +14,8 @@ export default function Features() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Calcula a rotação baseada na posição do mouse
-    const rotateX = ((y - centerY) / centerY) * -20; // Máximo 20 graus
-    const rotateY = ((x - centerX) / centerX) * 20; // Máximo 20 graus
+    const rotateX = ((y - centerY) / centerY) * -20;  // Máx 20 graus
+    const rotateY = ((x - centerX) / centerX) * 20;   // Máx 20 graus
 
     setMousePosition({ x: rotateY, y: rotateX });
     setHoveredCard(cardIndex);
@@ -77,22 +76,6 @@ export default function Features() {
                   width={620}
                   height={600}
                   className="transition-all duration-300"
-                />
-
-                {/* Overlay com gradiente dinâmico baseado na posição do mouse */}
-                <div
-                  className="absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none"
-                  style={{
-                    opacity: hoveredCard === index ? 0.1 : 0,
-                    background:
-                      hoveredCard === index
-                        ? `radial-gradient(circle at ${
-                            ((mousePosition.x + 20) / 40) * 100
-                          }% ${
-                            ((mousePosition.y + 20) / 40) * 100
-                          }%, rgba(255,255,255,0.3), transparent 70%)`
-                        : "none",
-                  }}
                 />
               </div>
             </div>

@@ -135,6 +135,7 @@ export default function UserMenu({ user }: UserMenuProps) {
               Page Settings
             </Link>
 
+            <div className="border-t border-gray-100 dark:border-gray-800 my-2 mx-2"></div>
             
             <Link
               href="/dashboard/shows"

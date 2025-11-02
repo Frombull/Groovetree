@@ -387,7 +387,7 @@ export default function EditPage() {
       });
 
       if (response.ok) {
-        toast.success(editingEvent ? "Show atualizado!" : "Show adicionado!");
+        toast.success(editingEvent ? "Show updated!" : "Show added!");
         setShowEventModal(false);
         setEventForm({
           title: "",
@@ -400,11 +400,11 @@ export default function EditPage() {
         setEditingEvent(null);
         fetchPageData();
       } else {
-        toast.error("Erro ao salvar show");
+        toast.error("Error saving show");
       }
     } catch (error) {
       console.error("Error saving event:", error);
-      toast.error("Erro ao salvar show");
+      toast.error("Error saving show");
     }
   };
 
@@ -422,7 +422,7 @@ export default function EditPage() {
   };
 
   const handleDeleteEvent = async (eventId: string) => {
-    if (!confirm("Tem certeza que deseja deletar este show?")) return;
+    if (!confirm("Are you sure you want to delete this show?")) return;
 
     try {
       const response = await fetch(`/api/events/${eventId}`, {
@@ -430,14 +430,14 @@ export default function EditPage() {
       });
 
       if (response.ok) {
-        toast.success("Show deletado!");
+        toast.success("Show deleted!");
         fetchPageData();
       } else {
-        toast.error("Erro ao deletar show");
+        toast.error("Error deleting show");
       }
     } catch (error) {
       console.error("Error deleting event:", error);
-      toast.error("Erro ao deletar show");
+      toast.error("Erro deleting show");
     }
   };
 
@@ -457,11 +457,11 @@ export default function EditPage() {
       "image/gif",
     ];
     if (!allowedTypes.includes(file.type)) {
-      toast.error("Tipo de arquivo inválido. Use JPEG, PNG, WebP ou GIF");
+      toast.error("Invalid file type, use [JPEG, PNG, WebP, GIF]");
       return;
     }
 
-    // Validar tamanho (10MB para melhor qualidade)
+    // (10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast.error("Arquivo muito grande. Tamanho máximo: 10MB");
       return;
@@ -469,7 +469,7 @@ export default function EditPage() {
 
     setUploadingPhoto(true);
 
-    // Preview local
+    // Local preview
     const reader = new FileReader();
     reader.onloadend = () => {
       setPhotoPreview(reader.result as string);
@@ -488,15 +488,15 @@ export default function EditPage() {
       if (response.ok) {
         const data = await response.json();
         setPhotoForm({ ...photoForm, imageUrl: data.url });
-        toast.success("Imagem carregada!");
+        toast.success("Image loaded!");
       } else {
         const error = await response.json();
-        toast.error(error.error || "Erro ao fazer upload");
+        toast.error(error.error || "Error uploading");
         setPhotoPreview(null);
       }
     } catch (error) {
       console.error("Error uploading photo:", error);
-      toast.error("Erro ao fazer upload da imagem");
+      toast.error("Error uploading photo");
       setPhotoPreview(null);
     } finally {
       setUploadingPhoto(false);
@@ -505,13 +505,13 @@ export default function EditPage() {
 
   const handleSavePhoto = async () => {
     if (!photoForm.imageUrl || !pageData) {
-      toast.error("Por favor, faça upload de uma imagem primeiro");
+      toast.error("Upload an image first");
       return;
     }
 
     // Limite de 4 fotos
     if (!editingPhoto && photos.length >= 4) {
-      toast.error("Máximo de 4 fotos permitidas");
+      toast.error("Max 4 photos");
       return;
     }
 
@@ -532,17 +532,17 @@ export default function EditPage() {
       });
 
       if (response.ok) {
-        toast.success(editingPhoto ? "Foto atualizada!" : "Foto adicionada!");
+        toast.success(editingPhoto ? "Picture updated!" : "Picture added!");
         setShowPhotoModal(false);
         setEditingPhoto(null);
         setPhotoForm({ imageUrl: "", caption: "" });
         fetchPageData();
       } else {
-        toast.error("Erro ao salvar foto");
+        toast.error("Error saving photo");
       }
     } catch (error) {
       console.error("Error saving photo:", error);
-      toast.error("Erro ao salvar foto");
+      toast.error("Error saving photo");
     }
   };
 
@@ -552,12 +552,12 @@ export default function EditPage() {
       imageUrl: photo.imageUrl,
       caption: photo.caption || "",
     });
-    setPhotoPreview(null); // Usa a URL existente
+    setPhotoPreview(null); // URL existente
     setShowPhotoModal(true);
   };
 
   const handleDeletePhoto = async (photoId: string) => {
-    if (!confirm("Tem certeza que deseja deletar esta foto?")) return;
+    if (!confirm("Are you sure you want to delete this photo?")) return;
 
     try {
       const response = await fetch(`/api/photos/${photoId}`, {
@@ -565,14 +565,14 @@ export default function EditPage() {
       });
 
       if (response.ok) {
-        toast.success("Foto deletada!");
+        toast.success("Photo deleted!");
         fetchPageData();
       } else {
-        toast.error("Erro ao deletar foto");
+        toast.error("Error deleting photo");
       }
     } catch (error) {
       console.error("Error deleting photo:", error);
-      toast.error("Erro ao deletar foto");
+      toast.error("Error deleting photo");
     }
   };
 
@@ -837,14 +837,6 @@ export default function EditPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowShareModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium cursor-pointer"
-            >
-              <RiShareFill className="w-5 h-5" />
-              Share
-            </button>
-
             <Link
               href="/settings"
               className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
@@ -996,6 +988,14 @@ export default function EditPage() {
                 placeholder="your-username"
                 data-cy="page-slug"
               />
+              <button
+                onClick={() => setShowShareModal(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium cursor-pointer whitespace-nowrap"
+                title="Share your page"
+              >
+                <RiShareFill className="w-5 h-5" />
+                Share
+              </button>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               Only letters, numbers and hyphens.
