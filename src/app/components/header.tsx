@@ -23,7 +23,7 @@ export default function Header() {
             {/* Logo */}
             <div className="flex items-center space-x-4 lg:space-x-10">
               <Link href="/">
-                <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
                   Groovetree
                 </h1>
               </Link>

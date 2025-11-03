@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -12,6 +13,11 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const logoFont = localFont({
+  src: "../../public/logo-font/Logo-font-Bold.ttf",
+  variable: "--font-logo",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${logoFont.variable} antialiased`}
       >
         <ThemeProvider>
           {children}
