@@ -22,7 +22,7 @@ interface MusicPlatformsProps {
   isLight?: boolean;
 }
 
-// Mapeamento de ícones e cores por tipo
+// Icon and color mapping by type
 const platformConfig: Record<
   string,
   {
@@ -67,12 +67,12 @@ export default function MusicPlatforms({
   links,
   isLight = false,
 }: MusicPlatformsProps) {
-  // Se não houver links, não renderiza nada
+  // If there are no links, render nothing
   if (!links || links.length === 0) {
     return null;
   }
 
-  // Separa links com embed e sem embed
+  // Separate links with embed and without embed
   const embedLinks = links.filter((link) => link.embedUrl);
   const cardLinks = links.filter((link) => !link.embedUrl);
 
@@ -82,10 +82,10 @@ export default function MusicPlatforms({
         className="my-6 font-sans text-3xl font-bold tracking-tight text-balance"
         style={{ color: isLight ? "#000000" : "#ffffff" }}
       >
-        Ouça agora
+        Listen Now
       </h1>
 
-      {/* Embeds - Mostrados primeiro */}
+      {/* Embeds - Shown first */}
       {embedLinks.length > 0 && (
         <div className="mb-8 flex flex-col gap-6 max-w-3xl mx-auto">
           {embedLinks.map((link) => {
@@ -101,10 +101,9 @@ export default function MusicPlatforms({
                   src={link.embedUrl!}
                   width="100%"
                   height="100%"
-                  frameBorder="0"
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                   loading="lazy"
-                  className="h-full w-full"
+                  className="h-full w-full border-0"
                   title={link.title}
                 />
               </div>
@@ -113,7 +112,7 @@ export default function MusicPlatforms({
         </div>
       )}
 
-      {/* Cards - Para links sem embed */}
+      {/* Cards - For links without embed */}
       {cardLinks.length > 0 && (
         <div className="flex flex-col gap-4 max-w-xl mx-auto">
           {cardLinks.map((link) => {
@@ -130,10 +129,9 @@ export default function MusicPlatforms({
                   backdrop-blur-xl rounded-xl p-6 border shadow-xl
                   transition-all duration-300 flex flex-col items-center justify-center gap-3
                   hover:scale-105 hover:shadow-2xl
-                  ${
-                    isLight
-                      ? "bg-black/5 border-black/10 hover:bg-black/10"
-                      : "bg-white/10 border-white/20 hover:bg-white/15"
+                  ${isLight
+                    ? "bg-black/5 border-black/10 hover:bg-black/10"
+                    : "bg-white/10 border-white/20 hover:bg-white/15"
                   }
                 `}
               >
