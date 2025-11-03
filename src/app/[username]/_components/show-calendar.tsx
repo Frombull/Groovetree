@@ -19,16 +19,16 @@ interface ShowCalendarProps {
 }
 
 export function ShowCalendar({ events, isLight = false }: ShowCalendarProps) {
-  // Se não houver eventos, não renderiza nada
+  // If there are no events, render nothing
   if (!events || events.length === 0) {
     return null;
   }
 
-  // Formatar data no formato "FRI, MAR 15"
+  // Format date in "FRI, MAR 15" format
   const formatDate = (date: Date) => {
     const eventDate = new Date(date);
     return eventDate
-      .toLocaleDateString("pt-BR", {
+      .toLocaleDateString("en-US", {
         weekday: "short",
         month: "short",
         day: "numeric",
@@ -42,7 +42,7 @@ export function ShowCalendar({ events, isLight = false }: ShowCalendarProps) {
         className="my-6 font-sans text-3xl font-bold tracking-tight text-balance"
         style={{ color: isLight ? "#000000" : "#ffffff" }}
       >
-        Próximos shows
+        Upcoming Shows
       </h1>
       <div className="space-y-3">
         {events.map((event) => (
@@ -50,10 +50,9 @@ export function ShowCalendar({ events, isLight = false }: ShowCalendarProps) {
             key={event.id}
             className={`
               rounded-xl p-5 transition-all hover:scale-[1.02] backdrop-blur-xl border shadow-xl
-              ${
-                isLight
-                  ? "bg-black/5 border-black/10 hover:bg-black/10"
-                  : "bg-white/10 border-white/20 hover:bg-white/15"
+              ${isLight
+                ? "bg-black/5 border-black/10 hover:bg-black/10"
+                : "bg-white/10 border-white/20 hover:bg-white/15"
               }
             `}
           >
@@ -89,10 +88,9 @@ export function ShowCalendar({ events, isLight = false }: ShowCalendarProps) {
                 <Button
                   asChild
                   className={`
-                    ${
-                      isLight
-                        ? "bg-purple-600 text-white hover:bg-purple-700"
-                        : "bg-purple-500 text-white hover:bg-purple-600"
+                    ${isLight
+                      ? "bg-purple-600 text-white hover:bg-purple-700"
+                      : "bg-purple-500 text-white hover:bg-purple-600"
                     }
                   `}
                 >
@@ -102,7 +100,7 @@ export function ShowCalendar({ events, isLight = false }: ShowCalendarProps) {
                     rel="noopener noreferrer"
                   >
                     <Ticket className="mr-2 h-4 w-4" />
-                    Comprar ingressos
+                    Buy Tickets
                   </a>
                 </Button>
               )}
