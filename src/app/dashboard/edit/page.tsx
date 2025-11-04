@@ -5,6 +5,7 @@ import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { isLightColor } from "@/lib/utils";
+import UserMenu from "@/app/components/UserMenu";
 // import Aurora from "@/app/components/Aurora";
 import {
   FaPlus,
@@ -824,11 +825,11 @@ export default function EditPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative overflow-x-hidden">
       {/* Header */}
-      <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800 px-6 py-4 sticky top-0 z-40">
+      <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800 px-6 py-3 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-900 bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
                 Groovetree
               </h1>
             </Link>
@@ -845,22 +846,11 @@ export default function EditPage() {
               Ver Página
             </Link>
 
-            <Link
-              href="/settings"
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-            >
-              <IoMdSettings className="w-5 h-5" />
-              Settings
-            </Link>
-
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors hover:cursor-pointer"
-              data-cy="logout-button"
-            >
-              <MdLogout className="w-5 h-5" />
-              Logout
-            </button>
+            {user && (
+              <div className="scale-90">
+                <UserMenu user={user} />
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -916,8 +906,8 @@ export default function EditPage() {
                   onClick={handleUpdatePage}
                   disabled={!hasUnsavedChanges}
                   className={`px-6 py-2 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 whitespace-nowrap ${hasUnsavedChanges
-                      ? "bg-green-600 hover:bg-green-700 text-white cursor-pointer animate-glow hover:animate-none"
-                      : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    ? "bg-green-600 hover:bg-green-700 text-white cursor-pointer animate-glow hover:animate-none"
+                    : "bg-gray-400 text-gray-200 cursor-not-allowed"
                     }`}
                   data-cy="page-save-customization-button"
                 >

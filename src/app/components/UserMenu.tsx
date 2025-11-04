@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/hooks/useAuth";
 import { FaCog, FaSignOutAlt, FaUser, FaChevronDown, FaCalendar } from "react-icons/fa";
 
@@ -25,6 +26,7 @@ export default function UserMenu({ user }: UserMenuProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { logout } = useAuth();
   const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   // Fechar menu ao clicar fora
   useEffect(() => {
@@ -118,20 +120,36 @@ export default function UserMenu({ user }: UserMenuProps) {
 
           <div className="py-1">
             <Link
-              href={user.page?.slug || '/'}
-              className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all group"
+              href={`/${user.page?.slug}` || '/'}
+              className={`flex items-center px-4 py-2.5 text-sm transition-all group ${
+                pathname === `/${user.page?.slug}`
+                  ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400"
+              }`}
               onClick={() => setIsOpen(false)}
             >
-              <FaUser className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
+              <FaUser className={`mr-3 transition-colors ${
+                pathname === `/${user.page?.slug}`
+                  ? "text-purple-600 dark:text-purple-400"
+                  : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+              }`} />
               Your Page
             </Link>
 
             <Link
               href="/dashboard/edit"
-              className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all group"
+              className={`flex items-center px-4 py-2.5 text-sm transition-all group ${
+                pathname === "/dashboard/edit"
+                  ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400"
+              }`}
               onClick={() => setIsOpen(false)}
             >
-              <FaCog className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
+              <FaCog className={`mr-3 transition-colors ${
+                pathname === "/dashboard/edit"
+                  ? "text-purple-600 dark:text-purple-400"
+                  : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+              }`} />
               Page Settings
             </Link>
 
@@ -139,19 +157,35 @@ export default function UserMenu({ user }: UserMenuProps) {
             
             <Link
               href="/dashboard/shows"
-              className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all group"
+              className={`flex items-center px-4 py-2.5 text-sm transition-all group ${
+                pathname === "/dashboard/shows"
+                  ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400"
+              }`}
               onClick={() => setIsOpen(false)}
             >
-              <FaCalendar className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
+              <FaCalendar className={`mr-3 transition-colors ${
+                pathname === "/dashboard/shows"
+                  ? "text-purple-600 dark:text-purple-400"
+                  : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+              }`} />
               My Shows
             </Link>
 
             <Link
               href="/settings"
-              className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 transition-all group"
+              className={`flex items-center px-4 py-2.5 text-sm transition-all group ${
+                pathname === "/settings"
+                  ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400"
+              }`}
               onClick={() => setIsOpen(false)}
             >
-              <FaCog className="mr-3 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
+              <FaCog className={`mr-3 transition-colors ${
+                pathname === "/settings"
+                  ? "text-purple-600 dark:text-purple-400"
+                  : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+              }`} />
               User Settings
             </Link>
 
