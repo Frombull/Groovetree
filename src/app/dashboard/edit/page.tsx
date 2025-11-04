@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { isLightColor } from "@/lib/utils";
+import UserMenu from "@/app/components/UserMenu";
 // import Aurora from "@/app/components/Aurora";
 import {
   FaPlus,
@@ -818,19 +820,16 @@ export default function EditPage() {
 
   if (!pageData) return null;
 
+  const isLight = isLightColor(pageData.backgroundColor);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative overflow-x-hidden">
-      {/* Aurora Background */}
-      {/* <div className="absolute inset-0 opacity-30 dark:opacity-40 pointer-events-none">
-        <Aurora colorStops={["#5227FF", "#7cff67", "#5227FF"]} />
-      </div> */}
-
       {/* Header */}
-      <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800 px-6 py-4 sticky top-0 z-40">
+      <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800 px-6 py-3 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-900 bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
                 Groovetree
               </h1>
             </Link>
@@ -838,535 +837,745 @@ export default function EditPage() {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/settings"
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              href={`/${pageData.slug}`}
+              target="_blank"
+              className="flex items-center gap-2 px-4 py-2 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors"
+              data-cy="page-preview-button"
             >
-              <IoMdSettings className="w-5 h-5" />
-              Settings
+              <BsEyeFill className="w-5 h-5" />
+              Ver Página
             </Link>
 
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors hover:cursor-pointer"
-              data-cy="logout-button"
-            >
-              <MdLogout className="w-5 h-5" />
-              Logout
-            </button>
+            {user && (
+              <div className="scale-90">
+                <UserMenu user={user} />
+              </div>
+            )}
           </div>
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto p-6 space-y-6 relative z-10 ">
-        {/* Preview Page Button - Destaque Principal */}
-        <div className="flex justify-center mb-6">
-          <Link
-            href={`/${pageData.slug}`}
-            target="_blank"
-            className="group relative inline-flex items-center gap-2 px-8 py-4 bg-transparent text-gray-900 dark:text-white font-semibold text-base rounded-full cursor-pointer transition-all duration-300 hover:scale-105"
-            data-cy="page-preview-button"
-          >
-            {/* Borda com gradiente Aurora */}
-            <span className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 via-green-500 to-purple-600 p-[2px]">
-              <span className="flex h-full w-full items-center justify-center rounded-full bg-white dark:bg-slate-950"></span>
-            </span>
+      {/* Two Column Layout */}
+      <div className="max-w-[1600px] mx-auto p-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Column - Edit Fields */}
+          <div className="space-y-6 overflow-y-auto max-h-[calc(100vh-120px)] pr-2 custom-scrollbar">
 
-            {/* Conteúdo do botão */}
-            <BsEyeFill className="w-5 h-5 relative z-10" />
-            <span className="relative z-10">See Your Page</span>
-            <svg
-              className="w-4 h-4 relative z-10 transform group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </Link>
-        </div>
+            {/* Profile Section */}
+            <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                  Profile
+                </h2>
+              </div>
 
-        {/* Profile Section */}
-        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-              Profile
-            </h2>
-          </div>
+              {/* Avatar and Save Button */}
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-3xl text-gray-500 dark:text-gray-300 overflow-hidden">
+                    {pageData.avatarUrl ? (
+                      <Image
+                        src={pageData.avatarUrl}
+                        alt="Avatar"
+                        width={80}
+                        height={80}
+                        className="rounded-full object-cover w-full h-full"
+                      />
+                    ) : (
+                      <span>{pageData.title[0]}</span>
+                    )}
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                  />
+                  <button
+                    onClick={handleAvatarClick}
+                    disabled={uploadingAvatar}
+                    className="px-4 py-2 text-purple-600 dark:text-purple-400 border border-purple-600 dark:border-purple-400 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors disabled:opacity-50 hover:cursor-pointer"
+                  >
+                    {uploadingAvatar ? "Uploading..." : "Choose Image"}
+                  </button>
+                </div>
 
-          {/* Avatar */}
-          <div className="flex items-center gap-4">
-            <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-3xl text-gray-500 dark:text-gray-300 overflow-hidden">
-              {pageData.avatarUrl ? (
-                <Image
-                  src={pageData.avatarUrl}
-                  alt="Avatar"
-                  width={80}
-                  height={80}
-                  className="rounded-full object-cover w-full h-full"
-                />
-              ) : (
-                <span>{pageData.title[0]}</span>
-              )}
-            </div>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-              className="hidden"
-            />
-            <button
-              onClick={handleAvatarClick}
-              disabled={uploadingAvatar}
-              className="px-4 py-2 text-purple-600 dark:text-purple-400 border border-purple-600 dark:border-purple-400 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors disabled:opacity-50 hover:cursor-pointer"
-            >
-              {uploadingAvatar ? "Uploading..." : "Choose Image"}
-            </button>
-          </div>
+                {/* Save Button */}
+                <button
+                  onClick={handleUpdatePage}
+                  disabled={!hasUnsavedChanges}
+                  className={`px-6 py-2 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 whitespace-nowrap ${hasUnsavedChanges
+                    ? "bg-green-600 hover:bg-green-700 text-white cursor-pointer animate-glow hover:animate-none"
+                    : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                    }`}
+                  data-cy="page-save-customization-button"
+                >
+                  <MdSave className="w-5 h-5" />
+                  {hasUnsavedChanges ? "Save Changes" : "Save Changes"}
+                </button>
+              </div>
 
-          {/* Profile Title */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Profile Title
-            </label>
-            <input
-              type="text"
-              value={pageData.title}
-              onChange={(e) => {
-                const newPageData = { ...pageData, title: e.target.value };
-                setPageData(newPageData);
-                checkForUnsavedChanges(newPageData);
-              }}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              placeholder="Your artist name"
-              data-cy="page-artist-name"
-            />
-          </div>
-
-          {/* Bio */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Bio
-            </label>
-            <textarea
-              value={pageData.bio || ""}
-              onChange={(e) => {
-                const newPageData = { ...pageData, bio: e.target.value };
-                setPageData(newPageData);
-                checkForUnsavedChanges(newPageData);
-              }}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-              rows={3}
-              placeholder="Tell your audience about yourself"
-              data-cy="page-bio-description"
-            />
-          </div>
-
-          {/* Groovetree URL */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Groovetree URL
-            </label>
-            <div className="flex items-center gap-2">
-              <span className="text-gray-500 dark:text-gray-400 text-sm">
-                groovetr.ee/
-              </span>
-              <input
-                type="text"
-                value={pageData.slug}
-                onChange={(e) => {
-                  const newPageData = { ...pageData, slug: e.target.value };
-                  setPageData(newPageData);
-                  checkForUnsavedChanges(newPageData);
-                }}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="your-username"
-                data-cy="page-slug"
-              />
-              <button
-                onClick={() => setShowShareModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium cursor-pointer whitespace-nowrap"
-                title="Share your page"
-              >
-                <RiShareFill className="w-5 h-5" />
-                Share
-              </button>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Only letters, numbers and hyphens.
-            </p>
-          </div>
-        </div>
-
-        {/* Customization Section */}
-        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <IoMdSettings className="w-6 h-6 text-purple-600" />
-            Page Customization
-          </h2>
-
-          <div className="space-y-4">
-            {/* Background Color */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Background Color
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={pageData?.backgroundColor || "#000000"}
-                  onChange={(e) => {
-                    const newPageData = {
-                      ...pageData!,
-                      backgroundColor: e.target.value,
-                    };
-                    setPageData(newPageData);
-                    checkForUnsavedChanges(newPageData);
-                  }}
-                  className="h-10 w-20 rounded-lg border border-gray-300 cursor-pointer"
-                />
+              {/* Profile Title */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Profile Title
+                </label>
                 <input
                   type="text"
-                  value={pageData?.backgroundColor || "#000000"}
+                  value={pageData.title}
                   onChange={(e) => {
-                    const newPageData = {
-                      ...pageData!,
-                      backgroundColor: e.target.value,
-                    };
+                    const newPageData = { ...pageData, title: e.target.value };
                     setPageData(newPageData);
                     checkForUnsavedChanges(newPageData);
                   }}
-                  placeholder="#000000"
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  data-cy="page-background-color"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Your artist name"
+                  data-cy="page-artist-name"
                 />
               </div>
-            </div>
 
-            {/* Text Color */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Text Color
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={pageData?.textColor || "#ffffff"}
+              {/* Bio */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Bio
+                </label>
+                <textarea
+                  value={pageData.bio || ""}
                   onChange={(e) => {
-                    const newPageData = {
-                      ...pageData!,
-                      textColor: e.target.value,
-                    };
+                    const newPageData = { ...pageData, bio: e.target.value };
                     setPageData(newPageData);
                     checkForUnsavedChanges(newPageData);
                   }}
-                  className="h-10 w-20 rounded-lg border border-gray-300 cursor-pointer"
-                />
-                <input
-                  type="text"
-                  value={pageData?.textColor || "#ffffff"}
-                  onChange={(e) => {
-                    const newPageData = {
-                      ...pageData!,
-                      textColor: e.target.value,
-                    };
-                    setPageData(newPageData);
-                    checkForUnsavedChanges(newPageData);
-                  }}
-                  placeholder="#ffffff"
-                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  data-cy="page-text-color"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                  rows={3}
+                  placeholder="Tell your audience about yourself"
+                  data-cy="page-bio-description"
                 />
               </div>
-            </div>
 
-            {/* Background Image URL */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Background Image URL
-              </label>
-              <input
-                type="url"
-                value={pageData?.backgroundImageUrl || ""}
-                onChange={(e) => {
-                  const newPageData = {
-                    ...pageData!,
-                    backgroundImageUrl: e.target.value,
-                  };
-                  setPageData(newPageData);
-                  checkForUnsavedChanges(newPageData);
-                }}
-                placeholder="https://example.com/background.jpg"
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                data-cy="page-background-image-url"
-              />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Leave empty to use only background color
-              </p>
-            </div>
-
-            {/* Preview */}
-            <div className="mt-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Preview:
-              </p>
-              <div
-                className="h-24 rounded-lg flex items-center justify-center"
-                style={{
-                  backgroundColor: pageData?.backgroundColor || "#000000",
-                  backgroundImage: pageData?.backgroundImageUrl
-                    ? `url(${pageData.backgroundImageUrl})`
-                    : undefined,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  color: pageData?.textColor || "#ffffff",
-                }}
-              >
-                <p className="font-semibold text-lg drop-shadow-lg">
-                  Sample text
+              {/* Groovetree URL */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Groovetree URL
+                </label>
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-500 dark:text-gray-400 text-sm">
+                    groovetr.ee/
+                  </span>
+                  <input
+                    type="text"
+                    value={pageData.slug}
+                    onChange={(e) => {
+                      const newPageData = { ...pageData, slug: e.target.value };
+                      setPageData(newPageData);
+                      checkForUnsavedChanges(newPageData);
+                    }}
+                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    placeholder="your-username"
+                    data-cy="page-slug"
+                  />
+                  <button
+                    onClick={() => setShowShareModal(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium cursor-pointer whitespace-nowrap"
+                    title="Share your page"
+                  >
+                    <RiShareFill className="w-5 h-5" />
+                    Share
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Only letters, numbers and hyphens.
                 </p>
               </div>
             </div>
 
-            {/* Save Button */}
-            <button
-              onClick={handleUpdatePage}
-              disabled={!hasUnsavedChanges}
-              className={`w-full py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 ${hasUnsavedChanges
-                ? "bg-red-600 hover:bg-red-700 text-white cursor-pointer"
-                : "bg-gray-400 text-gray-200 cursor-not-allowed"
-                }`}
-              data-cy="page-save-customization-button"
-            >
-              <MdSave className="w-5 h-5" />
-              {hasUnsavedChanges ? "Save Changes" : "Save Customization"}
-            </button>
-          </div>
-        </div>
+            {/* Customization Section */}
+            <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                <IoMdSettings className="w-6 h-6 text-purple-600" />
+                Page Customization
+              </h2>
 
-        {/* Shows Section */}
-        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <MdEvent className="w-6 h-6 text-purple-600" />
-            Shows & Events
-          </h2>
-
-          {/* Add Event Button */}
-          <button
-            onClick={() => {
-              setEditingEvent(null);
-              setEventForm({
-                title: "",
-                venue: "",
-                city: "",
-                state: "",
-                date: "",
-                ticketUrl: "",
-              });
-              setShowEventModal(true);
-            }}
-            className="w-full py-4 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer"
-          >
-            <FaPlus className="w-5 h-5" />
-            Add New Show
-          </button>
-
-          {/* Events List */}
-          <div className="space-y-3">
-            {events && events.length > 0 ? (
-              events.map((event) => (
-                <div
-                  key={event.id}
-                  className="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md transition-all group"
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 dark:text-gray-100">
-                      {event.title}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      📍 {event.venue} - {event.city}
-                      {event.state ? `, ${event.state}` : ""}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                      📅 {new Date(event.date).toLocaleDateString("pt-BR")}
-                    </p>
-                    {event.ticketUrl && (
-                      <a
-                        href={event.ticketUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 mt-1 inline-flex items-center gap-1"
-                      >
-                        <FaExternalLinkAlt className="w-3 h-3" />
-                        Ver ingressos
-                      </a>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleEditEvent(event)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      title="Edit event"
-                    >
-                      <MdEdit className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteEvent(event.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Delete event"
-                    >
-                      <FaTrash className="w-5 h-5" />
-                    </button>
+              <div className="space-y-4">
+                {/* Background Color */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Background Color
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={pageData?.backgroundColor || "#000000"}
+                      onChange={(e) => {
+                        const newPageData = {
+                          ...pageData!,
+                          backgroundColor: e.target.value,
+                        };
+                        setPageData(newPageData);
+                        checkForUnsavedChanges(newPageData);
+                      }}
+                      className="h-10 w-20 rounded-lg border border-gray-300 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={pageData?.backgroundColor || "#000000"}
+                      onChange={(e) => {
+                        const newPageData = {
+                          ...pageData!,
+                          backgroundColor: e.target.value,
+                        };
+                        setPageData(newPageData);
+                        checkForUnsavedChanges(newPageData);
+                      }}
+                      placeholder="#000000"
+                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      data-cy="page-background-color"
+                    />
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="py-16">
-              </div>
-            )}
-          </div>
-        </div>
 
-        {/* Photo Gallery Section */}
-        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <MdPhotoLibrary className="w-6 h-6 text-purple-600" />
-            Photo Gallery
-          </h2>
+                {/* Text Color */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Text Color
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={pageData?.textColor || "#ffffff"}
+                      onChange={(e) => {
+                        const newPageData = {
+                          ...pageData!,
+                          textColor: e.target.value,
+                        };
+                        setPageData(newPageData);
+                        checkForUnsavedChanges(newPageData);
+                      }}
+                      className="h-10 w-20 rounded-lg border border-gray-300 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={pageData?.textColor || "#ffffff"}
+                      onChange={(e) => {
+                        const newPageData = {
+                          ...pageData!,
+                          textColor: e.target.value,
+                        };
+                        setPageData(newPageData);
+                        checkForUnsavedChanges(newPageData);
+                      }}
+                      placeholder="#ffffff"
+                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      data-cy="page-text-color"
+                    />
+                  </div>
+                </div>
 
-          {/* Add Photo Button */}
-          <button
-            onClick={() => {
-              setEditingPhoto(null);
-              setPhotoForm({ imageUrl: "", caption: "" });
-              setPhotoPreview(null);
-              setShowPhotoModal(true);
-            }}
-            disabled={photos.length >= 4}
-            className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${photos.length >= 4
-              ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-              : "bg-purple-600 text-white hover:bg-purple-700"
-              }`}
-          >
-            <FaPlus className="w-5 h-5" />
-            Add Photo {photos.length >= 4 && "(Máximo atingido)"}
-          </button>
-
-          {/* Photos Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {photos && photos.length > 0 ? (
-              photos.map((photo) => (
-                <div
-                  key={photo.id}
-                  className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md transition-all"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={photo.imageUrl}
-                    alt={photo.caption || "Photo"}
-                    className="w-full h-full object-cover"
+                {/* Background Image URL */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Background Image URL
+                  </label>
+                  <input
+                    type="url"
+                    value={pageData?.backgroundImageUrl || ""}
+                    onChange={(e) => {
+                      const newPageData = {
+                        ...pageData!,
+                        backgroundImageUrl: e.target.value,
+                      };
+                      setPageData(newPageData);
+                      checkForUnsavedChanges(newPageData);
+                    }}
+                    placeholder="https://example.com/background.jpg"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    data-cy="page-background-image-url"
                   />
-                  {photo.caption && (
-                    <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs p-2 truncate">
-                      {photo.caption}
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Leave empty to use only background color
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Shows Section */}
+            <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                <MdEvent className="w-6 h-6 text-purple-600" />
+                Shows & Events
+              </h2>
+
+              {/* Add Event Button */}
+              <button
+                onClick={() => {
+                  setEditingEvent(null);
+                  setEventForm({
+                    title: "",
+                    venue: "",
+                    city: "",
+                    state: "",
+                    date: "",
+                    ticketUrl: "",
+                  });
+                  setShowEventModal(true);
+                }}
+                className="w-full py-4 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer"
+              >
+                <FaPlus className="w-5 h-5" />
+                Add New Show
+              </button>
+
+              {/* Events List */}
+              <div className="space-y-3">
+                {events && events.length > 0 ? (
+                  events.map((event) => (
+                    <div
+                      key={event.id}
+                      className="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md transition-all group"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                          {event.title}
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          📍 {event.venue} - {event.city}
+                          {event.state ? `, ${event.state}` : ""}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          📅 {new Date(event.date).toLocaleDateString("pt-BR")}
+                        </p>
+                        {event.ticketUrl && (
+                          <a
+                            href={event.ticketUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 mt-1 inline-flex items-center gap-1"
+                          >
+                            <FaExternalLinkAlt className="w-3 h-3" />
+                            Ver ingressos
+                          </a>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleEditEvent(event)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Edit event"
+                        >
+                          <MdEdit className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteEvent(event.id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Delete event"
+                        >
+                          <FaTrash className="w-5 h-5" />
+                        </button>
+                      </div>
                     </div>
-                  )}
-                  <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => handleEditPhoto(photo)}
-                      className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
-                      title="Edit photo"
-                    >
-                      <MdEdit className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDeletePhoto(photo.id)}
-                      className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-lg"
-                      title="Delete photo"
-                    >
-                      <FaTrash className="w-4 h-4" />
-                    </button>
+                  ))
+                ) : (
+                  <div className="py-16">
                   </div>
-                </div>
-              ))
-            ) : (
-              <div className="py-16">
+                )}
               </div>
-            )}
+            </div>
+
+            {/* Photo Gallery Section */}
+            <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                <MdPhotoLibrary className="w-6 h-6 text-purple-600" />
+                Photo Gallery
+              </h2>
+
+              {/* Add Photo Button */}
+              <button
+                onClick={() => {
+                  setEditingPhoto(null);
+                  setPhotoForm({ imageUrl: "", caption: "" });
+                  setPhotoPreview(null);
+                  setShowPhotoModal(true);
+                }}
+                disabled={photos.length >= 4}
+                className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${photos.length >= 4
+                  ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                  : "bg-purple-600 text-white hover:bg-purple-700"
+                  }`}
+              >
+                <FaPlus className="w-5 h-5" />
+                Add Photo {photos.length >= 4 && "(Máximo atingido)"}
+              </button>
+
+              {/* Photos Grid */}
+              <div className="grid grid-cols-2 gap-3">
+                {photos && photos.length > 0 ? (
+                  photos.map((photo) => (
+                    <div
+                      key={photo.id}
+                      className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md transition-all"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={photo.imageUrl}
+                        alt={photo.caption || "Photo"}
+                        className="w-full h-full object-cover"
+                      />
+                      {photo.caption && (
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white text-xs p-2 truncate">
+                          {photo.caption}
+                        </div>
+                      )}
+                      <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => handleEditPhoto(photo)}
+                          className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg"
+                          title="Edit photo"
+                        >
+                          <MdEdit className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeletePhoto(photo.id)}
+                          className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-lg"
+                          title="Delete photo"
+                        >
+                          <FaTrash className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="py-16">
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Links Section */}
+            <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+                Links
+              </h2>
+
+              {/* Add Button */}
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="w-full py-4 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer"
+              >
+                <FaPlus className="w-5 h-5" />
+                Add New Link
+              </button>
+
+              {/* Links List */}
+              <div className="space-y-3">
+                {pageData.links && pageData.links.length > 0 ? (
+                  pageData.links.map((link) => (
+                    <div
+                      key={link.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, link.id)}
+                      onDragEnd={handleDragEnd}
+                      onDragOver={(e) => handleDragOver(e, link.id)}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, link.id)}
+                      className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${dragOverItem === link.id
+                        ? "border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg scale-105"
+                        : draggedItem === link.id
+                          ? "border-gray-300 dark:border-gray-600 opacity-50"
+                          : "border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md"
+                        }`}
+                    >
+                      <FaGripVertical className="text-gray-400 dark:text-gray-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 cursor-grab active:cursor-grabbing transition-colors flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+                          {link.title}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate flex items-center gap-1">
+                          <FaExternalLinkAlt className="w-3 h-3" />
+                          {link.url}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <button
+                          onClick={() => handleEditLink(link)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Edit link"
+                        >
+                          <MdEdit className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteLink(link.id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Delete link"
+                        >
+                          <FaTrash className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="py-16">
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Links Section */}
-        <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
-            Links
-          </h2>
+          {/* Right Column - Live Preview */}
+          <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-120px)]">
+            <div className="h-full flex flex-col">
+              {/* Preview Container*/}
+              <div
+                className="flex-1 border-2 border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden shadow-lg relative"
+                style={{
+                  backgroundColor: pageData?.backgroundColor || "#000000",
+                }}
+              >
+                {/* Background image with overlay */}
+                {pageData?.backgroundImageUrl && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+                      style={{ backgroundImage: `url(${pageData.backgroundImageUrl})` }}
+                    />
+                    <div
+                      className="fixed inset-0 z-0 backdrop-blur-md"
+                      style={{
+                        backgroundColor: isLight
+                          ? "rgba(255, 255, 255, 0.7)"
+                          : "rgba(0, 0, 0, 0.7)",
+                      }}
+                    />
+                  </>
+                )}
 
-          {/* Add Button */}
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="w-full py-4 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer"
-          >
-            <FaPlus className="w-5 h-5" />
-            Add New Link
-          </button>
+                {/* Content */}
+                <div className="relative z-[9999] h-full overflow-y-auto custom-scrollbar">
+                  <div
+                    className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8"
+                    style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                  >
+                    {/* Artist Profile */}
+                    <div className="mb-12 text-center">
+                      <div className="mx-auto h-32 w-32 rounded-full overflow-hidden border-4 border-primary">
+                        {pageData.avatarUrl ? (
+                          <Image
+                            src={pageData.avatarUrl}
+                            alt="Avatar"
+                            width={128}
+                            height={128}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-secondary text-foreground text-4xl flex items-center justify-center">
+                            {pageData.title.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex justify-center items-center gap-2 mt-6">
+                        <h1
+                          className="font-sans text-4xl font-bold tracking-tight sm:text-5xl text-balance"
+                          style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                        >
+                          {pageData.title}
+                        </h1>
+                        <Image
+                          src="/verified-icon.png"
+                          alt="Badge Check"
+                          className="pt-2"
+                          width={32}
+                          height={32}
+                        />
+                      </div>
+                      {pageData.bio && (
+                        <p
+                          className="mx-auto mt-6 max-w-md text-sm text-pretty"
+                          style={{
+                            color: pageData?.textColor || (isLight ? "#000000" : "#ffffff"),
+                            opacity: 0.7
+                          }}
+                        >
+                          {pageData.bio}
+                        </p>
+                      )}
+                    </div>
 
-          {/* Links List */}
-          <div className="space-y-3">
-            {pageData.links && pageData.links.length > 0 ? (
-              pageData.links.map((link) => (
-                <div
-                  key={link.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, link.id)}
-                  onDragEnd={handleDragEnd}
-                  onDragOver={(e) => handleDragOver(e, link.id)}
-                  onDragLeave={handleDragLeave}
-                  onDrop={(e) => handleDrop(e, link.id)}
-                  className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${dragOverItem === link.id
-                    ? "border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg scale-105"
-                    : draggedItem === link.id
-                      ? "border-gray-300 dark:border-gray-600 opacity-50"
-                      : "border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md"
-                    }`}
-                >
-                  <FaGripVertical className="text-gray-400 dark:text-gray-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 cursor-grab active:cursor-grabbing transition-colors flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
-                      {link.title}
+                    {/* Social Links */}
+                    {pageData.links && pageData.links.filter(l =>
+                      ["INSTAGRAM", "TIKTOK", "YOUTUBE", "FACEBOOK", "TWITTER"].includes(l.type)
+                    ).length > 0 && (
+                        <section className="mb-12">
+                          <div className="flex flex-wrap justify-center gap-3">
+                            {pageData.links
+                              .filter(l => ["INSTAGRAM", "TIKTOK", "YOUTUBE", "FACEBOOK", "TWITTER"].includes(l.type))
+                              .map((link) => (
+                                <div
+                                  key={link.id}
+                                  className={`
+                                  p-4 rounded-xl backdrop-blur-xl border shadow-xl
+                                  ${isLight
+                                      ? "bg-black/5 border-black/10"
+                                      : "bg-white/10 border-white/20"
+                                    }
+                                `}
+                                >
+                                  {link.type === "INSTAGRAM" && <FaInstagram className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
+                                  {link.type === "TIKTOK" && <FaTiktok className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
+                                  {link.type === "YOUTUBE" && <FaYoutube className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
+                                  {link.type === "FACEBOOK" && <FaFacebook className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
+                                  {link.type === "TWITTER" && <BsTwitterX className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
+                                </div>
+                              ))}
+                          </div>
+                        </section>
+                      )}
+
+                    {/* Music Platforms */}
+                    {pageData.links && pageData.links.filter(l =>
+                      ["SPOTIFY", "APPLE_MUSIC", "SOUNDCLOUD", "YOUTUBE", "DEEZER", "BEATPORT"].includes(l.type)
+                    ).length > 0 && (
+                        <div className="text-center mb-12">
+                          <h1
+                            className="my-6 font-sans text-3xl font-bold tracking-tight text-balance"
+                            style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                          >
+                            Listen Now
+                          </h1>
+                          <div className="flex flex-col gap-4 max-w-xl mx-auto">
+                            {pageData.links
+                              .filter(l => ["SPOTIFY", "APPLE_MUSIC", "SOUNDCLOUD", "YOUTUBE", "DEEZER", "BEATPORT"].includes(l.type))
+                              .map((link) => (
+                                <div
+                                  key={link.id}
+                                  className={`
+                                  backdrop-blur-xl rounded-xl p-6 border shadow-xl
+                                  flex flex-col items-center justify-center gap-3
+                                  ${isLight
+                                      ? "bg-black/5 border-black/10"
+                                      : "bg-white/10 border-white/20"
+                                    }
+                                `}
+                                >
+                                  {link.type === "SPOTIFY" && <FaSpotify className="w-12 h-12 text-[#1DB954]" />}
+                                  {link.type === "APPLE_MUSIC" && <FaApple className="w-12 h-12 text-[#FA243C]" />}
+                                  {link.type === "SOUNDCLOUD" && <FaSoundcloud className="w-12 h-12 text-[#FF5500]" />}
+                                  {link.type === "YOUTUBE" && <FaYoutube className="w-12 h-12 text-[#FF0000]" />}
+                                  <span
+                                    className="font-medium text-sm"
+                                    style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                                  >
+                                    {link.title}
+                                  </span>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+
+                    {/* Shows & Events */}
+                    {events && events.length > 0 && (
+                      <section className="my-12 text-center">
+                        <h1
+                          className="my-6 font-sans text-3xl font-bold tracking-tight text-balance"
+                          style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                        >
+                          Upcoming Shows
+                        </h1>
+                        <div className="space-y-3">
+                          {events.map((event) => (
+                            <div
+                              key={event.id}
+                              className={`
+                                rounded-xl p-5 backdrop-blur-xl border shadow-xl
+                                ${isLight
+                                  ? "bg-black/5 border-black/10"
+                                  : "bg-white/10 border-white/20"
+                                }
+                              `}
+                            >
+                              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                <div className="space-y-2 text-left">
+                                  <div
+                                    className="flex items-center gap-2 font-semibold"
+                                    style={{ color: isLight ? "#7c3aed" : "#a78bfa" }}
+                                  >
+                                    <MdEvent className="h-4 w-4" />
+                                    <span className="font-mono text-sm">
+                                      {new Date(event.date).toLocaleDateString("en-US", {
+                                        weekday: "short",
+                                        month: "short",
+                                        day: "numeric",
+                                      }).toUpperCase()}
+                                    </span>
+                                  </div>
+                                  <h3
+                                    className="font-sans text-lg font-bold"
+                                    style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                                  >
+                                    {event.title}
+                                  </h3>
+                                  <div
+                                    className="flex items-center gap-2"
+                                    style={{ color: isLight ? "#4b5563" : "#9ca3af" }}
+                                  >
+                                    <span className="text-sm">
+                                      📍 {event.venue} - {event.city}
+                                      {event.state ? `, ${event.state}` : ""}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+
+                    {/* Photo Gallery */}
+                    {photos && photos.length > 0 && (
+                      <section className="mb-12">
+                        <h1
+                          className="text-center mb-8 font-sans text-2xl sm:text-3xl font-bold tracking-tight"
+                          style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                        >
+                          Nos palcos
+                        </h1>
+                        <div className="flex flex-col items-center gap-6 sm:gap-8 max-w-3xl mx-auto">
+                          {photos.slice(0, 4).map((photo) => (
+                            <div key={photo.id} className="w-full">
+                              <div className="relative overflow-hidden rounded-lg sm:rounded-xl shadow-xl">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={photo.imageUrl}
+                                  alt={photo.caption || "Photo"}
+                                  className="w-full h-auto object-cover"
+                                  style={{ maxHeight: "600px" }}
+                                />
+                              </div>
+                              {photo.caption && (
+                                <p
+                                  className="mt-3 sm:mt-4 text-center text-sm sm:text-base font-medium tracking-wide px-2"
+                                  style={{
+                                    color: pageData?.textColor || (isLight ? "#000000" : "#ffffff"),
+                                    opacity: 0.9,
+                                  }}
+                                >
+                                  {photo.caption}
+                                </p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+
+                    <p className="mt-8 text-center text-sm text-muted-foreground">
+                      © 2025 Groovetree
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate flex items-center gap-1">
-                      <FaExternalLinkAlt className="w-3 h-3" />
-                      {link.url}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <button
-                      onClick={() => handleEditLink(link)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      title="Edit link"
-                    >
-                      <MdEdit className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteLink(link.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Delete link"
-                    >
-                      <FaTrash className="w-5 h-5" />
-                    </button>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="py-16">
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
