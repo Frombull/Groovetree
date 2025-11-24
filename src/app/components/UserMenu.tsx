@@ -5,7 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/hooks/useAuth";
-import { FaCog, FaSignOutAlt, FaUser, FaChevronDown, FaCalendar } from "react-icons/fa";
+import {
+  FaCog,
+  FaSignOutAlt,
+  FaUser,
+  FaChevronDown,
+  FaCalendar,
+  FaHeart,
+} from "react-icons/fa";
 
 interface User {
   id: string;
@@ -120,7 +127,7 @@ export default function UserMenu({ user }: UserMenuProps) {
 
           <div className="py-1">
             <Link
-              href={`/${user.page?.slug}` || '/'}
+              href={`/${user.page?.slug}` || "/"}
               className={`flex items-center px-4 py-2.5 text-sm transition-all group ${
                 pathname === `/${user.page?.slug}`
                   ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold"
@@ -128,11 +135,13 @@ export default function UserMenu({ user }: UserMenuProps) {
               }`}
               onClick={() => setIsOpen(false)}
             >
-              <FaUser className={`mr-3 transition-colors ${
-                pathname === `/${user.page?.slug}`
-                  ? "text-purple-600 dark:text-purple-400"
-                  : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
-              }`} />
+              <FaUser
+                className={`mr-3 transition-colors ${
+                  pathname === `/${user.page?.slug}`
+                    ? "text-purple-600 dark:text-purple-400"
+                    : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                }`}
+              />
               Your Page
             </Link>
 
@@ -145,31 +154,54 @@ export default function UserMenu({ user }: UserMenuProps) {
               }`}
               onClick={() => setIsOpen(false)}
             >
-              <FaCog className={`mr-3 transition-colors ${
-                pathname === "/dashboard/edit"
-                  ? "text-purple-600 dark:text-purple-400"
-                  : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
-              }`} />
+              <FaCog
+                className={`mr-3 transition-colors ${
+                  pathname === "/dashboard/edit"
+                    ? "text-purple-600 dark:text-purple-400"
+                    : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                }`}
+              />
               Page Settings
             </Link>
 
             <div className="border-t border-gray-100 dark:border-gray-800 my-2 mx-2"></div>
-            
+
             <Link
-              href="/dashboard/shows"
+              href="/dashboard/calendar"
               className={`flex items-center px-4 py-2.5 text-sm transition-all group ${
-                pathname === "/dashboard/shows"
+                pathname === "/dashboard/calendar"
                   ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold"
                   : "text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400"
               }`}
               onClick={() => setIsOpen(false)}
             >
-              <FaCalendar className={`mr-3 transition-colors ${
-                pathname === "/dashboard/shows"
-                  ? "text-purple-600 dark:text-purple-400"
-                  : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
-              }`} />
-              My Shows
+              <FaCalendar
+                className={`mr-3 transition-colors ${
+                  pathname === "/dashboard/calendar"
+                    ? "text-purple-600 dark:text-purple-400"
+                    : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                }`}
+              />
+              Artist Shows
+            </Link>
+
+            <Link
+              href="/dashboard/favorites"
+              className={`flex items-center px-4 py-2.5 text-sm transition-all group ${
+                pathname === "/dashboard/favorites"
+                  ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400"
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              <FaHeart
+                className={`mr-3 transition-colors ${
+                  pathname === "/dashboard/favorites"
+                    ? "text-purple-600 dark:text-purple-400"
+                    : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                }`}
+              />
+              Favorite Artists
             </Link>
 
             <Link
@@ -181,11 +213,13 @@ export default function UserMenu({ user }: UserMenuProps) {
               }`}
               onClick={() => setIsOpen(false)}
             >
-              <FaCog className={`mr-3 transition-colors ${
-                pathname === "/settings"
-                  ? "text-purple-600 dark:text-purple-400"
-                  : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
-              }`} />
+              <FaCog
+                className={`mr-3 transition-colors ${
+                  pathname === "/settings"
+                    ? "text-purple-600 dark:text-purple-400"
+                    : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                }`}
+              />
               User Settings
             </Link>
 

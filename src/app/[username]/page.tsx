@@ -8,6 +8,8 @@ import { PhotoGallery } from "./_components/photo-gallery";
 import { ShowCalendar } from "./_components/show-calendar";
 import Link from "next/link";
 import { SocialLinks } from "./_components/social-links";
+import { FavoriteButton } from "./_components/favorite-button";
+import { ShareButton } from "./_components/share-button";
 
 interface UserPageProps {
   params: Promise<{
@@ -85,6 +87,7 @@ export default async function UserPage({ params }: UserPageProps) {
   console.log(`[USER PAGE] Successfully loaded page for: ${username}`);
 
   const {
+    id: pageId,
     avatarUrl,
     backgroundImageUrl,
     backgroundColor,
@@ -171,6 +174,20 @@ export default async function UserPage({ params }: UserPageProps) {
           <path d="m15 18-6-6 6-6" />
         </svg>
       </Link>
+
+      {/* Favorite button */}
+      <FavoriteButton pageId={pageId} isLight={isLight} />
+
+      {/* Share button */}
+      <ShareButton
+        pageId={pageId}
+        artistName={name || ""}
+        artistTitle={title}
+        artistSlug={username}
+        avatarUrl={avatarUrl}
+        isLight={isLight}
+        textColor={textColor}
+      />
 
       {/* Content */}
       <div

@@ -18,6 +18,7 @@ model User {
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
   page                   Page? // User can have only one page
+  favorites              FavoriteArtist[] // Artistas favoritos do usuário
 }
 
 model Page {
@@ -36,6 +37,7 @@ model Page {
   events Event[]
   embeds Embed[]
   photos Photo[]
+  favoritedBy FavoriteArtist[] // Usuários que favoritaram este artista
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -112,4 +114,17 @@ model Photo {
   page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model FavoriteArtist {
+  id        String   @id @default(cuid())
+  userId    String
+  pageId    String   // ID da página do artista favorito
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, pageId]) // Um usuário não pode favoritar o mesmo artista duas vezes
 }

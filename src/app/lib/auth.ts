@@ -141,3 +141,9 @@ export async function verifyAuth(req: Request): Promise<AuthUser | null> {
     return null;
   }
 }
+
+// Helper para extrair apenas o userId
+export async function verifyAuthUserId(req: Request): Promise<string | null> {
+  const user = await verifyAuth(req);
+  return user ? user.id : null;
+}
