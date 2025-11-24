@@ -76,7 +76,7 @@ export default function AnalyticsPage() {
       setAnalyticsData(data);
     } catch (error) {
       console.error("Error fetching analytics:", error);
-      toast.error("Erro ao carregar analytics");
+      toast.error("Error loading analytics");
     } finally {
       setIsLoading(false);
     }
