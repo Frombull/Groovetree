@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Create verification URL
-    const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email?token=${token}`;
+    const verificationUrl = `groovetr.ee/verify-email?token=${token}`;
 
     // Send verification email
     const { data, error } = await resend.emails.send({
