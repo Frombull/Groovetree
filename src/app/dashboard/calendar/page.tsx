@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import UserMenu from "@/app/components/UserMenu";
-import { FaHeart, FaExternalLinkAlt, FaChartLine, FaCog, FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaHeart,
+  FaExternalLinkAlt,
+  FaChartLine,
+  FaCog,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
 import { MdCalendarMonth, MdEdit } from "react-icons/md";
 import { BsEyeFill } from "react-icons/bs";
 import {
@@ -165,7 +172,11 @@ export default function CalendarPage() {
               className="md:hidden p-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all text-gray-700 dark:text-gray-300"
               aria-label="Menu"
             >
-              {mobileMenuOpen ? <FaTimes className="w-5 h-5" /> : <FaBars className="w-5 h-5" />}
+              {mobileMenuOpen ? (
+                <FaTimes className="w-5 h-5" />
+              ) : (
+                <FaBars className="w-5 h-5" />
+              )}
             </button>
 
             {/* Desktop Navigation Buttons */}

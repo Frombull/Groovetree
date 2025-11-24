@@ -5,7 +5,15 @@ import { useAuth } from "@/app/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import UserMenu from "@/app/components/UserMenu";
-import { FaEye, FaHeart, FaCalendarAlt, FaChartLine, FaCog, FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaEye,
+  FaHeart,
+  FaCalendarAlt,
+  FaChartLine,
+  FaCog,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { RiShareFill } from "react-icons/ri";
 import {
@@ -167,7 +175,11 @@ export default function AnalyticsPage() {
               className="md:hidden p-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all text-gray-700 dark:text-gray-300"
               aria-label="Menu"
             >
-              {mobileMenuOpen ? <FaTimes className="w-5 h-5" /> : <FaBars className="w-5 h-5" />}
+              {mobileMenuOpen ? (
+                <FaTimes className="w-5 h-5" />
+              ) : (
+                <FaBars className="w-5 h-5" />
+              )}
             </button>
 
             {/* Desktop Navigation Buttons */}
@@ -351,17 +363,29 @@ export default function AnalyticsPage() {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={combineChartData()}>
                 <defs>
-                  <linearGradient id="colorPageViews" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#9333EA" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#9333EA" stopOpacity={0}/>
+                  <linearGradient
+                    id="colorPageViews"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor="#9333EA" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#9333EA" stopOpacity={0} />
                   </linearGradient>
-                  <linearGradient id="colorFavorites" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#EC4899" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#EC4899" stopOpacity={0}/>
+                  <linearGradient
+                    id="colorFavorites"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor="#EC4899" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#EC4899" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="colorShares" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid

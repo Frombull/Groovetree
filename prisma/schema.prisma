@@ -135,7 +135,7 @@ model FavoriteArtist {
 model PageView {
   id        String   @id @default(cuid())
   pageId    String
-  
+
   page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
@@ -146,7 +146,7 @@ model ShareEvent {
   id        String   @id @default(cuid())
   pageId    String
   platform  String?  // "facebook", "twitter", "whatsapp", "copy", etc.
-  
+
   page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
