@@ -450,7 +450,7 @@ export default function CalendarPage() {
                                     : "text-gray-600 dark:text-gray-400"
                                 }`}
                               >
-                                +{dayEvents.length - 2} mais
+                                +{dayEvents.length - 2} more
                               </div>
                             )}
                           </div>
