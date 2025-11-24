@@ -89,7 +89,7 @@ export function FavoriteButton({
     <button
       onClick={handleToggleFavorite}
       disabled={isLoading}
-      className="fixed right-4 top-4 z-[10000] flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-110 disabled:opacity-50 cursor-pointer"
+      className="fixed right-16 top-4 z-[10000] flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-110 disabled:opacity-50 cursor-pointer"
       style={{
         backgroundColor: isLight
           ? "rgba(0, 0, 0, 0.1)"

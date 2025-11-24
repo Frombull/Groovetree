@@ -342,10 +342,10 @@ export default function SettingsPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto p-6 relative z-10">
-        <div className="flex gap-8">
-          {/* Sticky Sidebar */}
-          <div className="w-80 flex-shrink-0">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+          {/* Sticky Sidebar - Hidden on mobile, visible on desktop */}
+          <div className="hidden lg:block lg:w-80 flex-shrink-0">
             <div className="sticky top-24 bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Settings
@@ -372,12 +372,12 @@ export default function SettingsPage() {
           </div>
 
           {/* Main content */}
-          <div className="flex-1 space-y-12 dark:text-gray-100">
+          <div className="flex-1 space-y-6 sm:space-y-12 dark:text-gray-100">
             {/* Account Section */}
             <section
               id="account"
               ref={(el) => { sectionRefs.current.account = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8">
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8">
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
                   Account
@@ -524,7 +524,7 @@ export default function SettingsPage() {
             <section
               id="notifications"
               ref={(el) => { sectionRefs.current.notifications = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
@@ -618,7 +618,7 @@ export default function SettingsPage() {
 
                   {/* Test Email Section */}
                   <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
                         <h3 className="font-medium text-blue-900 dark:text-blue-100">
                           Test Email
@@ -630,7 +630,7 @@ export default function SettingsPage() {
                       <button
                         onClick={handleSendTestEmail}
                         disabled={isSendingEmail}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap font-medium"
                       >
                         {isSendingEmail ? (
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -662,7 +662,7 @@ export default function SettingsPage() {
             <section
               id="appearance"
               ref={(el) => { sectionRefs.current.appearance = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -773,7 +773,7 @@ export default function SettingsPage() {
             <section
               id="language"
               ref={(el) => { sectionRefs.current.language = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -823,7 +823,7 @@ export default function SettingsPage() {
             <section
               id="data"
               ref={(el) => { sectionRefs.current.data = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
@@ -837,7 +837,7 @@ export default function SettingsPage() {
             <section
               id="delete_account"
               ref={(el) => { sectionRefs.current.delete_account = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-red-900 dark:text-red-400">
