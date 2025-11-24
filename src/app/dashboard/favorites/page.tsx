@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import UserMenu from "@/app/components/UserMenu";
-import { FaHeart, FaTrash, FaExternalLinkAlt } from "react-icons/fa";
+import { FaHeart, FaHeartBroken, FaExternalLinkAlt } from "react-icons/fa";
 import { MdCalendarMonth, MdImage } from "react-icons/md";
 import { BsEyeFill } from "react-icons/bs";
 
@@ -171,23 +171,24 @@ export default function FavoritesPage() {
             {favorites.map((favorite) => (
               <div
                 key={favorite.id}
-                className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm overflow-hidden hover:shadow-lg hover:border-purple-400 dark:hover:border-purple-600 transition-all group"
+                className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-lg hover:border-purple-400 dark:hover:border-purple-600 transition-all group"
               >
                 <Link href={`/${favorite.slug}`}>
-                  <div className="relative aspect-square bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20">
+                  <div className="relative aspect-square bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 flex items-center justify-center p-12">
                     {favorite.avatarUrl ? (
-                      <img
-                        src={favorite.avatarUrl}
-                        alt={favorite.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                      <div className="relative w-3/4 h-3/4 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-lg">
+                        <img
+                          src={favorite.avatarUrl}
+                          alt={favorite.title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-purple-600 dark:text-purple-400 text-6xl font-bold">
+                      <div className="w-3/4 h-3/4 rounded-full border-4 border-white dark:border-gray-700 shadow-lg flex items-center justify-center text-purple-600 dark:text-purple-400 text-5xl font-bold bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 transition-transform duration-300 group-hover:scale-105">
                         {favorite.name?.slice(0, 2).toUpperCase() ||
                           favorite.title.slice(0, 2).toUpperCase()}
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 </Link>
 
@@ -217,10 +218,10 @@ export default function FavoritesPage() {
                     </Link>
                     <button
                       onClick={() => handleRemoveFavorite(favorite.pageId)}
-                      className="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-red-100 dark:hover:bg-red-900/20 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-colors"
+                      className="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-red-100 dark:hover:bg-red-900/20 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 rounded-lg transition-colors cursor-pointer"
                       title="Remove from favorites"
                     >
-                      <FaTrash className="w-4 h-4" />
+                      <FaHeartBroken className="w-4 h-4" />
                     </button>
                   </div>
                 </div>

@@ -119,6 +119,23 @@ export default function CalendarPage() {
     }
   };
 
+  const handleNextEvent = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Encontrar o próximo evento futuro
+    const futureEvents = events
+      .map((event) => new Date(event.date))
+      .filter((date) => date >= today)
+      .sort((a, b) => a.getTime() - b.getTime());
+
+    if (futureEvents.length > 0) {
+      const nextEventDate = futureEvents[0];
+      setCurrentMonth(nextEventDate);
+      setSelectedDate(nextEventDate);
+    }
+  };
+
   if (loading || !user) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center">
@@ -355,19 +372,43 @@ export default function CalendarPage() {
                 </div>
 
                 {/* Legend */}
-                <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-purple-500 dark:bg-purple-600"></div>
-                    <span>With shows</span>
+                <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400 items-center justify-between">
+                  <div className="flex flex-wrap gap-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded bg-purple-500 dark:bg-purple-600"></div>
+                      <span>With shows</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded ring-2 ring-purple-500"></div>
+                      <span>Today</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded bg-purple-600 dark:bg-purple-700"></div>
+                      <span>Selected</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded ring-2 ring-purple-500"></div>
-                    <span>Today</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-purple-600 dark:bg-purple-700"></div>
-                    <span>Selected</span>
-                  </div>
+                  {events.length > 0 && (
+                    <button
+                      onClick={handleNextEvent}
+                      className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors shadow-sm text-sm font-medium"
+                    >
+                      <span>Next Event</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

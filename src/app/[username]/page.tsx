@@ -10,6 +10,7 @@ import Link from "next/link";
 import { SocialLinks } from "./_components/social-links";
 import { FavoriteButton } from "./_components/favorite-button";
 import { ShareButton } from "./_components/share-button";
+import { BackButton } from "./_components/back-button";
 
 interface UserPageProps {
   params: Promise<{
@@ -150,33 +151,10 @@ export default async function UserPage({ params }: UserPageProps) {
       )}
 
       {/* Back button */}
-      <Link
-        href="/"
-        className="fixed left-4 top-4 z-[10000] flex h-10 w-10 items-center justify-center rounded-full transition-all hover:scale-110"
-        style={{
-          backgroundColor: isLight
-            ? "rgba(0, 0, 0, 0.1)"
-            : "rgba(255, 255, 255, 0.1)",
-          color: textColor || (isLight ? "#000000" : "#ffffff"),
-        }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m15 18-6-6 6-6" />
-        </svg>
-      </Link>
+      <BackButton isLight={isLight} textColor={textColor} />
 
       {/* Favorite button */}
-      <FavoriteButton pageId={pageId} isLight={isLight} />
+      <FavoriteButton pageId={pageId} isLight={isLight} textColor={textColor} />
 
       {/* Share button */}
       <ShareButton
