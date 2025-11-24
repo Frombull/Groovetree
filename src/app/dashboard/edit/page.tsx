@@ -27,6 +27,9 @@ import {
   FaEnvelope,
   FaRedditAlien,
   FaLinkedin,
+  FaChartLine,
+  FaCog,
+  FaBars,
 } from "react-icons/fa";
 import { IoMdSettings, IoMdMusicalNote } from "react-icons/io";
 import {
@@ -35,6 +38,7 @@ import {
   MdSave,
   MdEdit,
   MdPhotoLibrary,
+  MdCalendarMonth,
 } from "react-icons/md";
 import { BsEyeFill, BsTwitterX } from "react-icons/bs";
 import { RiShareFill } from "react-icons/ri";
@@ -205,7 +209,10 @@ export default function EditPage() {
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [dragOverItem, setDragOverItem] = useState<string | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [originalPageData, setOriginalPageData] = useState<PageData | null>(null);
+  const [originalPageData, setOriginalPageData] = useState<PageData | null>(
+    null
+  );
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const createPage = useCallback(async () => {
     try {
@@ -674,7 +681,7 @@ export default function EditPage() {
   };
 
   const handleCopyUrl = () => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     const url = `${window.location.origin}/${pageData?.slug}`;
     navigator.clipboard.writeText(url);
     setCopied(true);
@@ -682,7 +689,10 @@ export default function EditPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const getShareUrl = () => typeof window !== 'undefined' ? `${window.location.origin}/${pageData?.slug}` : '';
+  const getShareUrl = () =>
+    typeof window !== "undefined"
+      ? `${window.location.origin}/${pageData?.slug}`
+      : "";
   const getShareText = () => `Check out my Groovetree page!`;
 
   const getSocialPlatforms = () => {
@@ -694,47 +704,59 @@ export default function EditPage() {
         name: "X",
         icon: <BsTwitterX className="w-6 h-6" />,
         color: "bg-black hover:bg-gray-800",
-        url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+        url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          shareText
+        )}&url=${encodeURIComponent(shareUrl)}`,
       },
       {
         name: "Facebook",
         icon: <FaFacebook className="w-6 h-6" />,
         color: "bg-blue-600 hover:bg-blue-700",
-        url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+        url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          shareUrl
+        )}`,
       },
       {
         name: "WhatsApp",
         icon: <FaWhatsapp className="w-6 h-6" />,
         color: "bg-green-500 hover:bg-green-600",
-        url: `https://wa.me/?text=${encodeURIComponent(`${shareText} ${shareUrl}`)}`,
+        url: `https://wa.me/?text=${encodeURIComponent(
+          `${shareText} ${shareUrl}`
+        )}`,
       },
       {
         name: "Email",
         icon: <FaEnvelope className="w-6 h-6" />,
         color: "bg-gray-600 hover:bg-gray-700",
-        url: `mailto:?subject=${encodeURIComponent("Check out my Groovetree page!")}&body=${encodeURIComponent(`${shareText}\n\n${shareUrl}`)}`,
+        url: `mailto:?subject=${encodeURIComponent(
+          "Check out my Groovetree page!"
+        )}&body=${encodeURIComponent(`${shareText}\n\n${shareUrl}`)}`,
       },
       {
         name: "Reddit",
         icon: <FaRedditAlien className="w-6 h-6" />,
         color: "bg-orange-600 hover:bg-orange-700",
-        url: `https://reddit.com/submit?title=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+        url: `https://reddit.com/submit?title=${encodeURIComponent(
+          shareText
+        )}&url=${encodeURIComponent(shareUrl)}`,
       },
       {
         name: "LinkedIn",
         icon: <FaLinkedin className="w-6 h-6" />,
         color: "bg-blue-700 hover:bg-blue-800",
-        url: `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(shareText)} ${encodeURIComponent(shareUrl)}`,
+        url: `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(
+          shareText
+        )} ${encodeURIComponent(shareUrl)}`,
       },
     ];
   };
 
   const handleSocialShare = (url: string) => {
-    if (typeof window === 'undefined') return;
-    if (url.startsWith('mailto:')) {
+    if (typeof window === "undefined") return;
+    if (url.startsWith("mailto:")) {
       window.location.href = url;
     } else {
-      window.open(url, '_blank', 'noopener,noreferrer');
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -825,7 +847,7 @@ export default function EditPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 relative overflow-x-hidden">
       {/* Header */}
-      <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-800 px-6 py-3 sticky top-0 z-40">
+      <header className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-700 px-6 py-3 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/">
@@ -835,15 +857,74 @@ export default function EditPage() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all text-gray-700 dark:text-gray-300"
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? (
+                <FaTimes className="w-5 h-5" />
+              ) : (
+                <FaBars className="w-5 h-5" />
+              )}
+            </button>
+
+            {/* Desktop Navigation Buttons */}
+            <Link
+              href="/dashboard/edit"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 border border-purple-300 dark:border-purple-700 transition-all cursor-pointer items-center gap-2 text-purple-700 dark:text-purple-300 font-semibold"
+              title="Edit Page"
+            >
+              <MdEdit className="w-4 h-4" />
+              <span className="text-sm font-medium">Edit Page</span>
+            </Link>
+
+            <Link
+              href="/dashboard/favorites"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Favorite Artists"
+            >
+              <FaHeart className="w-4 h-4" />
+              <span className="text-sm font-medium">Favorites</span>
+            </Link>
+
+            <Link
+              href="/dashboard/calendar"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Artist Shows"
+            >
+              <MdCalendarMonth className="w-4 h-4" />
+              <span className="text-sm font-medium">Calendar</span>
+            </Link>
+
+            <Link
+              href="/dashboard/analytics"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Analytics"
+            >
+              <FaChartLine className="w-4 h-4" />
+              <span className="text-sm font-medium">Analytics</span>
+            </Link>
+
+            <Link
+              href="/settings"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Settings"
+            >
+              <FaCog className="w-4 h-4" />
+              <span className="text-sm font-medium">Settings</span>
+            </Link>
+
             <Link
               href={`/${pageData.slug}`}
-              target="_blank"
-              className="flex items-center gap-2 px-4 py-2 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
               data-cy="page-preview-button"
+              title="See Page"
             >
-              <BsEyeFill className="w-5 h-5" />
-              Ver Página
+              <BsEyeFill className="w-4 h-4" />
+              <span className="text-sm font-medium">See Page</span>
             </Link>
 
             {user && (
@@ -853,16 +934,72 @@ export default function EditPage() {
             )}
           </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-700 shadow-lg">
+            <nav className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-2">
+              <Link
+                href="/dashboard/favorites"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaHeart className="w-5 h-5" />
+                <span>Favorites</span>
+              </Link>
+              <Link
+                href="/dashboard/calendar"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <MdCalendarMonth className="w-5 h-5" />
+                <span>Calendar</span>
+              </Link>
+              <Link
+                href="/dashboard/analytics"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaChartLine className="w-5 h-5" />
+                <span>Analytics</span>
+              </Link>
+              <Link
+                href="/settings"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaCog className="w-5 h-5" />
+                <span>Settings</span>
+              </Link>
+              <Link
+                href={`/${pageData.slug}`}
+                className="flex items-center gap-3 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <BsEyeFill className="w-5 h-5" />
+                <span>See Page</span>
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* Two Column Layout */}
-      <div className="max-w-[1600px] mx-auto p-6 relative z-10">
+      <div className="max-w-[1600px] mx-auto p-3 md:p-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Column - Edit Fields */}
-          <div className="space-y-6 overflow-y-auto max-h-[calc(100vh-120px)] pr-2 custom-scrollbar">
+          <div className="space-y-4 md:space-y-6 overflow-y-auto max-h-[calc(100vh-120px)] pr-2 custom-scrollbar pb-2">
+            {/* Mobile Preview Button - Above first section */}
+            <Link
+              href={`/${pageData.slug}`}
+              className="lg:hidden flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-950 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-purple-500 dark:hover:border-purple-500 hover:text-purple-600 dark:hover:text-purple-400 rounded-lg transition-all font-medium text-sm"
+            >
+              <BsEyeFill className="w-4 h-4" />
+              Preview Page
+            </Link>
 
             {/* Profile Section */}
-            <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-6 space-y-6">
+            <div className="bg-white dark:bg-slate-950 border dark:border-gray-800 rounded-2xl shadow-sm p-4 md:p-6 space-y-4 md:space-y-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   Profile
@@ -870,9 +1007,9 @@ export default function EditPage() {
               </div>
 
               {/* Avatar and Save Button */}
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-3xl text-gray-500 dark:text-gray-300 overflow-hidden">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3 md:gap-4 w-full sm:w-auto">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-2xl md:text-3xl text-gray-500 dark:text-gray-300 overflow-hidden flex-shrink-0">
                     {pageData.avatarUrl ? (
                       <Image
                         src={pageData.avatarUrl}
@@ -895,7 +1032,7 @@ export default function EditPage() {
                   <button
                     onClick={handleAvatarClick}
                     disabled={uploadingAvatar}
-                    className="px-4 py-2 text-purple-600 dark:text-purple-400 border border-purple-600 dark:border-purple-400 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors disabled:opacity-50 hover:cursor-pointer"
+                    className="px-3 md:px-4 py-2 text-sm md:text-base text-purple-600 dark:text-purple-400 border border-purple-600 dark:border-purple-400 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors disabled:opacity-50 hover:cursor-pointer"
                   >
                     {uploadingAvatar ? "Uploading..." : "Choose Image"}
                   </button>
@@ -905,13 +1042,14 @@ export default function EditPage() {
                 <button
                   onClick={handleUpdatePage}
                   disabled={!hasUnsavedChanges}
-                  className={`px-6 py-2 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 whitespace-nowrap ${hasUnsavedChanges
-                    ? "bg-green-600 hover:bg-green-700 text-white cursor-pointer animate-glow hover:animate-none"
-                    : "bg-gray-400 text-gray-200 cursor-not-allowed"
-                    }`}
+                  className={`w-full sm:w-auto px-4 md:px-6 py-2 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 whitespace-nowrap text-sm md:text-base ${
+                    hasUnsavedChanges
+                      ? "bg-green-600 hover:bg-green-700 text-white cursor-pointer animate-glow hover:animate-none"
+                      : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                  }`}
                   data-cy="page-save-customization-button"
                 >
-                  <MdSave className="w-5 h-5" />
+                  <MdSave className="w-4 md:w-5 h-4 md:h-5" />
                   {hasUnsavedChanges ? "Save Changes" : "Save Changes"}
                 </button>
               </div>
@@ -959,28 +1097,33 @@ export default function EditPage() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Groovetree URL
                 </label>
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-500 dark:text-gray-400 text-sm">
-                    groovetr.ee/
-                  </span>
-                  <input
-                    type="text"
-                    value={pageData.slug}
-                    onChange={(e) => {
-                      const newPageData = { ...pageData, slug: e.target.value };
-                      setPageData(newPageData);
-                      checkForUnsavedChanges(newPageData);
-                    }}
-                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    placeholder="your-username"
-                    data-cy="page-slug"
-                  />
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  <div className="flex items-center gap-2 flex-1">
+                    <span className="text-gray-500 dark:text-gray-400 text-xs md:text-sm">
+                      groovetr.ee/
+                    </span>
+                    <input
+                      type="text"
+                      value={pageData.slug}
+                      onChange={(e) => {
+                        const newPageData = {
+                          ...pageData,
+                          slug: e.target.value,
+                        };
+                        setPageData(newPageData);
+                        checkForUnsavedChanges(newPageData);
+                      }}
+                      className="flex-1 px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      placeholder="your-username"
+                      data-cy="page-slug"
+                    />
+                  </div>
                   <button
                     onClick={() => setShowShareModal(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium cursor-pointer whitespace-nowrap"
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium cursor-pointer whitespace-nowrap text-sm md:text-base"
                     title="Share your page"
                   >
-                    <RiShareFill className="w-5 h-5" />
+                    <RiShareFill className="w-4 md:w-5 h-4 md:h-5" />
                     Share
                   </button>
                 </div>
@@ -1176,8 +1319,7 @@ export default function EditPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="py-16">
-                  </div>
+                  <div className="py-16"></div>
                 )}
               </div>
             </div>
@@ -1198,10 +1340,11 @@ export default function EditPage() {
                   setShowPhotoModal(true);
                 }}
                 disabled={photos.length >= 4}
-                className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${photos.length >= 4
-                  ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                  : "bg-purple-600 text-white hover:bg-purple-700"
-                  }`}
+                className={`w-full py-4 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 mb-6 cursor-pointer ${
+                  photos.length >= 4
+                    ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                    : "bg-purple-600 text-white hover:bg-purple-700"
+                }`}
               >
                 <FaPlus className="w-5 h-5" />
                 Add Photo {photos.length >= 4 && "(Máximo atingido)"}
@@ -1245,8 +1388,7 @@ export default function EditPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="py-16">
-                  </div>
+                  <div className="py-16"></div>
                 )}
               </div>
             </div>
@@ -1278,12 +1420,13 @@ export default function EditPage() {
                       onDragOver={(e) => handleDragOver(e, link.id)}
                       onDragLeave={handleDragLeave}
                       onDrop={(e) => handleDrop(e, link.id)}
-                      className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${dragOverItem === link.id
-                        ? "border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg scale-105"
-                        : draggedItem === link.id
+                      className={`flex items-center gap-3 p-4 border rounded-xl transition-all group cursor-move ${
+                        dragOverItem === link.id
+                          ? "border-purple-500 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg scale-105"
+                          : draggedItem === link.id
                           ? "border-gray-300 dark:border-gray-600 opacity-50"
                           : "border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-md"
-                        }`}
+                      }`}
                     >
                       <FaGripVertical className="text-gray-400 dark:text-gray-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 cursor-grab active:cursor-grabbing transition-colors flex-shrink-0" />
                       <div className="flex-1 min-w-0">
@@ -1295,7 +1438,7 @@ export default function EditPage() {
                           {link.url}
                         </p>
                       </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
+                      <div className="flex items-center gap-2 shrink-0">
                         <button
                           onClick={() => handleEditLink(link)}
                           className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -1314,15 +1457,14 @@ export default function EditPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="py-16">
-                  </div>
+                  <div className="py-16"></div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Right Column - Live Preview */}
-          <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-120px)]">
+          {/* Right Column - Live Preview (Hidden on Mobile) */}
+          <div className="hidden lg:block lg:sticky lg:top-24 lg:h-[calc(100vh-120px)]">
             <div className="h-full flex flex-col">
               {/* Preview Container*/}
               <div
@@ -1336,7 +1478,9 @@ export default function EditPage() {
                   <>
                     <div
                       className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
-                      style={{ backgroundImage: `url(${pageData.backgroundImageUrl})` }}
+                      style={{
+                        backgroundImage: `url(${pageData.backgroundImageUrl})`,
+                      }}
                     />
                     <div
                       className="fixed inset-0 z-0 backdrop-blur-md"
@@ -1350,10 +1494,14 @@ export default function EditPage() {
                 )}
 
                 {/* Content */}
-                <div className="relative z-[9999] h-full overflow-y-auto custom-scrollbar">
+                <div className="relative z-9999 h-full overflow-y-auto custom-scrollbar">
                   <div
                     className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8"
-                    style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                    style={{
+                      color:
+                        pageData?.textColor ||
+                        (isLight ? "#000000" : "#ffffff"),
+                    }}
                   >
                     {/* Artist Profile */}
                     <div className="mb-12 text-center">
@@ -1375,7 +1523,11 @@ export default function EditPage() {
                       <div className="flex justify-center items-center gap-2 mt-6">
                         <h1
                           className="font-sans text-4xl font-bold tracking-tight sm:text-5xl text-balance"
-                          style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                          style={{
+                            color:
+                              pageData?.textColor ||
+                              (isLight ? "#000000" : "#ffffff"),
+                          }}
                         >
                           {pageData.title}
                         </h1>
@@ -1391,8 +1543,10 @@ export default function EditPage() {
                         <p
                           className="mx-auto mt-6 max-w-md text-sm text-pretty"
                           style={{
-                            color: pageData?.textColor || (isLight ? "#000000" : "#ffffff"),
-                            opacity: 0.7
+                            color:
+                              pageData?.textColor ||
+                              (isLight ? "#000000" : "#ffffff"),
+                            opacity: 0.7,
                           }}
                         >
                           {pageData.bio}
@@ -1401,29 +1555,75 @@ export default function EditPage() {
                     </div>
 
                     {/* Social Links */}
-                    {pageData.links && pageData.links.filter(l =>
-                      ["INSTAGRAM", "TIKTOK", "YOUTUBE", "FACEBOOK", "TWITTER"].includes(l.type)
-                    ).length > 0 && (
+                    {pageData.links &&
+                      pageData.links.filter((l) =>
+                        [
+                          "INSTAGRAM",
+                          "TIKTOK",
+                          "YOUTUBE",
+                          "FACEBOOK",
+                          "TWITTER",
+                        ].includes(l.type)
+                      ).length > 0 && (
                         <section className="mb-12">
                           <div className="flex flex-wrap justify-center gap-3">
                             {pageData.links
-                              .filter(l => ["INSTAGRAM", "TIKTOK", "YOUTUBE", "FACEBOOK", "TWITTER"].includes(l.type))
+                              .filter((l) =>
+                                [
+                                  "INSTAGRAM",
+                                  "TIKTOK",
+                                  "YOUTUBE",
+                                  "FACEBOOK",
+                                  "TWITTER",
+                                ].includes(l.type)
+                              )
                               .map((link) => (
                                 <div
                                   key={link.id}
                                   className={`
                                   p-4 rounded-xl backdrop-blur-xl border shadow-xl
-                                  ${isLight
+                                  ${
+                                    isLight
                                       ? "bg-black/5 border-black/10"
                                       : "bg-white/10 border-white/20"
-                                    }
+                                  }
                                 `}
                                 >
-                                  {link.type === "INSTAGRAM" && <FaInstagram className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
-                                  {link.type === "TIKTOK" && <FaTiktok className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
-                                  {link.type === "YOUTUBE" && <FaYoutube className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
-                                  {link.type === "FACEBOOK" && <FaFacebook className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
-                                  {link.type === "TWITTER" && <BsTwitterX className={`h-5 w-5 ${isLight ? "text-black" : "text-white"}`} />}
+                                  {link.type === "INSTAGRAM" && (
+                                    <FaInstagram
+                                      className={`h-5 w-5 ${
+                                        isLight ? "text-black" : "text-white"
+                                      }`}
+                                    />
+                                  )}
+                                  {link.type === "TIKTOK" && (
+                                    <FaTiktok
+                                      className={`h-5 w-5 ${
+                                        isLight ? "text-black" : "text-white"
+                                      }`}
+                                    />
+                                  )}
+                                  {link.type === "YOUTUBE" && (
+                                    <FaYoutube
+                                      className={`h-5 w-5 ${
+                                        isLight ? "text-black" : "text-white"
+                                      }`}
+                                    />
+                                  )}
+                                  {link.type === "FACEBOOK" && (
+                                    <FaFacebook
+                                      className={`h-5 w-5 ${
+                                        isLight ? "text-black" : "text-white"
+                                      }`}
+                                    />
+                                  )}
+                                  {link.type === "TWITTER" && (
+                                    <BsTwitterX
+                                      className={`h-5 w-5 ${
+                                        isLight ? "text-black" : "text-white"
+                                      }`}
+                                    />
+                                  )}
                                 </div>
                               ))}
                           </div>
@@ -1431,38 +1631,72 @@ export default function EditPage() {
                       )}
 
                     {/* Music Platforms */}
-                    {pageData.links && pageData.links.filter(l =>
-                      ["SPOTIFY", "APPLE_MUSIC", "SOUNDCLOUD", "YOUTUBE", "DEEZER", "BEATPORT"].includes(l.type)
-                    ).length > 0 && (
+                    {pageData.links &&
+                      pageData.links.filter((l) =>
+                        [
+                          "SPOTIFY",
+                          "APPLE_MUSIC",
+                          "SOUNDCLOUD",
+                          "YOUTUBE",
+                          "DEEZER",
+                          "BEATPORT",
+                        ].includes(l.type)
+                      ).length > 0 && (
                         <div className="text-center mb-12">
                           <h1
                             className="my-6 font-sans text-3xl font-bold tracking-tight text-balance"
-                            style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                            style={{
+                              color:
+                                pageData?.textColor ||
+                                (isLight ? "#000000" : "#ffffff"),
+                            }}
                           >
                             Listen Now
                           </h1>
                           <div className="flex flex-col gap-4 max-w-xl mx-auto">
                             {pageData.links
-                              .filter(l => ["SPOTIFY", "APPLE_MUSIC", "SOUNDCLOUD", "YOUTUBE", "DEEZER", "BEATPORT"].includes(l.type))
+                              .filter((l) =>
+                                [
+                                  "SPOTIFY",
+                                  "APPLE_MUSIC",
+                                  "SOUNDCLOUD",
+                                  "YOUTUBE",
+                                  "DEEZER",
+                                  "BEATPORT",
+                                ].includes(l.type)
+                              )
                               .map((link) => (
                                 <div
                                   key={link.id}
                                   className={`
                                   backdrop-blur-xl rounded-xl p-6 border shadow-xl
                                   flex flex-col items-center justify-center gap-3
-                                  ${isLight
+                                  ${
+                                    isLight
                                       ? "bg-black/5 border-black/10"
                                       : "bg-white/10 border-white/20"
-                                    }
+                                  }
                                 `}
                                 >
-                                  {link.type === "SPOTIFY" && <FaSpotify className="w-12 h-12 text-[#1DB954]" />}
-                                  {link.type === "APPLE_MUSIC" && <FaApple className="w-12 h-12 text-[#FA243C]" />}
-                                  {link.type === "SOUNDCLOUD" && <FaSoundcloud className="w-12 h-12 text-[#FF5500]" />}
-                                  {link.type === "YOUTUBE" && <FaYoutube className="w-12 h-12 text-[#FF0000]" />}
+                                  {link.type === "SPOTIFY" && (
+                                    <FaSpotify className="w-12 h-12 text-[#1DB954]" />
+                                  )}
+                                  {link.type === "APPLE_MUSIC" && (
+                                    <FaApple className="w-12 h-12 text-[#FA243C]" />
+                                  )}
+                                  {link.type === "SOUNDCLOUD" && (
+                                    <FaSoundcloud className="w-12 h-12 text-[#FF5500]" />
+                                  )}
+                                  {link.type === "YOUTUBE" && (
+                                    <FaYoutube className="w-12 h-12 text-[#FF0000]" />
+                                  )}
                                   <span
                                     className="font-medium text-sm"
-                                    style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                                    style={{
+                                      color:
+                                        pageData?.textColor ||
+                                        (isLight ? "#000000" : "#ffffff"),
+                                    }}
                                   >
                                     {link.title}
                                   </span>
@@ -1477,7 +1711,11 @@ export default function EditPage() {
                       <section className="my-12 text-center">
                         <h1
                           className="my-6 font-sans text-3xl font-bold tracking-tight text-balance"
-                          style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                          style={{
+                            color:
+                              pageData?.textColor ||
+                              (isLight ? "#000000" : "#ffffff"),
+                          }}
                         >
                           Upcoming Shows
                         </h1>
@@ -1487,9 +1725,10 @@ export default function EditPage() {
                               key={event.id}
                               className={`
                                 rounded-xl p-5 backdrop-blur-xl border shadow-xl
-                                ${isLight
-                                  ? "bg-black/5 border-black/10"
-                                  : "bg-white/10 border-white/20"
+                                ${
+                                  isLight
+                                    ? "bg-black/5 border-black/10"
+                                    : "bg-white/10 border-white/20"
                                 }
                               `}
                             >
@@ -1497,26 +1736,36 @@ export default function EditPage() {
                                 <div className="space-y-2 text-left">
                                   <div
                                     className="flex items-center gap-2 font-semibold"
-                                    style={{ color: isLight ? "#7c3aed" : "#a78bfa" }}
+                                    style={{
+                                      color: isLight ? "#7c3aed" : "#a78bfa",
+                                    }}
                                   >
                                     <MdEvent className="h-4 w-4" />
                                     <span className="font-mono text-sm">
-                                      {new Date(event.date).toLocaleDateString("en-US", {
-                                        weekday: "short",
-                                        month: "short",
-                                        day: "numeric",
-                                      }).toUpperCase()}
+                                      {new Date(event.date)
+                                        .toLocaleDateString("en-US", {
+                                          weekday: "short",
+                                          month: "short",
+                                          day: "numeric",
+                                        })
+                                        .toUpperCase()}
                                     </span>
                                   </div>
                                   <h3
                                     className="font-sans text-lg font-bold"
-                                    style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                                    style={{
+                                      color:
+                                        pageData?.textColor ||
+                                        (isLight ? "#000000" : "#ffffff"),
+                                    }}
                                   >
                                     {event.title}
                                   </h3>
                                   <div
                                     className="flex items-center gap-2"
-                                    style={{ color: isLight ? "#4b5563" : "#9ca3af" }}
+                                    style={{
+                                      color: isLight ? "#4b5563" : "#9ca3af",
+                                    }}
                                   >
                                     <span className="text-sm">
                                       📍 {event.venue} - {event.city}
@@ -1536,7 +1785,11 @@ export default function EditPage() {
                       <section className="mb-12">
                         <h1
                           className="text-center mb-8 font-sans text-2xl sm:text-3xl font-bold tracking-tight"
-                          style={{ color: pageData?.textColor || (isLight ? "#000000" : "#ffffff") }}
+                          style={{
+                            color:
+                              pageData?.textColor ||
+                              (isLight ? "#000000" : "#ffffff"),
+                          }}
                         >
                           Nos palcos
                         </h1>
@@ -1556,7 +1809,9 @@ export default function EditPage() {
                                 <p
                                   className="mt-3 sm:mt-4 text-center text-sm sm:text-base font-medium tracking-wide px-2"
                                   style={{
-                                    color: pageData?.textColor || (isLight ? "#000000" : "#ffffff"),
+                                    color:
+                                      pageData?.textColor ||
+                                      (isLight ? "#000000" : "#ffffff"),
                                     opacity: 0.9,
                                   }}
                                 >
@@ -1603,10 +1858,11 @@ export default function EditPage() {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${selectedCategory === category.id
-                    ? "bg-purple-600 dark:bg-purple-700 text-white shadow-lg shadow-purple-200 dark:shadow-purple-900/50"
-                    : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700"
-                    }`}
+                  className={`flex items-center cursor-pointer gap-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all font-medium ${
+                    selectedCategory === category.id
+                      ? "bg-purple-600 dark:bg-purple-700 text-white shadow-lg shadow-purple-200 dark:shadow-purple-900/50"
+                      : "bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700"
+                  }`}
                 >
                   {category.icon}
                   <span>{category.name}</span>
@@ -1722,9 +1978,7 @@ export default function EditPage() {
           <div className="bg-white dark:bg-slate-950 backdrop-blur-md rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border dark:border-gray-800">
             <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 text-white">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold">
-                  Share your page
-                </h2>
+                <h2 className="text-2xl font-bold">Share your page</h2>
                 <button
                   onClick={() => setShowShareModal(false)}
                   className="text-white hover:text-gray-200 transition-colors cursor-pointer"
@@ -1739,7 +1993,10 @@ export default function EditPage() {
               <div>
                 <div className="flex gap-4 overflow-x-auto py-2 justify-center">
                   {getSocialPlatforms().map((platform) => (
-                    <div key={platform.name} className="flex flex-col items-center gap-2 flex-shrink-0">
+                    <div
+                      key={platform.name}
+                      className="flex flex-col items-center gap-2 flex-shrink-0"
+                    >
                       <button
                         onClick={() => handleSocialShare(platform.url)}
                         className={`w-14 h-14 rounded-full ${platform.color} text-white flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-lg cursor-pointer`}
@@ -2036,8 +2293,8 @@ export default function EditPage() {
                 {uploadingPhoto
                   ? "Uploading..."
                   : editingPhoto
-                    ? "Update Photo"
-                    : "Add Photo"}
+                  ? "Update Photo"
+                  : "Add Photo"}
               </button>
             </div>
           </div>

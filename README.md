@@ -48,7 +48,7 @@ Descrição feliz :)
     ```
 
     E Para criar migração nova:
-    
+
     ```bash
     npx prisma migrate dev --name <nome-da-mudanca>
     ```

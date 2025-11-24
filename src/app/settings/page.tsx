@@ -24,10 +24,15 @@ import {
   FaSun,
   FaMoon,
   FaDesktop,
+  FaHeart,
+  FaCog,
+  FaChartLine,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { FaShield } from "react-icons/fa6";
 import { IoMdSettings } from "react-icons/io";
-import { MdLogout } from "react-icons/md";
+import { MdLogout, MdCalendarMonth, MdEdit } from "react-icons/md";
 
 interface UserSettings {
   name: string;
@@ -75,6 +80,7 @@ export default function SettingsPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const sections = [
     { id: "account", label: "Account", icon: FaLock },
@@ -130,7 +136,9 @@ export default function SettingsPage() {
       (entries) => {
         // Find the entry with the highest intersection ratio
         let mostVisible = entries.reduce((prev, current) => {
-          return current.intersectionRatio > prev.intersectionRatio ? current : prev;
+          return current.intersectionRatio > prev.intersectionRatio
+            ? current
+            : prev;
         });
 
         if (mostVisible.isIntersecting && mostVisible.intersectionRatio > 0) {
@@ -182,7 +190,8 @@ export default function SettingsPage() {
     setTheme(newTheme);
     setSettings((prev) => ({ ...prev, theme: newTheme }));
     toast.success(
-      `Theme changed to ${newTheme === "auto" ? "system preference" : newTheme
+      `Theme changed to ${
+        newTheme === "auto" ? "system preference" : newTheme
       } mode!`
     );
   };
@@ -290,7 +299,9 @@ export default function SettingsPage() {
     } catch (error) {
       console.error("Error sending verification email:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to send verification email"
+        error instanceof Error
+          ? error.message
+          : "Failed to send verification email"
       );
     } finally {
       setIsSendingEmail(false);
@@ -332,7 +343,66 @@ export default function SettingsPage() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all text-gray-700 dark:text-gray-300"
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? (
+                <FaTimes className="w-5 h-5" />
+              ) : (
+                <FaBars className="w-5 h-5" />
+              )}
+            </button>
+
+            {/* Desktop Navigation Buttons */}
+            <Link
+              href="/dashboard/edit"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Edit Page"
+            >
+              <MdEdit className="w-4 h-4" />
+              <span className="text-sm font-medium">Edit Page</span>
+            </Link>
+
+            <Link
+              href="/dashboard/favorites"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Favorite Artists"
+            >
+              <FaHeart className="w-4 h-4" />
+              <span className="text-sm font-medium">Favorites</span>
+            </Link>
+
+            <Link
+              href="/dashboard/calendar"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Artist Shows"
+            >
+              <MdCalendarMonth className="w-4 h-4" />
+              <span className="text-sm font-medium">Calendar</span>
+            </Link>
+
+            <Link
+              href="/dashboard/analytics"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Analytics"
+            >
+              <FaChartLine className="w-4 h-4" />
+              <span className="text-sm font-medium">Analytics</span>
+            </Link>
+
+            <Link
+              href="/settings"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 border border-purple-300 dark:border-purple-700 transition-all cursor-pointer items-center gap-2 text-purple-700 dark:text-purple-300 font-semibold"
+              title="Settings"
+            >
+              <FaCog className="w-4 h-4" />
+              <span className="text-sm font-medium">Settings</span>
+            </Link>
+
             {user && (
               <div className="scale-90">
                 <UserMenu user={user} />
@@ -340,12 +410,60 @@ export default function SettingsPage() {
             )}
           </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-700 shadow-lg">
+            <nav className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-2">
+              <Link
+                href="/dashboard/edit"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <MdEdit className="w-5 h-5" />
+                <span>Edit Page</span>
+              </Link>
+              <Link
+                href="/dashboard/favorites"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaHeart className="w-5 h-5" />
+                <span>Favorites</span>
+              </Link>
+              <Link
+                href="/dashboard/calendar"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <MdCalendarMonth className="w-5 h-5" />
+                <span>Calendar</span>
+              </Link>
+              <Link
+                href="/dashboard/analytics"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaChartLine className="w-5 h-5" />
+                <span>Analytics</span>
+              </Link>
+              <Link
+                href="/settings"
+                className="flex items-center gap-3 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaCog className="w-5 h-5" />
+                <span>Settings</span>
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
 
-      <div className="max-w-7xl mx-auto p-6 relative z-10">
-        <div className="flex gap-8">
-          {/* Sticky Sidebar */}
-          <div className="w-80 flex-shrink-0">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+          {/* Sticky Sidebar - Hidden on mobile, visible on desktop */}
+          <div className="hidden lg:block lg:w-80 flex-shrink-0">
             <div className="sticky top-24 bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                 Settings
@@ -357,10 +475,11 @@ export default function SettingsPage() {
                     <button
                       key={section.id}
                       onClick={() => scrollToSection(section.id)}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 cursor-pointer ${activeSection === section.id
-                        ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 shadow-sm"
-                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
-                        }`}
+                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 cursor-pointer ${
+                        activeSection === section.id
+                          ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 shadow-sm"
+                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+                      }`}
                     >
                       <Icon className="w-5 h-5" />
                       <span className="font-medium">{section.label}</span>
@@ -372,12 +491,15 @@ export default function SettingsPage() {
           </div>
 
           {/* Main content */}
-          <div className="flex-1 space-y-12 dark:text-gray-100">
+          <div className="flex-1 space-y-6 sm:space-y-12 dark:text-gray-100">
             {/* Account Section */}
             <section
               id="account"
-              ref={(el) => { sectionRefs.current.account = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8">
+              ref={(el) => {
+                sectionRefs.current.account = el;
+              }}
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
+            >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
                   Account
@@ -415,8 +537,11 @@ export default function SettingsPage() {
                       <button
                         onClick={handleSendVerificationEmail}
                         disabled={isSendingEmail}
-                        className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium cursor-pointer disabled:opacity-50">
-                        {isSendingEmail ? "Sending..." : "Send verification email"}
+                        className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium cursor-pointer disabled:opacity-50"
+                      >
+                        {isSendingEmail
+                          ? "Sending..."
+                          : "Send verification email"}
                       </button>
                     </div>
                   )}
@@ -523,8 +648,10 @@ export default function SettingsPage() {
             {/* Notifications Section */}
             <section
               id="notifications"
-              ref={(el) => { sectionRefs.current.notifications = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              ref={(el) => {
+                sectionRefs.current.notifications = el;
+              }}
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
@@ -618,7 +745,7 @@ export default function SettingsPage() {
 
                   {/* Test Email Section */}
                   <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
                         <h3 className="font-medium text-blue-900 dark:text-blue-100">
                           Test Email
@@ -630,7 +757,7 @@ export default function SettingsPage() {
                       <button
                         onClick={handleSendTestEmail}
                         disabled={isSendingEmail}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap font-medium"
                       >
                         {isSendingEmail ? (
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -661,8 +788,10 @@ export default function SettingsPage() {
             {/* Appearance Section */}
             <section
               id="appearance"
-              ref={(el) => { sectionRefs.current.appearance = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              ref={(el) => {
+                sectionRefs.current.appearance = el;
+              }}
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -683,10 +812,11 @@ export default function SettingsPage() {
                       {/* Light Theme */}
                       <button
                         onClick={() => handleThemeChange("light")}
-                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "light"
-                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                          : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
+                          theme === "light"
+                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                        }`}
                       >
                         <div className="flex items-center space-x-3 mb-3">
                           <FaSun className="w-5 h-5 text-yellow-500" />
@@ -709,10 +839,11 @@ export default function SettingsPage() {
                       {/* Dark Theme */}
                       <button
                         onClick={() => handleThemeChange("dark")}
-                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "dark"
-                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                          : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
+                          theme === "dark"
+                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                        }`}
                       >
                         <div className="flex items-center space-x-3 mb-3">
                           <FaMoon className="w-5 h-5 text-blue-400" />
@@ -735,10 +866,11 @@ export default function SettingsPage() {
                       {/* Auto Theme */}
                       <button
                         onClick={() => handleThemeChange("auto")}
-                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "auto"
-                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                          : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
+                          theme === "auto"
+                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                        }`}
                       >
                         <div className="flex items-center space-x-3 mb-3">
                           <FaDesktop className="w-5 h-5 text-gray-500" />
@@ -772,8 +904,10 @@ export default function SettingsPage() {
             {/* Language Section */}
             <section
               id="language"
-              ref={(el) => { sectionRefs.current.language = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              ref={(el) => {
+                sectionRefs.current.language = el;
+              }}
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -822,8 +956,10 @@ export default function SettingsPage() {
             {/* Data Section */}
             <section
               id="data"
-              ref={(el) => { sectionRefs.current.data = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              ref={(el) => {
+                sectionRefs.current.data = el;
+              }}
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
@@ -836,8 +972,10 @@ export default function SettingsPage() {
             {/* Delete Account Section */}
             <section
               id="delete_account"
-              ref={(el) => { sectionRefs.current.delete_account = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-8"
+              ref={(el) => {
+                sectionRefs.current.delete_account = el;
+              }}
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-red-900 dark:text-red-400">

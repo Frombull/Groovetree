@@ -10,7 +10,7 @@ import {
   Youtube,
   ExternalLink,
   Music2,
-  Calendar
+  Calendar,
 } from "lucide-react";
 
 interface ArtistLink {
@@ -88,7 +88,10 @@ export default function FeaturedArtists() {
           </div>
           <div className="flex flex-wrap justify-center gap-8">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-lg animate-pulse w-[240px] h-[480px]">
+              <div
+                key={i}
+                className="bg-white rounded-2xl overflow-hidden shadow-lg animate-pulse w-[240px] h-[480px]"
+              >
                 <div className="p-6 flex flex-col items-center h-full">
                   <div className="w-24 h-24 bg-gray-300 rounded-full mb-4" />
                   <div className="h-5 w-24 bg-gray-300 rounded mb-2" />
@@ -126,30 +129,35 @@ export default function FeaturedArtists() {
             return (
               <div
                 key={artist.id}
-                className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 w-[240px] h-[480px]"
-                style={{ backgroundColor: bgColor }}>
-                <Link href={`/${artist.slug}`} className="block p-6 h-full">
+                className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 w-[240px] h-[480px] cursor-pointer"
+                style={{ backgroundColor: bgColor }}
+              >
+                <div className="p-6 h-full">
                   <div className="flex flex-col items-center h-full">
                     {/* Avatar */}
-                    <div className="relative w-24 h-24 mb-3 rounded-full overflow-hidden border-2 border-white/10 shadow-lg flex-shrink-0">
-                      {artist.avatarUrl ? (
-                        <Image
-                          src={artist.avatarUrl}
-                          alt={artist.title}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
-                          <Music className="w-12 h-12 text-white" />
-                        </div>
-                      )}
-                    </div>
+                    <Link href={`/${artist.slug}`} className="block mb-3">
+                      <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-white/10 shadow-lg flex-shrink-0">
+                        {artist.avatarUrl ? (
+                          <Image
+                            src={artist.avatarUrl}
+                            alt={artist.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                            <Music className="w-12 h-12 text-white" />
+                          </div>
+                        )}
+                      </div>
+                    </Link>
 
                     {/* Artist name */}
-                    <h4 className="text-[20px] font-bold text-white text-center mb-1 line-clamp-2">
-                      {artist.title}
-                    </h4>
+                    <Link href={`/${artist.slug}`}>
+                      <h4 className="text-[20px] font-bold text-white text-center mb-1 line-clamp-2 hover:opacity-80 transition-opacity">
+                        {artist.title}
+                      </h4>
+                    </Link>
 
                     {/* Bio */}
                     {artist.bio && (
@@ -163,7 +171,9 @@ export default function FeaturedArtists() {
                       <div className="w-full mb-3 flex-grow">
                         {artist.events.slice(0, 2).map((event) => {
                           const eventDate = new Date(event.date);
-                          const month = eventDate.toLocaleDateString('en-US', { month: 'short' });
+                          const month = eventDate.toLocaleDateString("en-US", {
+                            month: "short",
+                          });
                           const day = eventDate.getDate();
 
                           return (
@@ -175,11 +185,17 @@ export default function FeaturedArtists() {
                                 <div className="flex-shrink-0 text-center">
                                   <Calendar className="w-4 h-4 mx-auto mb-1" />
                                   <div className="font-bold">{month}</div>
-                                  <div className="text-lg font-bold leading-none">{day}</div>
+                                  <div className="text-lg font-bold leading-none">
+                                    {day}
+                                  </div>
                                 </div>
                                 <div className="flex-grow min-w-0">
-                                  <div className="font-semibold truncate">{event.city}</div>
-                                  <div className="text-white/70 truncate text-[10px]">{event.venue}</div>
+                                  <div className="font-semibold truncate">
+                                    {event.city}
+                                  </div>
+                                  <div className="text-white/70 truncate text-[10px]">
+                                    {event.venue}
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -209,7 +225,7 @@ export default function FeaturedArtists() {
                       </div>
                     )}
                   </div>
-                </Link>
+                </div>
               </div>
             );
           })}
