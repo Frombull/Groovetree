@@ -11,6 +11,7 @@ import { SocialLinks } from "./_components/social-links";
 import { FavoriteButton } from "./_components/favorite-button";
 import { ShareButton } from "./_components/share-button";
 import { BackButton } from "./_components/back-button";
+import { AnalyticsTracker } from "./_components/analytics-tracker";
 
 interface UserPageProps {
   params: Promise<{
@@ -152,6 +153,9 @@ export default async function UserPage({ params }: UserPageProps) {
 
       {/* Back button */}
       <BackButton isLight={isLight} textColor={textColor} />
+
+      {/* Analytics Tracker */}
+      <AnalyticsTracker pageId={pageId} />
 
       {/* Favorite button */}
       <FavoriteButton pageId={pageId} isLight={isLight} textColor={textColor} />

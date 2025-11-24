@@ -24,10 +24,15 @@ import {
   FaSun,
   FaMoon,
   FaDesktop,
+  FaHeart,
+  FaCog,
+  FaChartLine,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { FaShield } from "react-icons/fa6";
 import { IoMdSettings } from "react-icons/io";
-import { MdLogout } from "react-icons/md";
+import { MdLogout, MdCalendarMonth, MdEdit } from "react-icons/md";
 
 interface UserSettings {
   name: string;
@@ -75,6 +80,7 @@ export default function SettingsPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const sections = [
     { id: "account", label: "Account", icon: FaLock },
@@ -337,7 +343,62 @@ export default function SettingsPage() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all text-gray-700 dark:text-gray-300"
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? <FaTimes className="w-5 h-5" /> : <FaBars className="w-5 h-5" />}
+            </button>
+
+            {/* Desktop Navigation Buttons */}
+            <Link
+              href="/dashboard/edit"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Edit Page"
+            >
+              <MdEdit className="w-4 h-4" />
+              <span className="text-sm font-medium">Edit Page</span>
+            </Link>
+
+            <Link
+              href="/dashboard/favorites"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Favorite Artists"
+            >
+              <FaHeart className="w-4 h-4" />
+              <span className="text-sm font-medium">Favorites</span>
+            </Link>
+
+            <Link
+              href="/dashboard/calendar"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Artist Shows"
+            >
+              <MdCalendarMonth className="w-4 h-4" />
+              <span className="text-sm font-medium">Calendar</span>
+            </Link>
+
+            <Link
+              href="/dashboard/analytics"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
+              title="Analytics"
+            >
+              <FaChartLine className="w-4 h-4" />
+              <span className="text-sm font-medium">Analytics</span>
+            </Link>
+
+            <Link
+              href="/settings"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 border border-purple-300 dark:border-purple-700 transition-all cursor-pointer items-center gap-2 text-purple-700 dark:text-purple-300 font-semibold"
+              title="Settings"
+            >
+              <FaCog className="w-4 h-4" />
+              <span className="text-sm font-medium">Settings</span>
+            </Link>
+
             {user && (
               <div className="scale-90">
                 <UserMenu user={user} />
@@ -345,6 +406,54 @@ export default function SettingsPage() {
             )}
           </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-gray-700 shadow-lg">
+            <nav className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-2">
+              <Link
+                href="/dashboard/edit"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <MdEdit className="w-5 h-5" />
+                <span>Edit Page</span>
+              </Link>
+              <Link
+                href="/dashboard/favorites"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaHeart className="w-5 h-5" />
+                <span>Favorites</span>
+              </Link>
+              <Link
+                href="/dashboard/calendar"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <MdCalendarMonth className="w-5 h-5" />
+                <span>Calendar</span>
+              </Link>
+              <Link
+                href="/dashboard/analytics"
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaChartLine className="w-5 h-5" />
+                <span>Analytics</span>
+              </Link>
+              <Link
+                href="/settings"
+                className="flex items-center gap-3 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaCog className="w-5 h-5" />
+                <span>Settings</span>
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
 
       <div className="max-w-7xl mx-auto p-4 sm:p-6 relative z-10">

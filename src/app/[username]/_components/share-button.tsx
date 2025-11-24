@@ -49,6 +49,7 @@ export function ShareButton({
         artistSlug={artistSlug}
         avatarUrl={avatarUrl || undefined}
         isLight={isLight}
+        pageId={pageId}
       />
     </>
   );
