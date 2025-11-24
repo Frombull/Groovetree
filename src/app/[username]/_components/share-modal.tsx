@@ -69,7 +69,7 @@ export function ShareModal({
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
-    toast.success("Link copiado!");
+    toast.success("Link copied!");
     trackShare("copy");
     setTimeout(() => setCopied(false), 2000);
   };
