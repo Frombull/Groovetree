@@ -28,7 +28,6 @@ export async function getAuthUser(req?: Request): Promise<AuthUser | null> {
     // Se não encontrou no header ou não foi passada uma requisição, tenta pegar dos cookies
     if (!token) {
       const cookieStore = await cookies();
-      console.log(cookieStore);
       token = cookieStore.get("auth-token")?.value;
     }
 
@@ -127,8 +126,6 @@ export async function verifyAuth(req: Request): Promise<AuthUser | null> {
         },
       },
     });
-
-    console.log("User:", user);
 
     if (!user) return null;
 
