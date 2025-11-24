@@ -130,7 +130,9 @@ export default function SettingsPage() {
       (entries) => {
         // Find the entry with the highest intersection ratio
         let mostVisible = entries.reduce((prev, current) => {
-          return current.intersectionRatio > prev.intersectionRatio ? current : prev;
+          return current.intersectionRatio > prev.intersectionRatio
+            ? current
+            : prev;
         });
 
         if (mostVisible.isIntersecting && mostVisible.intersectionRatio > 0) {
@@ -182,7 +184,8 @@ export default function SettingsPage() {
     setTheme(newTheme);
     setSettings((prev) => ({ ...prev, theme: newTheme }));
     toast.success(
-      `Theme changed to ${newTheme === "auto" ? "system preference" : newTheme
+      `Theme changed to ${
+        newTheme === "auto" ? "system preference" : newTheme
       } mode!`
     );
   };
@@ -290,7 +293,9 @@ export default function SettingsPage() {
     } catch (error) {
       console.error("Error sending verification email:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to send verification email"
+        error instanceof Error
+          ? error.message
+          : "Failed to send verification email"
       );
     } finally {
       setIsSendingEmail(false);
@@ -357,10 +362,11 @@ export default function SettingsPage() {
                     <button
                       key={section.id}
                       onClick={() => scrollToSection(section.id)}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 cursor-pointer ${activeSection === section.id
-                        ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 shadow-sm"
-                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
-                        }`}
+                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 cursor-pointer ${
+                        activeSection === section.id
+                          ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 shadow-sm"
+                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+                      }`}
                     >
                       <Icon className="w-5 h-5" />
                       <span className="font-medium">{section.label}</span>
@@ -376,8 +382,11 @@ export default function SettingsPage() {
             {/* Account Section */}
             <section
               id="account"
-              ref={(el) => { sectionRefs.current.account = el; }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8">
+              ref={(el) => {
+                sectionRefs.current.account = el;
+              }}
+              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
+            >
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
                   Account
@@ -415,8 +424,11 @@ export default function SettingsPage() {
                       <button
                         onClick={handleSendVerificationEmail}
                         disabled={isSendingEmail}
-                        className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium cursor-pointer disabled:opacity-50">
-                        {isSendingEmail ? "Sending..." : "Send verification email"}
+                        className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium cursor-pointer disabled:opacity-50"
+                      >
+                        {isSendingEmail
+                          ? "Sending..."
+                          : "Send verification email"}
                       </button>
                     </div>
                   )}
@@ -523,7 +535,9 @@ export default function SettingsPage() {
             {/* Notifications Section */}
             <section
               id="notifications"
-              ref={(el) => { sectionRefs.current.notifications = el; }}
+              ref={(el) => {
+                sectionRefs.current.notifications = el;
+              }}
               className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
@@ -661,7 +675,9 @@ export default function SettingsPage() {
             {/* Appearance Section */}
             <section
               id="appearance"
-              ref={(el) => { sectionRefs.current.appearance = el; }}
+              ref={(el) => {
+                sectionRefs.current.appearance = el;
+              }}
               className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
@@ -683,10 +699,11 @@ export default function SettingsPage() {
                       {/* Light Theme */}
                       <button
                         onClick={() => handleThemeChange("light")}
-                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "light"
-                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                          : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
+                          theme === "light"
+                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                        }`}
                       >
                         <div className="flex items-center space-x-3 mb-3">
                           <FaSun className="w-5 h-5 text-yellow-500" />
@@ -709,10 +726,11 @@ export default function SettingsPage() {
                       {/* Dark Theme */}
                       <button
                         onClick={() => handleThemeChange("dark")}
-                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "dark"
-                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                          : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
+                          theme === "dark"
+                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                        }`}
                       >
                         <div className="flex items-center space-x-3 mb-3">
                           <FaMoon className="w-5 h-5 text-blue-400" />
@@ -735,10 +753,11 @@ export default function SettingsPage() {
                       {/* Auto Theme */}
                       <button
                         onClick={() => handleThemeChange("auto")}
-                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${theme === "auto"
-                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
-                          : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                        className={`py-8 p-4 border-2 rounded-lg transition-all cursor-pointer ${
+                          theme === "auto"
+                            ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+                            : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+                        }`}
                       >
                         <div className="flex items-center space-x-3 mb-3">
                           <FaDesktop className="w-5 h-5 text-gray-500" />
@@ -772,7 +791,9 @@ export default function SettingsPage() {
             {/* Language Section */}
             <section
               id="language"
-              ref={(el) => { sectionRefs.current.language = el; }}
+              ref={(el) => {
+                sectionRefs.current.language = el;
+              }}
               className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
@@ -822,7 +843,9 @@ export default function SettingsPage() {
             {/* Data Section */}
             <section
               id="data"
-              ref={(el) => { sectionRefs.current.data = el; }}
+              ref={(el) => {
+                sectionRefs.current.data = el;
+              }}
               className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
@@ -836,7 +859,9 @@ export default function SettingsPage() {
             {/* Delete Account Section */}
             <section
               id="delete_account"
-              ref={(el) => { sectionRefs.current.delete_account = el; }}
+              ref={(el) => {
+                sectionRefs.current.delete_account = el;
+              }}
               className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
             >
               <div className="space-y-6">
