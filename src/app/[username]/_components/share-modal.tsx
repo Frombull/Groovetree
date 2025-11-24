@@ -230,7 +230,7 @@ export function ShareModal({
               onClick={() => (window.location.href = "/")}
               className="w-full px-4 py-3 text-gray-600 hover:text-gray-900 transition-colors font-medium cursor-pointer"
             >
-              Saiba mais
+              Learn more
             </button>
           </div>
         </div>
