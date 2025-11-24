@@ -81,10 +81,10 @@ export default function CalendarPage() {
         const data = await response.json();
         setEvents(data.events);
       } else {
-        console.error("Erro ao carregar eventos");
+        console.error("Error loading events");
       }
     } catch (error) {
-      console.error("Erro ao carregar eventos:", error);
+      console.error("Error loading events:", error);
     } finally {
       setIsLoadingEvents(false);
     }
