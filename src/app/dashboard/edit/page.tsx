@@ -1428,7 +1428,7 @@ export default function EditPage() {
                           {event.state ? `, ${event.state}` : ""}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          📅 {new Date(event.date).toLocaleDateString("pt-BR")}
+                          📅 {new Date(event.date + 'T00:00:00').toLocaleDateString("pt-BR")}
                         </p>
                         {event.ticketUrl && (
                           <a
@@ -1884,7 +1884,7 @@ export default function EditPage() {
                                   >
                                     <MdEvent className="h-4 w-4" />
                                     <span className="font-mono text-sm">
-                                      {new Date(event.date)
+                                      {new Date(event.date + 'T00:00:00')
                                         .toLocaleDateString("en-US", {
                                           weekday: "short",
                                           month: "short",

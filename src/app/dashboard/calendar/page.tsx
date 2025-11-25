@@ -99,7 +99,7 @@ export default function CalendarPage() {
 
   // Agrupar eventos por data
   const eventsByDate = events.reduce((acc, event) => {
-    const dateKey = format(new Date(event.date), "yyyy-MM-dd");
+    const dateKey = format(new Date(event.date + 'T00:00:00'), "yyyy-MM-dd");
     if (!acc[dateKey]) {
       acc[dateKey] = [];
     }
@@ -133,7 +133,7 @@ export default function CalendarPage() {
 
     // Encontrar o próximo evento futuro
     const futureEvents = events
-      .map((event) => new Date(event.date))
+      .map((event) => new Date(event.date + 'T00:00:00'))
       .filter((date) => date >= today)
       .sort((a, b) => a.getTime() - b.getTime());
 
@@ -514,7 +514,7 @@ export default function CalendarPage() {
                 {selectedDate && selectedDateEvents.length > 0 ? (
                   <div className="space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar">
                     {selectedDateEvents.map((event) => {
-                      const eventDate = new Date(event.date);
+                      const eventDate = new Date(event.date + 'T00:00:00');
                       const isEventPast =
                         isPast(eventDate) && !isToday(eventDate);
 

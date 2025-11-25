@@ -26,7 +26,9 @@ export function ShowCalendar({ events, isLight = false }: ShowCalendarProps) {
 
   // Format date in "FRI, MAR 15" format
   const formatDate = (date: Date) => {
-    const eventDate = new Date(date);
+    // Convert date to string and add time to force local timezone
+    const dateStr = date.toString().split('T')[0];
+    const eventDate = new Date(dateStr + 'T00:00:00');
     return eventDate
       .toLocaleDateString("en-US", {
         weekday: "short",
