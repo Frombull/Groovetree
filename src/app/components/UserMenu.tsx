@@ -37,6 +37,9 @@ export default function UserMenu({ user }: UserMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
+  // Determina se está na home (fundo escuro) ou dashboard (fundo claro)
+  const isHomePage = pathname === "/" || pathname === "/settings";
+
   // Fechar menu ao clicar fora
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -84,12 +87,18 @@ export default function UserMenu({ user }: UserMenuProps) {
           )}
         </div>
         <div className="hidden md:block flex-1 text-left">
-          <span className="text-white font-bold text-sm lg:text-base">
+          <span
+            className={`${
+              isHomePage ? "text-white" : "text-gray-900 dark:text-white"
+            } font-bold text-sm lg:text-base`}
+          >
             {user.name || "User"}
           </span>
         </div>
         <FaChevronDown
-          className={`hidden md:block text-white text-xs transition-transform duration-200 ${
+          className={`hidden md:block ${
+            isHomePage ? "text-white" : "text-gray-900 dark:text-white"
+          } text-xs transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -97,8 +106,8 @@ export default function UserMenu({ user }: UserMenuProps) {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-64 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-800/50 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+        <div className="absolute right-0 mt-3 w-64 bg-white dark:bg-slate-950 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-300 dark:border-gray-800 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-purple-200 dark:ring-purple-600">
                 {user.page?.avatarUrl ? (

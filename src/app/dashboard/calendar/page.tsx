@@ -159,7 +159,7 @@ export default function CalendarPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
                 Groovetree
               </h1>
             </Link>

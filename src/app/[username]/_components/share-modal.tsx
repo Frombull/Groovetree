@@ -131,7 +131,7 @@ export function ShareModal({
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">
-            Share Linktree
+            Share Groovetree
           </h2>
           <button
             onClick={onClose}
@@ -210,28 +210,6 @@ export function ShareModal({
                 )}
               </button>
             ))}
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="space-y-3">
-            <p className="text-center text-sm text-gray-500">
-              Obtenha seu próprio Groovetree gratuito. O único link de bio
-              confiável para milhões de artistas.
-            </p>
-
-            <button
-              onClick={() => (window.location.href = "/signup")}
-              className="w-full px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full transition-colors font-medium cursor-pointer"
-            >
-              Cadastre-se gratuitamente
-            </button>
-
-            <button
-              onClick={() => (window.location.href = "/")}
-              className="w-full px-4 py-3 text-gray-600 hover:text-gray-900 transition-colors font-medium cursor-pointer"
-            >
-              Learn more
-            </button>
           </div>
         </div>
       </div>
