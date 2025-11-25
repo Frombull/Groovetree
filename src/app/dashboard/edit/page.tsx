@@ -309,66 +309,52 @@ export default function EditPage() {
       return;
     }
 
-    try {
-      if (editingLink) {
-        // Atualizar link existente
-        const response = await fetch(`/api/links/${editingLink.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(linkForm),
-        });
-
-        if (response.ok) {
-          toast.success("Link atualizado!");
-          fetchPageData();
-          setShowEditModal(false);
-          setEditingLink(null);
-        } else {
-          toast.error("Erro ao atualizar link");
-        }
-      } else {
-        // Criar novo link
-        const response = await fetch("/api/links/create", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...linkForm,
-            pageId: pageData?.id,
-          }),
-        });
-
-        if (response.ok) {
-          toast.success("Link adicionado!");
-          fetchPageData();
-          setShowEditModal(false);
-        } else {
-          toast.error("Erro ao adicionar link");
-        }
-      }
-    } catch (error) {
-      console.error("Error saving link:", error);
-      toast.error("Erro ao salvar link");
+    if (editingLink) {
+      // Atualizar link existente localmente
+      const updatedLinks = pageData!.links.map((link) =>
+        link.id === editingLink.id
+          ? {
+              ...link,
+              title: linkForm.title,
+              url: linkForm.url,
+              type: linkForm.type,
+            }
+          : link
+      );
+      setPageData({ ...pageData!, links: updatedLinks });
+      toast.success(
+        "Link atualizado! Clique em 'Save Changes' para confirmar."
+      );
+      setShowEditModal(false);
+      setEditingLink(null);
+      setHasUnsavedChanges(true);
+    } else {
+      // Criar novo link localmente
+      const newLink: Link = {
+        id: `temp-${Date.now()}`, // ID temporário
+        title: linkForm.title,
+        url: linkForm.url,
+        type: linkForm.type,
+        order: pageData!.links.length,
+        isActive: true,
+      };
+      setPageData({ ...pageData!, links: [...pageData!.links, newLink] });
+      toast.success(
+        "Link adicionado! Clique em 'Save Changes' para confirmar."
+      );
+      setShowEditModal(false);
+      setHasUnsavedChanges(true);
     }
   };
 
   const handleDeleteLink = async (linkId: string) => {
     if (!confirm("Tem certeza que deseja deletar este link?")) return;
 
-    try {
-      const response = await fetch(`/api/links/${linkId}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        toast.success("Link deletado!");
-        fetchPageData();
-      } else {
-        toast.error("Erro ao deletar link");
-      }
-    } catch (error) {
-      console.error("Error deleting link:", error);
-      toast.error("Erro ao deletar link");
-    }
+    // Remover link localmente
+    const updatedLinks = pageData!.links.filter((link) => link.id !== linkId);
+    setPageData({ ...pageData!, links: updatedLinks });
+    toast.success("Link deletado! Clique em 'Save Changes' para confirmar.");
+    setHasUnsavedChanges(true);
   };
 
   // Funções para gerenciar eventos
@@ -383,37 +369,50 @@ export default function EditPage() {
       return;
     }
 
-    try {
-      const url = editingEvent
-        ? `/api/events/${editingEvent.id}`
-        : "/api/events/create";
-      const method = editingEvent ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(eventForm),
+    if (editingEvent) {
+      // Atualizar evento existente localmente
+      const updatedEvents = pageData!.events.map((event) =>
+        event.id === editingEvent.id ? { ...event, ...eventForm } : event
+      );
+      setPageData({ ...pageData!, events: updatedEvents });
+      setEvents(updatedEvents);
+      toast.success(
+        "Show atualizado! Clique em 'Save Changes' para confirmar."
+      );
+      setShowEventModal(false);
+      setEventForm({
+        title: "",
+        venue: "",
+        city: "",
+        state: "",
+        date: "",
+        ticketUrl: "",
       });
-
-      if (response.ok) {
-        toast.success(editingEvent ? "Show updated!" : "Show added!");
-        setShowEventModal(false);
-        setEventForm({
-          title: "",
-          venue: "",
-          city: "",
-          state: "",
-          date: "",
-          ticketUrl: "",
-        });
-        setEditingEvent(null);
-        fetchPageData();
-      } else {
-        toast.error("Error saving show");
-      }
-    } catch (error) {
-      console.error("Error saving event:", error);
-      toast.error("Error saving show");
+      setEditingEvent(null);
+      setHasUnsavedChanges(true);
+    } else {
+      // Criar novo evento localmente
+      const newEvent: Event = {
+        id: `temp-${Date.now()}`,
+        ...eventForm,
+        isActive: true,
+      };
+      const updatedEvents = [...pageData!.events, newEvent];
+      setPageData({ ...pageData!, events: updatedEvents });
+      setEvents(updatedEvents);
+      toast.success(
+        "Show adicionado! Clique em 'Save Changes' para confirmar."
+      );
+      setShowEventModal(false);
+      setEventForm({
+        title: "",
+        venue: "",
+        city: "",
+        state: "",
+        date: "",
+        ticketUrl: "",
+      });
+      setHasUnsavedChanges(true);
     }
   };
 
@@ -433,21 +432,14 @@ export default function EditPage() {
   const handleDeleteEvent = async (eventId: string) => {
     if (!confirm("Are you sure you want to delete this show?")) return;
 
-    try {
-      const response = await fetch(`/api/events/${eventId}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        toast.success("Show deleted!");
-        fetchPageData();
-      } else {
-        toast.error("Error deleting show");
-      }
-    } catch (error) {
-      console.error("Error deleting event:", error);
-      toast.error("Erro deleting show");
-    }
+    // Remover evento localmente
+    const updatedEvents = pageData!.events.filter(
+      (event) => event.id !== eventId
+    );
+    setPageData({ ...pageData!, events: updatedEvents });
+    setEvents(updatedEvents);
+    toast.success("Show deletado! Clique em 'Save Changes' para confirmar.");
+    setHasUnsavedChanges(true);
   };
 
   // Photo Management Functions
@@ -524,34 +516,44 @@ export default function EditPage() {
       return;
     }
 
-    try {
-      const url = editingPhoto
-        ? `/api/photos/${editingPhoto.id}`
-        : "/api/photos/create";
-      const method = editingPhoto ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          imageUrl: photoForm.imageUrl,
-          caption: photoForm.caption || null,
-          pageId: pageData.id,
-        }),
-      });
-
-      if (response.ok) {
-        toast.success(editingPhoto ? "Picture updated!" : "Picture added!");
-        setShowPhotoModal(false);
-        setEditingPhoto(null);
-        setPhotoForm({ imageUrl: "", caption: "" });
-        fetchPageData();
-      } else {
-        toast.error("Error saving photo");
-      }
-    } catch (error) {
-      console.error("Error saving photo:", error);
-      toast.error("Error saving photo");
+    if (editingPhoto) {
+      // Atualizar foto existente localmente
+      const updatedPhotos = pageData!.photos.map((photo) =>
+        photo.id === editingPhoto.id
+          ? {
+              ...photo,
+              imageUrl: photoForm.imageUrl,
+              caption: photoForm.caption || null,
+            }
+          : photo
+      );
+      setPageData({ ...pageData!, photos: updatedPhotos });
+      setPhotos(updatedPhotos);
+      toast.success(
+        "Foto atualizada! Clique em 'Save Changes' para confirmar."
+      );
+      setShowPhotoModal(false);
+      setEditingPhoto(null);
+      setPhotoForm({ imageUrl: "", caption: "" });
+      setHasUnsavedChanges(true);
+    } else {
+      // Criar nova foto localmente
+      const newPhoto: Photo = {
+        id: `temp-${Date.now()}`,
+        imageUrl: photoForm.imageUrl,
+        caption: photoForm.caption || null,
+        order: pageData!.photos.length,
+        isActive: true,
+      };
+      const updatedPhotos = [...pageData!.photos, newPhoto];
+      setPageData({ ...pageData!, photos: updatedPhotos });
+      setPhotos(updatedPhotos);
+      toast.success(
+        "Foto adicionada! Clique em 'Save Changes' para confirmar."
+      );
+      setShowPhotoModal(false);
+      setPhotoForm({ imageUrl: "", caption: "" });
+      setHasUnsavedChanges(true);
     }
   };
 
@@ -568,25 +570,19 @@ export default function EditPage() {
   const handleDeletePhoto = async (photoId: string) => {
     if (!confirm("Are you sure you want to delete this photo?")) return;
 
-    try {
-      const response = await fetch(`/api/photos/${photoId}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        toast.success("Photo deleted!");
-        fetchPageData();
-      } else {
-        toast.error("Error deleting photo");
-      }
-    } catch (error) {
-      console.error("Error deleting photo:", error);
-      toast.error("Error deleting photo");
-    }
+    // Remover foto localmente
+    const updatedPhotos = pageData!.photos.filter(
+      (photo) => photo.id !== photoId
+    );
+    setPageData({ ...pageData!, photos: updatedPhotos });
+    setPhotos(updatedPhotos);
+    toast.success("Foto deletada! Clique em 'Save Changes' para confirmar.");
+    setHasUnsavedChanges(true);
   };
 
   const handleUpdatePage = async () => {
     try {
+      // Salvar dados básicos da página
       const response = await fetch("/api/page/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -600,16 +596,132 @@ export default function EditPage() {
         }),
       });
 
-      if (response.ok) {
-        const updatedData = await response.json();
-        setPageData(updatedData);
-        setOriginalPageData(updatedData); // Update original data
-        setHasUnsavedChanges(false); // Reset unsaved changes
-        toast.success("Changes saved");
-      } else {
+      if (!response.ok) {
         const errorData = await response.json();
         toast.error(errorData.error || "Error updating page");
+        return;
       }
+
+      // Salvar/atualizar links
+      const linkPromises = pageData!.links.map(async (link) => {
+        if (link.id.startsWith("temp-")) {
+          // Criar novo link
+          return fetch("/api/links/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: link.title,
+              url: link.url,
+              type: link.type,
+              pageId: pageData?.id,
+            }),
+          });
+        } else {
+          // Atualizar link existente
+          return fetch(`/api/links/${link.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: link.title,
+              url: link.url,
+              type: link.type,
+            }),
+          });
+        }
+      });
+
+      // Deletar links removidos
+      const deleteLinkPromises = originalPageData!.links
+        .filter((oldLink) => !pageData!.links.find((l) => l.id === oldLink.id))
+        .map((link) => fetch(`/api/links/${link.id}`, { method: "DELETE" }));
+
+      // Salvar/atualizar eventos
+      const eventPromises = pageData!.events.map(async (event) => {
+        if (event.id.startsWith("temp-")) {
+          // Criar novo evento
+          return fetch("/api/events/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: event.title,
+              venue: event.venue,
+              city: event.city,
+              state: event.state,
+              date: event.date,
+              ticketUrl: event.ticketUrl,
+            }),
+          });
+        } else {
+          // Atualizar evento existente
+          return fetch(`/api/events/${event.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: event.title,
+              venue: event.venue,
+              city: event.city,
+              state: event.state,
+              date: event.date,
+              ticketUrl: event.ticketUrl,
+            }),
+          });
+        }
+      });
+
+      // Deletar eventos removidos
+      const deleteEventPromises = originalPageData!.events
+        .filter(
+          (oldEvent) => !pageData!.events.find((e) => e.id === oldEvent.id)
+        )
+        .map((event) => fetch(`/api/events/${event.id}`, { method: "DELETE" }));
+
+      // Salvar/atualizar fotos
+      const photoPromises = pageData!.photos.map(async (photo) => {
+        if (photo.id.startsWith("temp-")) {
+          // Criar nova foto
+          return fetch("/api/photos/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              imageUrl: photo.imageUrl,
+              caption: photo.caption,
+              pageId: pageData?.id,
+            }),
+          });
+        } else {
+          // Atualizar foto existente
+          return fetch(`/api/photos/${photo.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              imageUrl: photo.imageUrl,
+              caption: photo.caption,
+            }),
+          });
+        }
+      });
+
+      // Deletar fotos removidas
+      const deletePhotoPromises = originalPageData!.photos
+        .filter(
+          (oldPhoto) => !pageData!.photos.find((p) => p.id === oldPhoto.id)
+        )
+        .map((photo) => fetch(`/api/photos/${photo.id}`, { method: "DELETE" }));
+
+      // Executar todas as requisições
+      await Promise.all([
+        ...linkPromises,
+        ...deleteLinkPromises,
+        ...eventPromises,
+        ...deleteEventPromises,
+        ...photoPromises,
+        ...deletePhotoPromises,
+      ]);
+
+      // Recarregar dados da página
+      await fetchPageData();
+      toast.success("Changes saved");
+      setHasUnsavedChanges(false);
     } catch (error) {
       console.error("Error updating page:", error);
       toast.error("Error updating page");
@@ -619,7 +731,7 @@ export default function EditPage() {
   const checkForUnsavedChanges = (newPageData: PageData) => {
     if (!originalPageData) return;
 
-    const hasChanges =
+    const hasPageChanges =
       newPageData.slug !== originalPageData.slug ||
       newPageData.title !== originalPageData.title ||
       newPageData.bio !== originalPageData.bio ||
@@ -627,7 +739,51 @@ export default function EditPage() {
       newPageData.textColor !== originalPageData.textColor ||
       newPageData.backgroundImageUrl !== originalPageData.backgroundImageUrl;
 
-    setHasUnsavedChanges(hasChanges);
+    const hasLinkChanges =
+      newPageData.links.length !== originalPageData.links.length ||
+      newPageData.links.some((link, index) => {
+        const origLink = originalPageData.links.find((l) => l.id === link.id);
+        if (!origLink) return true; // Novo link
+        return (
+          link.title !== origLink.title ||
+          link.url !== origLink.url ||
+          link.type !== origLink.type
+        );
+      });
+
+    const hasEventChanges =
+      newPageData.events.length !== originalPageData.events.length ||
+      newPageData.events.some((event, index) => {
+        const origEvent = originalPageData.events.find(
+          (e) => e.id === event.id
+        );
+        if (!origEvent) return true; // Novo evento
+        return (
+          event.title !== origEvent.title ||
+          event.venue !== origEvent.venue ||
+          event.city !== origEvent.city ||
+          event.state !== origEvent.state ||
+          event.date !== origEvent.date ||
+          event.ticketUrl !== origEvent.ticketUrl
+        );
+      });
+
+    const hasPhotoChanges =
+      newPageData.photos.length !== originalPageData.photos.length ||
+      newPageData.photos.some((photo, index) => {
+        const origPhoto = originalPageData.photos.find(
+          (p) => p.id === photo.id
+        );
+        if (!origPhoto) return true; // Nova foto
+        return (
+          photo.imageUrl !== origPhoto.imageUrl ||
+          photo.caption !== origPhoto.caption
+        );
+      });
+
+    setHasUnsavedChanges(
+      hasPageChanges || hasLinkChanges || hasEventChanges || hasPhotoChanges
+    );
   };
 
   const handleLogout = async () => {
@@ -667,8 +823,10 @@ export default function EditPage() {
       if (response.ok) {
         const { avatarUrl } = await response.json();
         setPageData((prev) => (prev ? { ...prev, avatarUrl } : null));
-        toast.success("Image updated!");
-        fetchPageData();
+        toast.success(
+          "Avatar atualizado! Clique em 'Save Changes' para confirmar."
+        );
+        setHasUnsavedChanges(true);
       } else {
         toast.error("Error uploading image");
       }
@@ -809,24 +967,8 @@ export default function EditPage() {
 
     // Optimistic update
     setPageData({ ...pageData, links: updatedLinks });
-
-    // Update in backend
-    try {
-      await Promise.all(
-        updatedLinks.map((link) =>
-          fetch(`/api/links/${link.id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ order: link.order }),
-          })
-        )
-      );
-      toast.success("Order updated!");
-    } catch (error) {
-      console.error("Error updating order:", error);
-      toast.error("Eoor updating order");
-      fetchPageData(); // Revert on error
-    }
+    toast.success("Ordem atualizada! Clique em 'Save Changes' para confirmar.");
+    setHasUnsavedChanges(true);
   };
 
   if (loading || isLoadingPage) {
@@ -851,7 +993,7 @@ export default function EditPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
                 Groovetree
               </h1>
             </Link>
@@ -1067,7 +1209,7 @@ export default function EditPage() {
                     setPageData(newPageData);
                     checkForUnsavedChanges(newPageData);
                   }}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="Your artist name"
                   data-cy="page-artist-name"
                 />
@@ -1085,7 +1227,7 @@ export default function EditPage() {
                     setPageData(newPageData);
                     checkForUnsavedChanges(newPageData);
                   }}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                   rows={3}
                   placeholder="Tell your audience about yourself"
                   data-cy="page-bio-description"
@@ -1113,7 +1255,7 @@ export default function EditPage() {
                         setPageData(newPageData);
                         checkForUnsavedChanges(newPageData);
                       }}
-                      className="flex-1 px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="flex-1 px-3 md:px-4 py-2 text-sm md:text-base border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       placeholder="your-username"
                       data-cy="page-slug"
                     />
@@ -1172,7 +1314,7 @@ export default function EditPage() {
                         checkForUnsavedChanges(newPageData);
                       }}
                       placeholder="#000000"
-                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       data-cy="page-background-color"
                     />
                   </div>
@@ -1209,7 +1351,7 @@ export default function EditPage() {
                         checkForUnsavedChanges(newPageData);
                       }}
                       placeholder="#ffffff"
-                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       data-cy="page-text-color"
                     />
                   </div>
@@ -1232,7 +1374,7 @@ export default function EditPage() {
                       checkForUnsavedChanges(newPageData);
                     }}
                     placeholder="https://example.com/background.jpg"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     data-cy="page-background-image-url"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -1477,13 +1619,13 @@ export default function EditPage() {
                 {pageData?.backgroundImageUrl && (
                   <>
                     <div
-                      className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+                      className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
                       style={{
                         backgroundImage: `url(${pageData.backgroundImageUrl})`,
                       }}
                     />
                     <div
-                      className="fixed inset-0 z-0 backdrop-blur-md"
+                      className="absolute inset-0 z-0 backdrop-blur-md"
                       style={{
                         backgroundColor: isLight
                           ? "rgba(255, 255, 255, 0.7)"
@@ -1494,7 +1636,7 @@ export default function EditPage() {
                 )}
 
                 {/* Content */}
-                <div className="relative z-9999 h-full overflow-y-auto custom-scrollbar">
+                <div className="relative z-10 h-full overflow-y-auto custom-scrollbar">
                   <div
                     className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8"
                     style={{
@@ -1717,7 +1859,7 @@ export default function EditPage() {
                               (isLight ? "#000000" : "#ffffff"),
                           }}
                         >
-                          Upcoming Shows
+                          Upcoming Shows & Events
                         </h1>
                         <div className="space-y-3">
                           {events.map((event) => (
@@ -1929,7 +2071,7 @@ export default function EditPage() {
                   onChange={(e) =>
                     setLinkForm({ ...linkForm, title: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="e.g., My Spotify"
                 />
               </div>
@@ -1944,7 +2086,7 @@ export default function EditPage() {
                   onChange={(e) =>
                     setLinkForm({ ...linkForm, url: e.target.value })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="https://..."
                 />
               </div>
@@ -2098,7 +2240,7 @@ export default function EditPage() {
                     setEventForm({ ...eventForm, title: e.target.value })
                   }
                   placeholder="Ex: Summer Tour 2025"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
@@ -2114,7 +2256,7 @@ export default function EditPage() {
                     setEventForm({ ...eventForm, venue: e.target.value })
                   }
                   placeholder="Ex: Estádio Mineirão"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
@@ -2131,7 +2273,7 @@ export default function EditPage() {
                       setEventForm({ ...eventForm, city: e.target.value })
                     }
                     placeholder="Ex: Belo Horizonte"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -2146,7 +2288,7 @@ export default function EditPage() {
                     }
                     placeholder="Ex: MG"
                     maxLength={2}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent uppercase"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent uppercase"
                   />
                 </div>
               </div>
@@ -2162,7 +2304,7 @@ export default function EditPage() {
                   onChange={(e) =>
                     setEventForm({ ...eventForm, date: e.target.value })
                   }
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
 
@@ -2178,7 +2320,7 @@ export default function EditPage() {
                     setEventForm({ ...eventForm, ticketUrl: e.target.value })
                   }
                   placeholder="https://example.com/tickets"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Ticket purchase link (optional)
@@ -2235,7 +2377,7 @@ export default function EditPage() {
                   accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
                   onChange={handlePhotoUpload}
                   disabled={uploadingPhoto}
-                  className="w-full cursor-pointer px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 dark:file:bg-purple-900/30 file:text-purple-700 dark:file:text-purple-400 hover:file:bg-purple-100 dark:hover:file:bg-purple-900/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full cursor-pointer px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 dark:file:bg-purple-900/30 file:text-purple-700 dark:file:text-purple-400 hover:file:bg-purple-100 dark:hover:file:bg-purple-900/50 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   JPEG, PNG, WebP or GIF (máx. 10MB for better quality)
@@ -2267,7 +2409,7 @@ export default function EditPage() {
                   }
                   placeholder="Ex: Show em São Paulo 2024"
                   maxLength={100}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 dark:bg-slate-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Text that appears above the photo (optional, max. 100

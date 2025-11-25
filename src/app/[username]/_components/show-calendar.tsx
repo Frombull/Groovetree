@@ -42,7 +42,7 @@ export function ShowCalendar({ events, isLight = false }: ShowCalendarProps) {
         className="my-6 font-sans text-3xl font-bold tracking-tight text-balance"
         style={{ color: isLight ? "#000000" : "#ffffff" }}
       >
-        Upcoming Shows
+        Upcoming Shows & Events
       </h1>
       <div className="space-y-3">
         {events.map((event) => (

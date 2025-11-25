@@ -23,7 +23,7 @@ export default function Header() {
             {/* Logo */}
             <div className="flex items-center space-x-4 lg:space-x-10">
               <Link href="/">
-                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
                   Groovetree
                 </h1>
               </Link>
@@ -32,13 +32,13 @@ export default function Header() {
                 <nav className="hidden lg:flex items-center space-x-6">
                   <a
                     href="#features"
-                    className="text-gray-300 dark:text-gray-300 hover:text-purple-400 transition-colors text-sm font-bold "
+                    className="text-gray-300 hover:text-purple-400 transition-colors text-sm font-bold "
                   >
                     Resources
                   </a>
                   <a
                     href="#how-it-works"
-                    className="text-gray-300 dark:text-gray-300 hover:text-purple-400 transition-colors text-sm font-bold "
+                    className="text-gray-300 hover:text-purple-400 transition-colors text-sm font-bold "
                   >
                     How it works
                   </a>
@@ -51,13 +51,13 @@ export default function Header() {
               <div className="flex-1 flex justify-center">
                 <div className="flex items-center gap-6">
                   <Link href="/">
-                    <span className="flex items-center gap-2 text-base md:text-lg text-white font-semibold hover:text-purple-400 transition-colors cursor-pointer whitespace-nowrap">
+                    <span className="flex items-center gap-2 text-base md:text-lg text-gray-300 font-semibold hover:text-purple-400 transition-colors cursor-pointer whitespace-nowrap">
                       <FaHome className="text-sm md:text-base" />
                       Home
                     </span>
                   </Link>
                   <Link href="/dashboard/edit">
-                    <span className="flex items-center gap-2 text-base md:text-lg text-white font-semibold hover:text-purple-400 transition-colors cursor-pointer whitespace-nowrap">
+                    <span className="flex items-center gap-2 text-base md:text-lg text-gray-300 font-semibold hover:text-purple-400 transition-colors cursor-pointer whitespace-nowrap">
                       <FaEdit className="text-sm md:text-base" />
                       Edit Page
                     </span>
@@ -89,7 +89,7 @@ export default function Header() {
                 <>
                   <Link href="/login">
                     <button
-                      className="bg-transparent hover:opacity-90 dark:text-gray-300 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 hover:border-purple-400 transition-all cursor-pointer text-sm md:text-base whitespace-nowrap"
+                      className="bg-transparent hover:opacity-90 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 hover:border-purple-400 transition-all cursor-pointer text-sm md:text-base whitespace-nowrap"
                       data-cy="login-button-header"
                     >
                       Login
@@ -97,7 +97,7 @@ export default function Header() {
                   </Link>
                   <Link href="/signup">
                     <button
-                      className="bg-transparent hover:opacity-90 dark:text-gray-300 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 hover:border-purple-400 transition-all cursor-pointer text-sm md:text-base whitespace-nowrap"
+                      className="bg-transparent hover:opacity-90 text-gray-300 font-semibold py-2 px-3 md:px-6 rounded-full border border-gray-300 hover:border-purple-400 transition-all cursor-pointer text-sm md:text-base whitespace-nowrap"
                       data-cy="signup-button-header"
                     >
                       Sign Up

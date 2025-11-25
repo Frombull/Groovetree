@@ -95,7 +95,7 @@ export default function AnalyticsPage() {
     }
   };
 
-  // Combinar dados dos gráficos em um único dataset
+  // Combinar dados dos gráficos em um único dataset e tornar cumulativo
   const combineChartData = () => {
     if (!analyticsData) return [];
 
@@ -108,9 +108,13 @@ export default function AnalyticsPage() {
           pageViews: 0,
           favorites: 0,
           shares: 0,
+          dailyPageViews: 0,
+          dailyFavorites: 0,
+          dailyShares: 0,
         });
       }
       dateMap.get(item.date)!.pageViews = item.count;
+      dateMap.get(item.date)!.dailyPageViews = item.count;
     });
 
     analyticsData.charts.favorites.forEach((item) => {
@@ -120,9 +124,13 @@ export default function AnalyticsPage() {
           pageViews: 0,
           favorites: 0,
           shares: 0,
+          dailyPageViews: 0,
+          dailyFavorites: 0,
+          dailyShares: 0,
         });
       }
       dateMap.get(item.date)!.favorites = item.count;
+      dateMap.get(item.date)!.dailyFavorites = item.count;
     });
 
     analyticsData.charts.shares.forEach((item) => {
@@ -132,14 +140,39 @@ export default function AnalyticsPage() {
           pageViews: 0,
           favorites: 0,
           shares: 0,
+          dailyPageViews: 0,
+          dailyFavorites: 0,
+          dailyShares: 0,
         });
       }
       dateMap.get(item.date)!.shares = item.count;
+      dateMap.get(item.date)!.dailyShares = item.count;
     });
 
-    return Array.from(dateMap.values()).sort((a, b) =>
+    // Ordenar por data e tornar cumulativo
+    const sortedData = Array.from(dateMap.values()).sort((a, b) =>
       a.date.localeCompare(b.date)
     );
+
+    let cumulativePageViews = 0;
+    let cumulativeFavorites = 0;
+    let cumulativeShares = 0;
+
+    return sortedData.map((item) => {
+      cumulativePageViews += item.pageViews;
+      cumulativeFavorites += item.favorites;
+      cumulativeShares += item.shares;
+
+      return {
+        date: item.date,
+        pageViews: cumulativePageViews,
+        favorites: cumulativeFavorites,
+        shares: cumulativeShares,
+        dailyPageViews: item.dailyPageViews,
+        dailyFavorites: item.dailyFavorites,
+        dailyShares: item.dailyShares,
+      };
+    });
   };
 
   const formatDate = (dateStr: string) => {
@@ -162,7 +195,7 @@ export default function AnalyticsPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white bg-clip-text cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap font-[family-name:var(--font-logo)] flex items-center translate-y-0.5">
                 Groovetree
               </h1>
             </Link>
@@ -208,6 +241,15 @@ export default function AnalyticsPage() {
             >
               <FaCalendarAlt className="w-4 h-4" />
               <span className="text-sm font-medium">Calendar</span>
+            </Link>
+
+            <Link
+              href="/dashboard/analytics"
+              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 border border-purple-300 dark:border-purple-700 transition-all cursor-pointer items-center gap-2 text-purple-700 dark:text-purple-300 font-semibold"
+              title="Analytics"
+            >
+              <FaChartLine className="w-4 h-4" />
+              <span className="text-sm font-medium">Analytics</span>
             </Link>
 
             <Link
@@ -357,7 +399,7 @@ export default function AnalyticsPage() {
         {/* Combined Chart */}
         <div className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-            Métricas ao longo do tempo
+            Metrics over time
           </h2>
           <div className="w-full h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -408,11 +450,20 @@ export default function AnalyticsPage() {
                     color: "#F9FAFB",
                   }}
                   labelFormatter={(label) => formatDate(label as string)}
+                  formatter={(value: number, name: string) => {
+                    // Show only daily values in tooltip
+                    if (name === "Page Views")
+                      return [value, "Views on this day"];
+                    if (name === "Favorites")
+                      return [value, "Favorites on this day"];
+                    if (name === "Shares") return [value, "Shares on this day"];
+                    return [value, name];
+                  }}
                 />
                 <Legend />
                 <Area
                   type="monotone"
-                  dataKey="pageViews"
+                  dataKey="dailyPageViews"
                   stroke="#9333EA"
                   strokeWidth={2}
                   fillOpacity={1}
@@ -421,7 +472,7 @@ export default function AnalyticsPage() {
                 />
                 <Area
                   type="monotone"
-                  dataKey="favorites"
+                  dataKey="dailyFavorites"
                   stroke="#EC4899"
                   strokeWidth={2}
                   fillOpacity={1}
@@ -430,7 +481,7 @@ export default function AnalyticsPage() {
                 />
                 <Area
                   type="monotone"
-                  dataKey="shares"
+                  dataKey="dailyShares"
                   stroke="#3B82F6"
                   strokeWidth={2}
                   fillOpacity={1}
