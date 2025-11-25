@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { useTheme } from "@/app/contexts/ThemeContext";
-import DataExport from "@/app/components/DataExport";
 import DeleteAccountModal from "@/app/components/DeleteAccountModal";
 import UserMenu from "@/app/components/UserMenu";
 // import Aurora from "@/app/components/Aurora";
@@ -87,7 +86,6 @@ export default function SettingsPage() {
     { id: "notifications", label: "Notifications", icon: FaBell },
     { id: "appearance", label: "Appearance", icon: FaPalette },
     { id: "language", label: "Language", icon: FaGlobe },
-    { id: "data", label: "Data", icon: FaDatabase },
     { id: "delete_account", label: "Delete Account", icon: FaTrash },
   ];
 
@@ -146,8 +144,8 @@ export default function SettingsPage() {
         }
       },
       {
-        rootMargin: "-20% 0px -70% 0px",
-        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1.0],
+        rootMargin: "-10% 0px -60% 0px",
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
       }
     );
 
@@ -475,11 +473,7 @@ export default function SettingsPage() {
                     <button
                       key={section.id}
                       onClick={() => scrollToSection(section.id)}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 cursor-pointer ${
-                        activeSection === section.id
-                          ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700 shadow-sm"
-                          : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
-                      }`}
+                      className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 cursor-pointer text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none"
                     >
                       <Icon className="w-5 h-5" />
                       <span className="font-medium">{section.label}</span>
@@ -950,22 +944,6 @@ export default function SettingsPage() {
                   )}
                   {isSaving ? "Saving..." : "Save Changes"}
                 </button>
-              </div>
-            </section>
-
-            {/* Data Section */}
-            <section
-              id="data"
-              ref={(el) => {
-                sectionRefs.current.data = el;
-              }}
-              className="bg-white dark:bg-slate-950 rounded-2xl shadow-sm border dark:border-gray-800 p-4 sm:p-8"
-            >
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300">
-                  Data and Privacy
-                </h2>
-                <DataExport />
               </div>
             </section>
 
