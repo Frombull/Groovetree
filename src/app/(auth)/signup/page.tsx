@@ -3,10 +3,10 @@
 import Link from "next/link";
 import {
   FaGoogle,
-  FaGithub,
   FaEye,
   FaEyeSlash,
   FaArrowLeft,
+  FaSpotify,
 } from "react-icons/fa";
 import { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
@@ -177,13 +177,23 @@ function SignupContent() {
           </div>
 
           <div className="space-y-3">
-            <button className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer">
+            <button
+              onClick={() => {
+                window.location.href = '/api/auth/oauth/google?mode=signup';
+              }}
+              className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer"
+            >
               <FaGoogle />
               Sign up with Google
             </button>
-            <button className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer">
-              <FaGithub />
-              Sign up with Github
+            <button
+              onClick={() => {
+                window.location.href = '/api/auth/oauth/spotify?mode=signup';
+              }}
+              className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer"
+            >
+              <FaSpotify />
+              Sign up with Spotify
             </button>
           </div>
 

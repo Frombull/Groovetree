@@ -4,21 +4,24 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
-  id                     String    @id @default(cuid())
-  email                  String    @unique
-  name                   String?
-  password               String
-  emailVerified          Boolean   @default(false)
-  emailVerificationToken String?   @unique
+  id                      String           @id @default(cuid())
+  email                   String           @unique
+  name                    String?
+  password                String? // Optional for OAuth users
+  provider                String? // "google", "spotify", or null for email/password
+  providerId              String? // OAuth provider user ID
+  emailVerified           Boolean          @default(false)
+  emailVerificationToken  String?          @unique
   emailVerificationExpiry DateTime?
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
-  page                   Page? // User can have only one page
-  favorites              FavoriteArtist[] // Artistas favoritos do usuário
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  page                    Page? // User can have only one page
+  favorites               FavoriteArtist[] // Artistas favoritos do usuário
+
+  @@unique([provider, providerId]) // Unique constraint for OAuth users
 }
 
 model Page {
@@ -31,14 +34,14 @@ model Page {
   textColor          String?
   backgroundImageUrl String?
 
-  userId String @unique // One-to-one relationship
-  user   User    @relation(fields: [userId], references: [id])
-  links  Link[]
-  events Event[]
-  embeds Embed[]
-  photos Photo[]
+  userId      String           @unique // One-to-one relationship
+  user        User             @relation(fields: [userId], references: [id])
+  links       Link[]
+  events      Event[]
+  embeds      Embed[]
+  photos      Photo[]
   favoritedBy FavoriteArtist[] // Usuários que favoritaram este artista
-  pageViews PageView[] // Analytics: visualizações da página
+  pageViews   PageView[] // Analytics: visualizações da página
   shareEvents ShareEvent[] // Analytics: compartilhamentos
 
   createdAt DateTime @default(now())
@@ -64,7 +67,7 @@ model Link {
   id       String   @id @default(cuid())
   title    String
   url      String
-  embedUrl String?  // URL do embed (opcional, gerado automaticamente)
+  embedUrl String? // URL do embed (opcional, gerado automaticamente)
   type     LinkType @default(GENERIC)
   order    Int      @default(0)
   isActive Boolean  @default(true)
@@ -80,7 +83,7 @@ model Event {
   title     String
   venue     String
   city      String
-  state     String?  // Estado (opcional)
+  state     String? // Estado (opcional)
   date      DateTime
   ticketUrl String?
   isActive  Boolean  @default(true)
@@ -106,11 +109,11 @@ model Embed {
 }
 
 model Photo {
-  id              String  @id @default(cuid())
-  imageUrl        String  // URL da imagem
-  caption         String? // Texto do overlay (opcional)
-  order           Int     @default(0)
-  isActive        Boolean @default(true)
+  id       String  @id @default(cuid())
+  imageUrl String // URL da imagem
+  caption  String? // Texto do overlay (opcional)
+  order    Int     @default(0)
+  isActive Boolean @default(true)
 
   pageId    String
   page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
@@ -119,12 +122,12 @@ model Photo {
 }
 
 model FavoriteArtist {
-  id        String   @id @default(cuid())
-  userId    String
-  pageId    String   // ID da página do artista favorito
+  id     String @id @default(cuid())
+  userId String
+  pageId String // ID da página do artista favorito
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -133,8 +136,8 @@ model FavoriteArtist {
 
 // Analytics Models
 model PageView {
-  id        String   @id @default(cuid())
-  pageId    String
+  id     String @id @default(cuid())
+  pageId String
 
   page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
@@ -143,9 +146,9 @@ model PageView {
 }
 
 model ShareEvent {
-  id        String   @id @default(cuid())
-  pageId    String
-  platform  String?  // "facebook", "twitter", "whatsapp", "copy", etc.
+  id       String  @id @default(cuid())
+  pageId   String
+  platform String? // "facebook", "twitter", "whatsapp", "copy", etc.
 
   page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())

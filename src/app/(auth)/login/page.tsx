@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   FaGoogle,
-  FaGithub,
   FaEye,
   FaEyeSlash,
   FaArrowLeft,
+  FaSpotify,
 } from "react-icons/fa";
 import { useState } from "react";
 import { useAuth } from "@/app/hooks/useAuth";
@@ -122,13 +122,23 @@ export default function Login() {
           </div>
 
           <div className="space-y-3">
-            <button className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer">
+            <button
+              onClick={() => {
+                window.location.href = '/api/auth/oauth/google?mode=login';
+              }}
+              className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer"
+            >
               <FaGoogle />
               Continue with Google
             </button>
-            <button className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer">
-              <FaGithub />
-              Continue with Github
+            <button
+              onClick={() => {
+                window.location.href = '/api/auth/oauth/spotify?mode=login';
+              }}
+              className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-md py-3 text-gray-700 font-semibold hover:bg-gray-50 transition cursor-pointer"
+            >
+              <FaSpotify />
+              Continue with Spotify
             </button>
           </div>
 
