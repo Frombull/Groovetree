@@ -8,8 +8,8 @@ const globalForPrisma = globalThis as unknown as {
 const isProduction = process.env.NODE_ENV === "production";
 
 const connectionString = isProduction
-  ? process.env.DIRECT_URL // pooler supabase
-  : process.env.DATABASE_URL; // normal
+  ? process.env.DATABASE_URL // pooler supabase (porta 6543)
+  : process.env.DIRECT_URL; // direct connection (porta 5432)
 
 if (!connectionString) {
   throw new Error("Missing DATABASE_URL / DIRECT_URL environment variables");
