@@ -5,23 +5,26 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-// Debug: log the DATABASE_URL being used
-if (process.env.NODE_ENV === "development") {
-  console.log("DATABASE_URL:", process.env.DATABASE_URL);
+const isProduction = process.env.NODE_ENV === "production";
+
+const connectionString = isProduction
+  ? process.env.DIRECT_URL // pooler supabase
+  : process.env.DATABASE_URL; // normal
+
+if (!connectionString) {
+  throw new Error("Missing DATABASE_URL / DIRECT_URL environment variables");
 }
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+// Create adapter with the correct URL depending on environment
+const adapter = new PrismaPg({ connectionString });
 
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     adapter,
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "error", "warn"]
-        : ["error"],
+    log: isProduction ? ["error"] : ["query", "error", "warn"],
   });
 
-if (process.env.NODE_ENV !== "production") {
+if (!isProduction) {
   globalForPrisma.prisma = prisma;
 }
