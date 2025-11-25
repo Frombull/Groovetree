@@ -596,7 +596,7 @@ export default function Home() {
                     </div>
 
                     {/* X-axis labels */}
-                    <div className="flex justify-between mt-4 pl-14 pr-1">
+                    <div className="hidden md:flex justify-between mt-4 pl-14 pr-1">
                       <span className="text-xs text-gray-400 font-medium">
                         Jan
                       </span>

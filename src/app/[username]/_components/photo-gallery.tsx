@@ -29,7 +29,7 @@ export function PhotoGallery({ photos, isLight = false }: PhotoGalleryProps) {
         className="text-center mb-8 font-sans text-2xl sm:text-3xl font-bold tracking-tight"
         style={{ color: isLight ? "#000000" : "#ffffff" }}
       >
-        Nos palcos
+        Photo Gallery
       </h1>
 
       {/* Layout responsivo: uma foto por linha */}

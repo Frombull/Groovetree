@@ -1933,7 +1933,7 @@ export default function EditPage() {
                               (isLight ? "#000000" : "#ffffff"),
                           }}
                         >
-                          Nos palcos
+                          Photo Gallery
                         </h1>
                         <div className="flex flex-col items-center gap-6 sm:gap-8 max-w-3xl mx-auto">
                           {photos.slice(0, 4).map((photo) => (
