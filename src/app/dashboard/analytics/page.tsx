@@ -176,7 +176,8 @@ export default function AnalyticsPage() {
   };
 
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+    // Parse the date string and add timezone offset to get local date
+    const date = new Date(dateStr + 'T00:00:00');
     return date.toLocaleDateString("pt-BR", { month: "short", day: "numeric" });
   };
 
