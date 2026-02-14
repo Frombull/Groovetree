@@ -25,7 +25,6 @@ import {
   FaDesktop,
   FaHeart,
   FaCog,
-  FaChartLine,
   FaBars,
   FaTimes,
 } from "react-icons/fa";
@@ -384,15 +383,6 @@ export default function SettingsPage() {
             </Link>
 
             <Link
-              href="/dashboard/analytics"
-              className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all cursor-pointer items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400"
-              title="Analytics"
-            >
-              <FaChartLine className="w-4 h-4" />
-              <span className="text-sm font-medium">Analytics</span>
-            </Link>
-
-            <Link
               href="/settings"
               className="hidden md:flex p-2 md:px-4 md:py-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 border border-purple-300 dark:border-purple-700 transition-all cursor-pointer items-center gap-2 text-purple-700 dark:text-purple-300 font-semibold"
               title="Settings"
@@ -436,14 +426,6 @@ export default function SettingsPage() {
               >
                 <MdCalendarMonth className="w-5 h-5" />
                 <span>Calendar</span>
-              </Link>
-              <Link
-                href="/dashboard/analytics"
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-700 dark:text-gray-300"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <FaChartLine className="w-5 h-5" />
-                <span>Analytics</span>
               </Link>
               <Link
                 href="/settings"

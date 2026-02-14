@@ -47,30 +47,10 @@ export function ShareModal({
       : "";
   const shareText = `Confira ${artistTitle} no Groovetree!`;
 
-  const trackShare = async (platform: string) => {
-    if (!pageId) return;
-    try {
-      await fetch("/api/analytics/track", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          pageId,
-          type: "share",
-          platform,
-        }),
-      });
-    } catch (error) {
-      console.error("Error tracking share:", error);
-    }
-  };
-
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     toast.success("Link copied!");
-    trackShare("copy");
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -120,8 +100,7 @@ export function ShareModal({
     },
   ];
 
-  const handleSocialShare = (url: string, platform: string) => {
-    trackShare(platform);
+  const handleSocialShare = (url: string) => {
     window.open(url, "_blank", "width=600,height=400");
   };
 
@@ -192,7 +171,7 @@ export function ShareModal({
                 onClick={() =>
                   platform.action === "copy"
                     ? handleCopyUrl()
-                    : handleSocialShare(platform.url!, platform.platform)
+                    : handleSocialShare(platform.url!)
                 }
                 className={`w-12 h-12 rounded-full ${platform.color} text-white flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-lg cursor-pointer`}
                 title={
