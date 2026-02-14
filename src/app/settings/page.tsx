@@ -28,7 +28,6 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
-} from "react-icons/fa";
 import { FaShield } from "react-icons/fa6";
 import { IoMdSettings } from "react-icons/io";
 import { MdLogout, MdCalendarMonth, MdEdit } from "react-icons/md";
