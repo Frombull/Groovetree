@@ -11,11 +11,11 @@ export default function DataExport() {
     setIsExporting(true);
 
     try {
-      // Buscar dados do usuário da API
+      // Fetch user data from API
       const response = await fetch('/api/user/export');
 
       if (!response.ok) {
-        throw new Error('Falha ao buscar dados do usuário');
+        throw new Error('Failed to fetch user data');
       }
 
       const userData = await response.json();
