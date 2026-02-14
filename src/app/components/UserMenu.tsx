@@ -12,7 +12,6 @@ import {
   FaChevronDown,
   FaCalendar,
   FaHeart,
-  FaChartLine,
   FaCopy,
 } from "react-icons/fa";
 
@@ -176,25 +175,6 @@ export default function UserMenu({ user }: UserMenuProps) {
             </Link>
 
             <div className="border-t border-gray-100 dark:border-gray-800 my-2 mx-2"></div>
-
-            <Link
-              href="/dashboard/analytics"
-              className={`flex items-center px-4 py-2.5 text-sm transition-all group ${
-                pathname === "/dashboard/analytics"
-                  ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400"
-              }`}
-              onClick={() => setIsOpen(false)}
-            >
-              <FaChartLine
-                className={`mr-3 transition-colors ${
-                  pathname === "/dashboard/analytics"
-                    ? "text-purple-600 dark:text-purple-400"
-                    : "text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400"
-                }`}
-              />
-              Analytics
-            </Link>
 
             <Link
               href="/dashboard/calendar"
