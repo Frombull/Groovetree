@@ -232,7 +232,7 @@ export default function EditPage() {
         console.error("Error creating page:", errorData);
         if (errorData.error === "User already has a page") {
           console.log("User already has a page, trying to fetch it...");
-          // Se o usuário já tem uma página, tenta buscar ela
+          // If the user already has a page, try to fetch it
           const fetchResponse = await fetch("/api/page/me");
           if (fetchResponse.ok) {
             const data = await fetchResponse.json();
@@ -260,7 +260,7 @@ export default function EditPage() {
       }
     } catch (error) {
       console.error("Error fetching page:", error);
-      toast.error("Erro ao carregar página");
+      toast.error("Error loading page");
     } finally {
       setIsLoadingPage(false);
     }
@@ -304,7 +304,7 @@ export default function EditPage() {
 
   const handleSaveLink = async () => {
     if (!linkForm.title || !linkForm.url) {
-      toast.error("Preencha todos os campos");
+      toast.error("Fill in all fields");
       return;
     }
 
@@ -322,7 +322,7 @@ export default function EditPage() {
       );
       setPageData({ ...pageData!, links: updatedLinks });
       toast.success(
-        "Link atualizado! Clique em 'Save Changes' para confirmar."
+        "Link updated! Click 'Save Changes' to confirm."
       );
       setShowEditModal(false);
       setEditingLink(null);
@@ -339,7 +339,7 @@ export default function EditPage() {
       };
       setPageData({ ...pageData!, links: [...pageData!.links, newLink] });
       toast.success(
-        "Link adicionado! Clique em 'Save Changes' para confirmar."
+        "Link added! Click 'Save Changes' to confirm."
       );
       setShowEditModal(false);
       setHasUnsavedChanges(true);
@@ -347,12 +347,12 @@ export default function EditPage() {
   };
 
   const handleDeleteLink = async (linkId: string) => {
-    if (!confirm("Tem certeza que deseja deletar este link?")) return;
+    if (!confirm("Are you sure you want to delete this link?")) return;
 
     // Remover link localmente
     const updatedLinks = pageData!.links.filter((link) => link.id !== linkId);
     setPageData({ ...pageData!, links: updatedLinks });
-    toast.success("Link deletado! Clique em 'Save Changes' para confirmar.");
+    toast.success("Link deleted! Click 'Save Changes' to confirm.");
     setHasUnsavedChanges(true);
   };
 
@@ -364,7 +364,7 @@ export default function EditPage() {
       !eventForm.city ||
       !eventForm.date
     ) {
-      toast.error("Preencha todos os campos obrigatórios");
+      toast.error("Fill in all required fields");
       return;
     }
 
@@ -376,7 +376,7 @@ export default function EditPage() {
       setPageData({ ...pageData!, events: updatedEvents });
       setEvents(updatedEvents);
       toast.success(
-        "Show atualizado! Clique em 'Save Changes' para confirmar."
+        "Show updated! Click 'Save Changes' to confirm."
       );
       setShowEventModal(false);
       setEventForm({
@@ -400,7 +400,7 @@ export default function EditPage() {
       setPageData({ ...pageData!, events: updatedEvents });
       setEvents(updatedEvents);
       toast.success(
-        "Show adicionado! Clique em 'Save Changes' para confirmar."
+        "Show added! Click 'Save Changes' to confirm."
       );
       setShowEventModal(false);
       setEventForm({
@@ -437,7 +437,7 @@ export default function EditPage() {
     );
     setPageData({ ...pageData!, events: updatedEvents });
     setEvents(updatedEvents);
-    toast.success("Show deletado! Clique em 'Save Changes' para confirmar.");
+    toast.success("Show deleted! Click 'Save Changes' to confirm.");
     setHasUnsavedChanges(true);
   };
 
@@ -463,7 +463,7 @@ export default function EditPage() {
 
     // (10MB)
     if (file.size > 10 * 1024 * 1024) {
-      toast.error("Arquivo muito grande. Tamanho máximo: 10MB");
+      toast.error("File too large. Maximum size: 10MB");
       return;
     }
 
@@ -529,7 +529,7 @@ export default function EditPage() {
       setPageData({ ...pageData!, photos: updatedPhotos });
       setPhotos(updatedPhotos);
       toast.success(
-        "Foto atualizada! Clique em 'Save Changes' para confirmar."
+        "Photo updated! Click 'Save Changes' to confirm."
       );
       setShowPhotoModal(false);
       setEditingPhoto(null);
@@ -548,7 +548,7 @@ export default function EditPage() {
       setPageData({ ...pageData!, photos: updatedPhotos });
       setPhotos(updatedPhotos);
       toast.success(
-        "Foto adicionada! Clique em 'Save Changes' para confirmar."
+        "Photo added! Click 'Save Changes' to confirm."
       );
       setShowPhotoModal(false);
       setPhotoForm({ imageUrl: "", caption: "" });
@@ -575,7 +575,7 @@ export default function EditPage() {
     );
     setPageData({ ...pageData!, photos: updatedPhotos });
     setPhotos(updatedPhotos);
-    toast.success("Foto deletada! Clique em 'Save Changes' para confirmar.");
+    toast.success("Photo deleted! Click 'Save Changes' to confirm.");
     setHasUnsavedChanges(true);
   };
 
@@ -823,7 +823,7 @@ export default function EditPage() {
         const { avatarUrl } = await response.json();
         setPageData((prev) => (prev ? { ...prev, avatarUrl } : null));
         toast.success(
-          "Avatar atualizado! Clique em 'Save Changes' para confirmar."
+          "Avatar updated! Click 'Save Changes' to confirm."
         );
         setHasUnsavedChanges(true);
       } else {
@@ -966,7 +966,7 @@ export default function EditPage() {
 
     // Optimistic update
     setPageData({ ...pageData, links: updatedLinks });
-    toast.success("Ordem atualizada! Clique em 'Save Changes' para confirmar.");
+    toast.success("Order updated! Click 'Save Changes' to confirm.");
     setHasUnsavedChanges(true);
   };
 
@@ -1410,7 +1410,7 @@ export default function EditPage() {
                           {event.state ? `, ${event.state}` : ""}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          📅 {new Date(event.date).toLocaleDateString("pt-BR")}
+                          📅 {new Date(event.date).toLocaleDateString("en-US")}
                         </p>
                         {event.ticketUrl && (
                           <a
@@ -1420,7 +1420,7 @@ export default function EditPage() {
                             className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 mt-1 inline-flex items-center gap-1"
                           >
                             <FaExternalLinkAlt className="w-3 h-3" />
-                            Ver ingressos
+                            View tickets
                           </a>
                         )}
                       </div>
@@ -1471,7 +1471,7 @@ export default function EditPage() {
                 }`}
               >
                 <FaPlus className="w-5 h-5" />
-                Add Photo {photos.length >= 4 && "(Máximo atingido)"}
+                Add Photo {photos.length >= 4 && "(Maximum reached)"}
               </button>
 
               {/* Photos Grid */}
@@ -2221,7 +2221,7 @@ export default function EditPage() {
                   onChange={(e) =>
                     setEventForm({ ...eventForm, title: e.target.value })
                   }
-                  placeholder="Ex: Summer Tour 2025"
+                  placeholder="e.g., Summer Tour 2025"
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
@@ -2237,7 +2237,7 @@ export default function EditPage() {
                   onChange={(e) =>
                     setEventForm({ ...eventForm, venue: e.target.value })
                   }
-                  placeholder="Ex: Estádio Mineirão"
+                  placeholder="e.g., Madison Square Garden"
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
@@ -2254,7 +2254,7 @@ export default function EditPage() {
                     onChange={(e) =>
                       setEventForm({ ...eventForm, city: e.target.value })
                     }
-                    placeholder="Ex: Belo Horizonte"
+                    placeholder="e.g., New York"
                     className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
@@ -2268,7 +2268,7 @@ export default function EditPage() {
                     onChange={(e) =>
                       setEventForm({ ...eventForm, state: e.target.value })
                     }
-                    placeholder="Ex: MG"
+                    placeholder="e.g., NY"
                     maxLength={2}
                     className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent uppercase"
                   />
@@ -2362,7 +2362,7 @@ export default function EditPage() {
                   className="w-full cursor-pointer px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 dark:file:bg-purple-900/30 file:text-purple-700 dark:file:text-purple-400 hover:file:bg-purple-100 dark:hover:file:bg-purple-900/50 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  JPEG, PNG, WebP or GIF (máx. 10MB for better quality)
+                  JPEG, PNG, WebP or GIF (max. 10MB for better quality)
                 </p>
               </div>
 
@@ -2389,7 +2389,7 @@ export default function EditPage() {
                   onChange={(e) =>
                     setPhotoForm({ ...photoForm, caption: e.target.value })
                   }
-                  placeholder="Ex: Show em São Paulo 2024"
+                  placeholder="e.g., Show in New York 2024"
                   maxLength={100}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />

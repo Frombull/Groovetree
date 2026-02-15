@@ -9,9 +9,9 @@ export default function PrivacyPolicy() {
           ← Back to Groovetree
         </a>
       </div>
-      <h1 className="text-3xl font-bold mb-6">Privacy Policy - Groovetree</h1>
+      <h1 className="text-3xl font-bold mb-6 text-white">Privacy Policy - Groovetree</h1>
 
-      <div className="prose prose-gray max-w-none">
+      <div className="prose prose-gray max-w-none text-white">
         <p className="text-sm text-gray-600 mb-6">Last updated: {new Date().toLocaleDateString()}</p>
 
         <section className="mb-6">
