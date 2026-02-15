@@ -1,80 +1,69 @@
 # GrooveTree
 
-Descrição feliz :)
 
-
-
-## Pré-requisitos
+## Prerequisites
 
 - [Node.js](https://nodejs.org/)
 - [Docker](https://www.docker.com/)
 - [Supabase CLI](https://supabase.com/docs/guides/local-development)
 
 
+# Running the Project
 
-# Rodando o projeto
-
-1.  Instale as dependências
+1.  Install dependencies
 
     ```bash
     npm install
     ```
 
-2. Inicie os serviços do Supabase
+2. Start Supabase services
 
     ```bash
     npx supabase start
     ```
-    Ao final, o terminal vai mostrar as credenciais de acesso local, guarde elas para o próximo passo.
+    Save the credentials.
 
-3. Crie um ``.env`` na pasta raiz, seguindo o template de ``.env.template`` E preencha.
+3. Create a ``.env`` file in the root folder, following the ``.env.template`` template and fill it in.
 
-4. Execute as Migrações do Banco de Dados
+4. Run Database Migrations
     ```bash
     npx prisma migrate dev
     ```
-    Esse comando aplica todas as migrações, cria o DB local e gera o cliente Prisma.
+    This command applies all migrations, creates the local DB and generates the Prisma client.
 
-5. Rode o SEED do DB (opcional)
+5. Run DB SEED (optional)
 
     ```bash
     npx tsx prisma/seed.ts
     ```
 
-6. Rodando em DEV
+6. Running in DEV
 
     ```bash
     npm run dev
     ```
 
-    E Para criar migração nova:
+    To create a new migration:
 
     ```bash
-    npx prisma migrate dev --name <nome-da-mudanca>
+    npx prisma migrate dev --name <migration-name>
     ```
 
 
-# Testes
-- Testes com **cypress** estão em:
+# Tests
+- Tests with **cypress** are located in:
 
     ```bash
     cypress/e2e/
     ```
-    para executar o cypress, use:
+    To run cypress, use:
 
     ```bash
     npx cypress open
     ```
 
-- Testes com **postman**:
 
-    ```bash
-    Dentro de nosso time do postman
-    ```
-
-
-
-# Autores
-- [Marco Di Toro](https://github.com/Frombull) | 150 | GES
-- [Gabriel Costa](https://github.com/JoaoGabrielCostaa) | 193 | GES
-- [Vitor Torres](https://github.com/Torress01)  | 517 | GES
+# Authors
+- [Marco Di Toro](https://github.com/Frombull)
+- [Vitor Torres](https://github.com/Torress01)
+- [Gabriel Costa](https://github.com/JoaoGabrielCostaa)
